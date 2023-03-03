@@ -43,6 +43,7 @@ public class WeddingTask implements Serializable {
     @OneToMany(orphanRemoval = true, cascade = { CascadeType.REMOVE, CascadeType.PERSIST }, mappedBy = "parentTask")
     private List<WeddingTask> subtasks;
 
+    public WeddingTask() {}
     public String getTaskDescription() {
         return taskDescription;
     }
