@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -35,6 +36,23 @@ public class WeddingItinerary implements Serializable {
     private Date eventStartTime;
     @Temporal(TemporalType.TIME)
     private Date eventEndTime;
+    
+    @ManyToOne
+    private WeddingProject weddingProject;
+    
+        /**
+     * @return the weddingProject
+     */
+    public WeddingProject getWeddingProject() {
+        return weddingProject;
+    }
+
+    /**
+     * @param weddingProject the weddingProject to set
+     */
+    public void setWeddingProject(WeddingProject weddingProject) {
+        this.weddingProject = weddingProject;
+    }
     
     /**
      * @return the eventName

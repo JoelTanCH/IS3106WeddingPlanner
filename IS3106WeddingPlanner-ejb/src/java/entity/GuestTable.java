@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -40,6 +41,23 @@ public class GuestTable implements Serializable {
     
     private Set<Guest> guests;
 
+    @ManyToOne
+    private WeddingProject weddingProject;
+
+    /**
+     * @return the weddingProject
+     */
+    public WeddingProject getWeddingProject() {
+        return weddingProject;
+    }
+
+    /**
+     * @param weddingProject the weddingProject to set
+     */
+    public void setWeddingProject(WeddingProject weddingProject) {
+        this.weddingProject = weddingProject;
+    }
+    
     public GuestTable() {
         this.guests = new HashSet<>();
     }

@@ -37,6 +37,24 @@ public class Guest implements Serializable {
     
     @ManyToOne
     private GuestTable guestTable;
+    
+    @ManyToOne
+    private WeddingProject weddingProject;
+
+    /**
+     * @return the weddingProject
+     */
+    public WeddingProject getWeddingProject() {
+        return weddingProject;
+    }
+
+    /**
+     * @param weddingProject the weddingProject to set
+     */
+    public void setWeddingProject(WeddingProject weddingProject) {
+        this.weddingProject = weddingProject;
+    }
+    
     public Guest(){}
     
     public GuestTable getGuestTable() {

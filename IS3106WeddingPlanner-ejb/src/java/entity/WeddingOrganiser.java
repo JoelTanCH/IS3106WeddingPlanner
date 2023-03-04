@@ -22,10 +22,24 @@ public class WeddingOrganiser extends UserEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
-    //@OneToMany(mappedBy="weddingOrganiser")
-    //List<WeddingProject> weddingProjects;
+    @OneToMany(mappedBy="weddingOrganiser")
+    private List<WeddingProject> weddingProjects;
     
 
+    /**
+     * @return the weddingProjects
+     */
+    public List<WeddingProject> getWeddingProjects() {
+        return weddingProjects;
+    }
+
+    /**
+     * @param weddingProjects the weddingProjects to set
+     */
+    public void setWeddingProjects(List<WeddingProject> weddingProjects) {
+        this.weddingProjects = weddingProjects;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;

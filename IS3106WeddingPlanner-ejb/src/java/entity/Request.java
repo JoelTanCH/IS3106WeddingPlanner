@@ -49,6 +49,51 @@ public class Request implements Serializable {
     @OneToOne(mappedBy = "request")
     private Transaction transaction;
 
+    @ManyToOne
+    private WeddingProject weddingProject;
+
+    /**
+     * @return the vendor
+     */
+    public Vendor getVendor() {
+        return vendor;
+    }
+
+    /**
+     * @param vendor the vendor to set
+     */
+    public void setVendor(Vendor vendor) {
+        this.vendor = vendor;
+    }
+
+    /**
+     * @return the transaction
+     */
+    public Transaction getTransaction() {
+        return transaction;
+    }
+
+    /**
+     * @param transaction the transaction to set
+     */
+    public void setTransaction(Transaction transaction) {
+        this.transaction = transaction;
+    }
+
+    /**
+     * @return the weddingProject
+     */
+    public WeddingProject getWeddingProject() {
+        return weddingProject;
+    }
+
+    /**
+     * @param weddingProject the weddingProject to set
+     */
+    public void setWeddingProject(WeddingProject weddingProject) {
+        this.weddingProject = weddingProject;
+    }
+    
     public Long getRequestId() {
         return requestId;
     }
