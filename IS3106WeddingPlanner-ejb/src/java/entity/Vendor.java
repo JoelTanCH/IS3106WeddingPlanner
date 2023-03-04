@@ -45,7 +45,7 @@ public class Vendor implements Serializable {
     
     @OneToMany(mappedBy="vendor")
     private List<Request> requests;
-     
+
     
     public Long getVendorId() {
         return vendorId;
