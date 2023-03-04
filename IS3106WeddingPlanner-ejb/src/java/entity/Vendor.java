@@ -21,12 +21,9 @@ import javax.persistence.OneToMany;
  * @author joelt
  */
 @Entity
-public class Vendor implements Serializable {
+public class Vendor extends UserEntity implements Serializable {
 
     private static long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long vendorId;
     @Column(nullable = false)
     private String description;
     @Column(nullable = false)
@@ -46,19 +43,10 @@ public class Vendor implements Serializable {
     @OneToMany(mappedBy="vendor")
     private List<Request> requests;
 
-    
-    public Long getVendorId() {
-        return vendorId;
-    }
-
-    public void setVendorId(Long vendorId) {
-        this.vendorId = vendorId;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (vendorId != null ? vendorId.hashCode() : 0);
+        hash += (userId != null ? userId.hashCode() : 0);
         return hash;
     }
 
@@ -69,7 +57,7 @@ public class Vendor implements Serializable {
             return false;
         }
         Vendor other = (Vendor) object;
-        if ((this.vendorId == null && other.vendorId != null) || (this.vendorId != null && !this.vendorId.equals(other.vendorId))) {
+        if ((this.userId == null && other.userId != null) || (this.userId != null && !this.userId.equals(other.userId))) {
             return false;
         }
         return true;
@@ -77,7 +65,7 @@ public class Vendor implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Vendor[ id=" + vendorId + " ]";
+        return "entity.Vendor[ id=" + userId + " ]";
     }
 
     /**
