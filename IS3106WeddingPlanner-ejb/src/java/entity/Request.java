@@ -38,14 +38,17 @@ public class Request implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date requestDate;
     @Column(nullable = false)
-    private String requestDetails; 
-    
+    private String requestDetails;
+
+    @OneToOne(optional = true, mappedBy="request")
+    private WeddingBudgetItem weddingBudgetItem;
+
     @ManyToOne
     private Vendor vendor;
-    
-    @OneToOne(mappedBy="request")
+
+    @OneToOne(mappedBy = "request")
     private Transaction transaction;
-    
+
     public Long getRequestId() {
         return requestId;
     }
@@ -54,6 +57,15 @@ public class Request implements Serializable {
         this.requestId = requestId;
     }
 
+    public WeddingBudgetItem getWeddingBudgetItem() {
+        return weddingBudgetItem;
+    }
+
+    public void setWeddingBudgetItem(WeddingBudgetItem weddingBudgetItem) {
+        this.weddingBudgetItem = weddingBudgetItem;
+    }
+
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -162,5 +174,5 @@ public class Request implements Serializable {
     public void setRequestDetails(String requestDetails) {
         this.requestDetails = requestDetails;
     }
-    
+
 }

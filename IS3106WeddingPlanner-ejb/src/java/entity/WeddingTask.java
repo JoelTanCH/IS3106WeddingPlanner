@@ -34,6 +34,9 @@ public class WeddingTask implements Serializable {
     @Column(nullable = false)
     private boolean isDone;
     
+    @ManyToOne
+    private WeddingChecklist weddingChecklist;
+    
     @ManyToOne // this is nullable
     private WeddingTask parentTask;
     
