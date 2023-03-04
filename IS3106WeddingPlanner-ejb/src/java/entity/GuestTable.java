@@ -17,11 +17,11 @@ import javax.persistence.Id;
  * @author leomi
  */
 @Entity
-public class Table implements Serializable {
+public class GuestTable implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
     private int tableNumber;
@@ -37,7 +37,7 @@ public class Table implements Serializable {
     private int currOccupancy;
 
 
-    public Table() {}
+    public GuestTable() {}
 
     public int getTableNumber() {
         return tableNumber;
@@ -105,10 +105,10 @@ public class Table implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Table)) {
+        if (!(object instanceof GuestTable)) {
             return false;
         }
-        Table other = (Table) object;
+        GuestTable other = (GuestTable) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
