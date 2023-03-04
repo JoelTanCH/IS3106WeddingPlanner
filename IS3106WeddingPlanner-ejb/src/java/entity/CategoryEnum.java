@@ -3,15 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package session;
-
-import javax.ejb.Local;
+package entity;
 
 /**
  *
- * @author wangp
+ * @author joelt
  */
-@Local
-public interface WeddingChecklistBeanLocal {
-    
+public enum CategoryEnum {
+    ENTERTAINMENT,
+    FOOD,
+    LIGHTING,
+    DECORATION,
+    DRESSES_SUITS,
+    VENUE
 }
