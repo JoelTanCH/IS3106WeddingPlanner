@@ -6,6 +6,8 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,9 +37,19 @@ public class GuestTable implements Serializable {
     private int capacity;
     @Column(nullable = false)
     private int currOccupancy;
+    
+    private Set<Guest> guests;
 
+    public GuestTable() {
+        this.guests = new HashSet<>();
+    }
+    public Set<Guest> getGuests() {
+        return guests;
+    }
 
-    public GuestTable() {}
+    public void setGuests(Set<Guest> guests) {
+        this.guests = guests;
+    }
 
     public int getTableNumber() {
         return tableNumber;

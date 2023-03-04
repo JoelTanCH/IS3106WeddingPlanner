@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -34,8 +35,17 @@ public class Guest implements Serializable {
     @Column(nullable = false)
     private Boolean rsvp; 
     
+    @ManyToOne
+    private GuestTable guestTable;
     public Guest(){}
+    
+    public GuestTable getGuestTable() {
+        return guestTable;
+    }
 
+    public void setGuestTable(GuestTable guestTable) {
+        this.guestTable = guestTable;
+    }
     public String getName() {
         return name;
     }
