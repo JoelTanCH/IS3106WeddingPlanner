@@ -37,6 +37,9 @@ public class WeddingTask implements Serializable {
     @ManyToOne // this is nullable
     private WeddingTask parentTask;
 
+    @ManyToOne
+    private WeddingChecklist weddingChecklist;
+    
     public WeddingTask() {
     }
     
@@ -53,7 +56,13 @@ public class WeddingTask implements Serializable {
     
     
     // --- GETTERS & SETTERS ---
-    
+    public WeddingChecklist getWeddingChecklist() {
+        return weddingChecklist;
+    }
+
+    public void setWeddingChecklist(WeddingChecklist weddingChecklist) {
+        this.weddingChecklist = weddingChecklist;
+    }
     public String getTaskDescription() {
         return taskDescription;
     }

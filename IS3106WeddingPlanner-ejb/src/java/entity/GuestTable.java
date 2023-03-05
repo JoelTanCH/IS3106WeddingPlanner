@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -33,15 +34,17 @@ public class GuestTable implements Serializable {
     @Column(nullable = false)
     private double locationY;
     @Column(nullable = false)
-    private double size;
+    private double tableSize;
     @Column(nullable = false)
     private int capacity;
     @Column(nullable = false)
     private int currOccupancy;
     
+    
+    @OneToMany(mappedBy = "guestTable")
     private Set<Guest> guests;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private WeddingProject weddingProject;
 
     /**
@@ -73,6 +76,14 @@ public class GuestTable implements Serializable {
         return tableNumber;
     }
 
+    public double getTableSize() {
+        return tableSize;
+    }
+
+    public void setTableSize(double tableSize) {
+        this.tableSize = tableSize;
+    }
+
     public void setTableNumber(int tableNumber) {
         this.tableNumber = tableNumber;
     }
@@ -93,13 +104,6 @@ public class GuestTable implements Serializable {
         this.locationY = locationY;
     }
 
-    public double getSize() {
-        return size;
-    }
-
-    public void setSize(double size) {
-        this.size = size;
-    }
 
     public int getCapacity() {
         return capacity;

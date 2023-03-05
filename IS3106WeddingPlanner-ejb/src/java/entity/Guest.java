@@ -38,12 +38,13 @@ public class Guest implements Serializable {
     @ManyToOne
     private GuestTable guestTable;
     
-    @ManyToOne
+    @ManyToOne(optional = false)
     private WeddingProject weddingProject;
 
     /**
      * @return the weddingProject
      */
+    public Guest(){}
     public WeddingProject getWeddingProject() {
         return weddingProject;
     }
@@ -55,7 +56,7 @@ public class Guest implements Serializable {
         this.weddingProject = weddingProject;
     }
     
-    public Guest(){}
+
     
     public GuestTable getGuestTable() {
         return guestTable;
