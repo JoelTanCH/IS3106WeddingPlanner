@@ -39,6 +39,13 @@ public class WeddingItinerary implements Serializable {
     
     @ManyToOne
     private WeddingProject weddingProject;
+
+    
+    public WeddingItinerary() {
+    }
+    
+    
+    
     
         /**
      * @return the weddingProject

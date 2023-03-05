@@ -42,6 +42,9 @@ public class WeddingBudgetItem implements Serializable {
     @OneToOne(optional = false)
     private Request request;
 
+    public WeddingBudgetItem() {
+    }
+    
     public BigDecimal getCost() {
         return cost;
     }

@@ -24,8 +24,19 @@ public class WeddingOrganiser extends UserEntity implements Serializable {
     
     @OneToMany(mappedBy="weddingOrganiser")
     private List<WeddingProject> weddingProjects;
+
+    public WeddingOrganiser() {
+        super();
+    }
     
 
+    
+    
+    
+    
+    
+    
+    
     /**
      * @return the weddingProjects
      */

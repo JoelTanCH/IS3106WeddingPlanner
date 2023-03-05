@@ -47,6 +47,13 @@ public class WeddingProject implements Serializable {
     @OneToMany(mappedBy="weddingProject")
     private List<GuestTable> tables;
 
+    
+    
+    
+    public WeddingProject() {
+    }
+    
+
     /**
      * @return the weddingOrganiser
      */

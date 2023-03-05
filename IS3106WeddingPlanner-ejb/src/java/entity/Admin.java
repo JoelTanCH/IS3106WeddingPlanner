@@ -20,6 +20,10 @@ public class Admin extends UserEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public Admin() {
+        super();
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -44,5 +48,5 @@ public class Admin extends UserEntity implements Serializable {
     public String toString() {
         return "entity.Admin[ id=" + userId + " ]";
     }
-    
+
 }

@@ -38,6 +38,11 @@ public class Transaction implements Serializable {
     @OneToOne
     private Request request; 
 
+    public Transaction() {
+    }
+
+    
+    
     public Long getTransactionId() {
         return transactionId;
     }

@@ -35,6 +35,11 @@ public class UserEntity implements Serializable {
     @Column(nullable = false)
     private boolean isBanned;
 
+    public UserEntity() {
+    }
+    
+    
+
     public Long getUserId() {
         return userId;
     }

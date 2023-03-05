@@ -52,6 +52,11 @@ public class Request implements Serializable {
     @ManyToOne
     private WeddingProject weddingProject;
 
+    public Request() {
+    }
+
+    
+    
     /**
      * @return the vendor
      */

@@ -29,6 +29,9 @@ public class WeddingBudgetList implements Serializable {
     @Column(nullable = false)
     private BigDecimal budget;
 
+    public WeddingBudgetList() {
+    }
+
 //    @OneToOne(optional = false)
 //    private WeddingProject weddingProject;
 

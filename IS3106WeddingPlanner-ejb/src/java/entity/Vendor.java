@@ -7,14 +7,12 @@ package entity;
 
 import enumeration.CategoryEnum;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 /**
@@ -51,6 +49,11 @@ public class Vendor extends UserEntity implements Serializable {
         return hash;
     }
 
+    public Vendor() {
+        super();
+        this.requests = new ArrayList<Request>();
+    }
+    
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the vendorId fields are not set
@@ -164,6 +167,22 @@ public class Vendor extends UserEntity implements Serializable {
      */
     public void setWhatsappUrl(String whatsappUrl) {
         this.whatsappUrl = whatsappUrl;
+    }
+
+    public CategoryEnum getCategory() {
+        return category;
+    }
+
+    public void setCategory(CategoryEnum category) {
+        this.category = category;
+    }
+
+    public List<Request> getRequests() {
+        return requests;
+    }
+
+    public void setRequests(List<Request> requests) {
+        this.requests = requests;
     }
     
 }

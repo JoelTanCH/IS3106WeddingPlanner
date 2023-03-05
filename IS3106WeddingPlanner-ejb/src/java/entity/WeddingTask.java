@@ -36,8 +36,10 @@ public class WeddingTask implements Serializable {
     
     @ManyToOne // this is nullable
     private WeddingTask parentTask;
+
+    public WeddingTask() {
+    }
     
-        
 //    @ManyToOne
 //    private WeddingChecklist weddingChecklist;
     
@@ -47,6 +49,11 @@ public class WeddingTask implements Serializable {
     @OneToMany(orphanRemoval = true, cascade = { CascadeType.REMOVE, CascadeType.PERSIST }, mappedBy = "parentTask")
     private List<WeddingTask> subtasks;
 
+
+    
+    
+    // --- GETTERS & SETTERS ---
+    
     public String getTaskDescription() {
         return taskDescription;
     }
