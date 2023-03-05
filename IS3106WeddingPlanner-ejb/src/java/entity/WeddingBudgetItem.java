@@ -5,6 +5,7 @@
  */
 package entity;
 
+import enumeration.CategoryEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Column;
@@ -25,7 +26,7 @@ public class WeddingBudgetItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long weddingBudgetItemId;
 
     @Column(nullable = false)

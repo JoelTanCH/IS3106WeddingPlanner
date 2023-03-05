@@ -23,7 +23,7 @@ public class WeddingBudgetList implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long weddingBudgetListId;
     
     @Column(nullable = false)
