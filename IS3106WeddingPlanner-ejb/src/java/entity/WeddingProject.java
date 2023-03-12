@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -51,6 +52,10 @@ public class WeddingProject implements Serializable {
     
     
     public WeddingProject() {
+        this.requests = new ArrayList<>();
+        this.guests = new ArrayList<>();
+        this.weddingItineraries = new ArrayList<>();
+        this.tables = new ArrayList<>();
     }
     
 

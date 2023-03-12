@@ -6,7 +6,9 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -42,11 +44,14 @@ public class GuestTable implements Serializable {
     
     
     @OneToMany(mappedBy = "guestTable")
-    private Set<Guest> guests;
+    private List<Guest> guests;
 
     @ManyToOne(optional = false)
     private WeddingProject weddingProject;
 
+    public GuestTable() {
+        this.guests = new ArrayList<>();
+    }
     /**
      * @return the weddingProject
      */
@@ -61,14 +66,11 @@ public class GuestTable implements Serializable {
         this.weddingProject = weddingProject;
     }
     
-    public GuestTable() {
-        this.guests = new HashSet<>();
-    }
-    public Set<Guest> getGuests() {
+    public List<Guest> getGuests() {
         return guests;
     }
 
-    public void setGuests(Set<Guest> guests) {
+    public void setGuests(List<Guest> guests) {
         this.guests = guests;
     }
 
