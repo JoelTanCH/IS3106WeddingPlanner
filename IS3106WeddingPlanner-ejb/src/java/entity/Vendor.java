@@ -41,6 +41,7 @@ public class Vendor extends UserEntity implements Serializable {
     
     @OneToMany(mappedBy="vendor")
     private List<Request> requests;
+            
 
     @Override
     public int hashCode() {
