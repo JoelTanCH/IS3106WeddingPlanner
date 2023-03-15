@@ -12,11 +12,11 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
 /**
  *
  * @author leomi
  */
+import util.exception.InvalidAssociationException;
 @Stateless
 public class GuestTableSessionBean implements GuestTableSessionBeanLocal {
 
@@ -32,9 +32,12 @@ public class GuestTableSessionBean implements GuestTableSessionBeanLocal {
     }
     
     @Override
-    public void addGuestToTable(Long guestId, Long guestTableId) {
+    public void addGuestToTable(Long guestId, Long guestTableId) throws InvalidAssociationException {
         Guest guest = em.find(Guest.class, guestId);
         GuestTable guestTable = em.find(GuestTable.class, guestTableId);
+        if (!guest.getWeddingProject().equals(guestTable.getWeddingProject())) {
+            throw new InvalidAssociationException();
+        }
         guest.setGuestTable(guestTable);
         guestTable.getGuests().add(guest);
     }

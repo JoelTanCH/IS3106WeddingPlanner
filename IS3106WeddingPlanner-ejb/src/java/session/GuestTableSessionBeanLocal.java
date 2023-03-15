@@ -7,6 +7,7 @@ package session;
 
 import entity.GuestTable;
 import javax.ejb.Local;
+import util.exception.InvalidAssociationException;
 
 /**
  *
@@ -17,7 +18,7 @@ public interface GuestTableSessionBeanLocal {
 
     public void deleteGuestTable(Long guestTableId);
 
-    public void addGuestToTable(Long guestId, Long guestTableId);
+    public void addGuestToTable(Long guestId, Long guestTableId) throws InvalidAssociationException;
 
     public void createGuestTable(GuestTable guestTable, Long weddingProjectId);
     
