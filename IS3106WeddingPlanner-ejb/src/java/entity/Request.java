@@ -43,14 +43,18 @@ public class Request implements Serializable {
     @OneToOne(optional = true, mappedBy="request")
     private WeddingBudgetItem weddingBudgetItem;
 
-    @ManyToOne
+    
+    //Made vendor and wedding project optional for testing. In deployment should be compulsory
+    @ManyToOne(optional = true)
     private Vendor vendor;
 
+    @ManyToOne(optional = true)
+    private WeddingProject weddingProject;
+        
     @OneToOne(mappedBy = "request")
     private Transaction transaction;
 
-    @ManyToOne
-    private WeddingProject weddingProject;
+
 
     public Request() {
     }

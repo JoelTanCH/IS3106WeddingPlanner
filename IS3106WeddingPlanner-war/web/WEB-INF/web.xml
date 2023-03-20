@@ -27,4 +27,10 @@
         <local>session.AdminSessionBeanLocal</local>
         <ejb-link>IS3106WeddingPlanner-ejb.jar#AdminSessionBean</ejb-link>
     </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>RequestSessionBean</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>session.RequestSessionBeanLocal</local>
+        <ejb-link>IS3106WeddingPlanner-ejb.jar#RequestSessionBean</ejb-link>
+    </ejb-local-ref>
 </web-app>
