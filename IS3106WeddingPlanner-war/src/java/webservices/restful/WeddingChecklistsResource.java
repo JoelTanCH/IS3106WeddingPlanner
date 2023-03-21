@@ -7,7 +7,6 @@ package webservices.restful;
 
 import entity.WeddingChecklist;
 import entity.WeddingTask;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -17,6 +16,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.enterprise.context.RequestScoped;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
@@ -81,7 +81,7 @@ public class WeddingChecklistsResource {
     
     
     // same as above, no need id
-    @PUT
+    @DELETE
     @Path("/{wedding-checklist-id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public void removeTask(@PathParam("wedding-checklist-id") Long checklistId,
