@@ -14,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -21,6 +22,34 @@ import javax.persistence.OneToMany;
  */
 @Entity
 public class WeddingProject implements Serializable {
+
+    /**
+     * @return the weddingBudgetList
+     */
+    public WeddingBudgetList getWeddingBudgetList() {
+        return weddingBudgetList;
+    }
+
+    /**
+     * @param weddingBudgetList the weddingBudgetList to set
+     */
+    public void setWeddingBudgetList(WeddingBudgetList weddingBudgetList) {
+        this.weddingBudgetList = weddingBudgetList;
+    }
+
+    /**
+     * @return the weddingChecklist
+     */
+    public WeddingChecklist getWeddingChecklist() {
+        return weddingChecklist;
+    }
+
+    /**
+     * @param weddingChecklist the weddingChecklist to set
+     */
+    public void setWeddingChecklist(WeddingChecklist weddingChecklist) {
+        this.weddingChecklist = weddingChecklist;
+    }
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -36,11 +65,11 @@ public class WeddingProject implements Serializable {
     @OneToMany(mappedBy="weddingProject") // unidirectional
     private List<Guest> guests;
     
-//    @OneToOne
-//    private WeddingBudgetList weddingBudgetList;
-//    
-//    @OneToOne
-//    private WeddingCheckList weddingChecklist;
+    @OneToOne
+    private WeddingBudgetList weddingBudgetList;
+    
+    @OneToOne
+    private WeddingChecklist weddingChecklist;
     
     @OneToMany(mappedBy="weddingProject")
     private List<WeddingItinerary> weddingItineraries;

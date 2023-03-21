@@ -27,8 +27,8 @@ public class WeddingChecklist implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long weddingCheckListId;
     
-//    @OneToOne(optional = false)
-//    private WeddingProject weddingProject;
+    @OneToOne(optional = false)
+    private WeddingProject weddingProject;
     
     @OneToMany(mappedBy = "weddingChecklist")
     private List<WeddingTask> weddingTasks;
@@ -72,6 +72,20 @@ public class WeddingChecklist implements Serializable {
     @Override
     public String toString() {
         return "entity.WeddingChecklist[ id=" + weddingCheckListId + " ]";
+    }
+
+    /**
+     * @return the weddingProject
+     */
+    public WeddingProject getWeddingProject() {
+        return weddingProject;
+    }
+
+    /**
+     * @param weddingProject the weddingProject to set
+     */
+    public void setWeddingProject(WeddingProject weddingProject) {
+        this.weddingProject = weddingProject;
     }
     
 }

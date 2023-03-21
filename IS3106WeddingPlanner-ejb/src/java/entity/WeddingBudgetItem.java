@@ -15,6 +15,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 /**
@@ -39,6 +40,9 @@ public class WeddingBudgetItem implements Serializable {
     @Column(nullable = false)
     private CategoryEnum category;
 
+    @ManyToOne
+    private WeddingBudgetList weddingBudgetList;
+    
     @OneToOne(optional = false)
     private Request request;
 
@@ -92,6 +96,20 @@ public class WeddingBudgetItem implements Serializable {
     @Override
     public String toString() {
         return "entity.WeddingBudgetItem[ id=" + weddingBudgetItemId + " ]";
+    }
+
+    /**
+     * @return the weddingBudgetList
+     */
+    public WeddingBudgetList getWeddingBudgetList() {
+        return weddingBudgetList;
+    }
+
+    /**
+     * @param weddingBudgetList the weddingBudgetList to set
+     */
+    public void setWeddingBudgetList(WeddingBudgetList weddingBudgetList) {
+        this.weddingBudgetList = weddingBudgetList;
     }
 
 }

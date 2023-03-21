@@ -7,11 +7,13 @@ package entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 /**
@@ -32,9 +34,12 @@ public class WeddingBudgetList implements Serializable {
     public WeddingBudgetList() {
     }
 
-//    @OneToOne(optional = false)
-//    private WeddingProject weddingProject;
+    @OneToOne(optional = false)
+    private WeddingProject weddingProject;
 
+    @OneToMany(mappedBy="weddingBudgetList")
+    private List<WeddingBudgetItem> weddingBudgetItems;
+    
     public BigDecimal getBudget() {
         return budget;
     }
@@ -55,6 +60,34 @@ public class WeddingBudgetList implements Serializable {
     @Override
     public String toString() {
         return "entity.WeddingBudgetList[ id=" + weddingBudgetListId + " ]";
+    }
+
+    /**
+     * @return the weddingProject
+     */
+    public WeddingProject getWeddingProject() {
+        return weddingProject;
+    }
+
+    /**
+     * @param weddingProject the weddingProject to set
+     */
+    public void setWeddingProject(WeddingProject weddingProject) {
+        this.weddingProject = weddingProject;
+    }
+
+    /**
+     * @return the weddingBudgetItems
+     */
+    public List<WeddingBudgetItem> getWeddingBudgetItems() {
+        return weddingBudgetItems;
+    }
+
+    /**
+     * @param weddingBudgetItems the weddingBudgetItems to set
+     */
+    public void setWeddingBudgetItems(List<WeddingBudgetItem> weddingBudgetItems) {
+        this.weddingBudgetItems = weddingBudgetItems;
     }
     
 }
