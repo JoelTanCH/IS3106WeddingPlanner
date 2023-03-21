@@ -5,6 +5,8 @@
  */
 package session;
 
+import entity.WeddingChecklist;
+import entity.WeddingTask;
 import javax.ejb.Local;
 
 /**
@@ -13,5 +15,19 @@ import javax.ejb.Local;
  */
 @Local
 public interface WeddingChecklistBeanLocal {
+
+    public WeddingChecklist getWeddingChecklist(Long checklistId);
+
+    public void createTask(WeddingTask t, Long checklistId);
+
+    public void updateTask(WeddingTask t);
+
+    public void addSubtaskToTask(WeddingTask parentTask, WeddingTask t);
+
+    public void removeTask(WeddingTask t);
+
+    public void checkOffTask(WeddingTask t);
+
+    public void checkOffTask(WeddingTask t, boolean valueToSet);
     
 }

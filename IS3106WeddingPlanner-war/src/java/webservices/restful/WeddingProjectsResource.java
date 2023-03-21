@@ -32,23 +32,23 @@ public class WeddingProjectsResource {
     public WeddingProjectsResource() {
     }
 
-    /**
-     * Retrieves representation of an instance of webservices.restful.WeddingProjectsResource
-     * @return an instance of java.lang.String
-     */
-    @GET
-    @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-    public String getJson() {
-        //TODO return proper representation object
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * PUT method for updating or creating an instance of WeddingProjectsResource
-     * @param content representation for the resource
-     */
-    @PUT
-    @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-    public void putJson(String content) {
-    }
+//    /**
+//     * Retrieves representation of an instance of webservices.restful.WeddingProjectsResource
+//     * @return an instance of java.lang.String
+//     */
+//    @GET
+//    @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+//    public String getJson() {
+//        //TODO return proper representation object
+//        throw new UnsupportedOperationException();
+//    }
+//
+//    /**
+//     * PUT method for updating or creating an instance of WeddingProjectsResource
+//     * @param content representation for the resource
+//     */
+//    @PUT
+//    @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+//    public void putJson(String content) {
+//    }
 }

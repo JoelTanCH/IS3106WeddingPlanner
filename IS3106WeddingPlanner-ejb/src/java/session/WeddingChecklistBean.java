@@ -26,6 +26,15 @@ public class WeddingChecklistBean implements WeddingChecklistBeanLocal {
     // upon the creation of a WeddingProject. Furthermore, it cannot be removed/deleted.
     // (WeddingProject should only be able to be deleted if no vendors hired?)
     //
+    // however just in case some CRUD code is here anyway
+    
+    public WeddingChecklist getWeddingChecklist(Long checklistId) {
+        WeddingChecklist checklist = em.find(WeddingChecklist.class, checklistId);
+        return checklist;
+    }
+    
+    
+    
     // 
     public void createTask(WeddingTask t, Long checklistId) {
         // add t to WeddingProject's WeddingChecklist's List<WeddingTask> attribute
