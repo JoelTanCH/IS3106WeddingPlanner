@@ -5,17 +5,23 @@
  */
 package datainit;
 
+import entity.Admin;
 import entity.Guest;
 import entity.GuestTable;
+import entity.Request;
 import entity.WeddingProject;
+import java.math.BigDecimal;
+import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import session.AdminSessionBeanLocal;
 import session.GuestSessionBeanLocal;
 import session.GuestTableSessionBeanLocal;
+import session.RequestSessionBeanLocal;
 
 /**
  *
@@ -24,6 +30,12 @@ import session.GuestTableSessionBeanLocal;
 @Startup
 @Singleton
 public class TestingDataInitBean {
+
+    @EJB
+    private AdminSessionBeanLocal adminSessionBean;
+
+    @EJB
+    private RequestSessionBeanLocal requestSessionBeanLocal;
 
     @EJB
     private GuestTableSessionBeanLocal guestTableSessionBean;
@@ -55,9 +67,27 @@ public class TestingDataInitBean {
             guestTable.setTableNumber(1);
             guestTable.setTableSize(100);
             guestTableSessionBean.createGuestTable(guestTable, 1L);
-       }
+
+        }
+        
+        if (em.find(Admin.class, (long) 1) == null) {
+            Admin a1 = new Admin();
+            a1.setEmail("joestar@gmail.com");
+            a1.setUsername("Joseph");
+            a1.setPassword("caesar");
+            adminSessionBean.createAdmin(a1);
+
+            Request sampleRequest = new Request();
+            sampleRequest.setIsAccepted(false);
+            sampleRequest.setQuotationURL("www.fakeUrl.com");
+            sampleRequest.setQuotedPrice(BigDecimal.valueOf(1000L));
+            sampleRequest.setRequestDate(new Date());
+            sampleRequest.setRequestDetails("Do something for me");
+            requestSessionBeanLocal.createRequest(sampleRequest);
+
+        }
     }
-    
+
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
 }
