@@ -35,10 +35,15 @@ public class WeddingBudgetSessionBean implements WeddingBudgetSessionBeanLocal {
         return itemsQuery.getResultList();
     }
     
-//    @Override
-//    public void deleteItem(Long itemId) {
-//        WeddingBudgetItem item = em.find(WeddingBudgetItem.class, itemId);
-//    }
+    @Override
+    public void deleteItem(Long itemId) {
+        WeddingBudgetItem item = em.find(WeddingBudgetItem.class, itemId);
+        
+        item.setWeddingBudgetList(null);
+        item.setRequest(null);
+        
+        em.remove(item);
+    }
     
     @Override
     public void createBudget(WeddingBudgetList budget) {

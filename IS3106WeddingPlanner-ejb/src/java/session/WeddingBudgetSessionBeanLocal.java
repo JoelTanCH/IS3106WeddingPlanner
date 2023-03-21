@@ -22,7 +22,7 @@ public interface WeddingBudgetSessionBeanLocal {
 
     public List<WeddingBudgetItem> retrieveAllItems();
 
-//    public void deleteItem(Long itemId);
+    public void deleteItem(Long itemId);
 
     public void createBudget(WeddingBudgetList budget);
 
