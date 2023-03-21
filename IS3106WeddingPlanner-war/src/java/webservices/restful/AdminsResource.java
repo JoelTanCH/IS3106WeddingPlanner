@@ -6,6 +6,7 @@
 package webservices.restful;
 
 import entity.Admin;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.core.Context;
@@ -52,44 +53,44 @@ public class AdminsResource {
     public List<Admin> getAllAdmins() {
         return adminSessionBeanLocal.searchAdminsByUsernameEmail("", "");
         // pass in empty strings for the search, so it basically returns all admins
-        
+
     }
-    
+
     @GET
     @Path("/query")
     @Produces(MediaType.APPLICATION_JSON)
     public Response searchAdmins(@QueryParam("username") String username,
             @QueryParam("password") String password,
             @QueryParam("email") String email) {
-        
+
         if (email == null && username != null && password != null) {
             List<Admin> gotAdminsByUsernamePassword = adminSessionBeanLocal.getAdminsByUsernamePassword(username, password);
-            
+
             // curly braces in the line below is an anonymous inner class. Since GenericEntity is an abstract class,
             // we need to declare sth that extends from it, and cannot instantiate it by itself.
             // the syntax below creates an empty class extending GenericEntity, with the same effect like` A extends GenericEntity {} `
-            GenericEntity<List<Admin>> entityToReturn = new GenericEntity<List<Admin>>(gotAdminsByUsernamePassword) {};
-            
+            GenericEntity<List<Admin>> entityToReturn = new GenericEntity<List<Admin>>(gotAdminsByUsernamePassword) {
+            };
+
             // response status 200 means "OK"
             return Response.status(200).entity(entityToReturn).build();
         } else if (password == null && username != null && email != null) {
             List<Admin> searchedAdminsByUsernameEmail = adminSessionBeanLocal.searchAdminsByUsernameEmail(username, email);
-            
-            GenericEntity<List<Admin>> entity = new GenericEntity<List<Admin>>(searchedAdminsByUsernameEmail) {};
-            
+
+            GenericEntity<List<Admin>> entity = new GenericEntity<List<Admin>>(searchedAdminsByUsernameEmail) {
+            };
+
             return Response.status(200).entity(entity).build();
-            
+
         } else {
             JsonObject exception = Json.createObjectBuilder().add("error", "No query or invalid query")
                     .build();
-            
+
             // 400 is error; invalid request
             return Response.status(400).entity(exception).build();
-            
-            
+
         }
-        
-        
+
     }
 
     @POST
@@ -97,18 +98,32 @@ public class AdminsResource {
     public Response createAdmin(Admin admin) {
         try {
             adminSessionBeanLocal.createAdmin(admin);
+            // should it return a json object with a "success" message? 
             return Response.status(200).build();
         } catch (Exception e) {
             // response status 500 is internal server error
-            return Response.status(500).build();
+            JsonObject exception = Json.createObjectBuilder().add("error", "Probably admin with same attributes already exists")
+                    .add("exceptionMessage", e.getMessage())
+                    .build();
+            return Response.status(500).entity(exception).build();
         }
     }
-    
+
     @DELETE
     @Path("/{admin-id}")
-    public void removeAdmin(@PathParam("admin-id") Long adminId) {
-        adminSessionBeanLocal.deleteAdmin(adminId);
+    public Response removeAdmin(@PathParam("admin-id") Long adminId) {
+        try {
+            adminSessionBeanLocal.deleteAdmin(adminId);
+            // should it return a json object with a "success" message? 
+            return Response.status(200).build();
+        } catch (Exception e) {
+            // response status 500 is internal server error
+            JsonObject exception = Json.createObjectBuilder().add("error", "Probably admin with id doesn't exist")
+                    .add("exceptionMessage", e.getMessage())
+                    .build();
+            return Response.status(500).entity(exception).build();
+        }
+
     }
-    
 
 }
