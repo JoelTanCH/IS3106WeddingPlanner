@@ -5,6 +5,7 @@
  */
 package session;
 
+import entity.WeddingChecklist;
 import entity.WeddingTask;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -21,44 +22,47 @@ public class WeddingChecklistBean implements WeddingChecklistBeanLocal {
     private EntityManager em;
 
     // --- CRUD for WeddingTask ---
-    // need to wait and see WeddingChecklist object and the List<WeddingTask> it has
-    
-    public void createTask(WeddingTask t) {
+    // Probably don't need? Because WeddingChecklist should be automaticalled instantialised
+    // upon the creation of a WeddingProject. Furthermore, it cannot be removed/deleted.
+    // (WeddingProject should only be able to be deleted if no vendors hired?)
+    //
+    // 
+    public void createTask(WeddingTask t, Long checklistId) {
         // add t to WeddingProject's WeddingChecklist's List<WeddingTask> attribute
+        WeddingChecklist checklist = em.find(WeddingChecklist.class, checklistId);
+        checklist.getWeddingTasks().add(t);
+
         em.persist(t);
     }
-    
+
     // for editing of description?
     public void updateTask(WeddingTask t) {
         em.merge(t);
     }
-    
+
     // WIP, this will depend on structure of the main list
     public void addSubtaskToTask(WeddingTask parentTask, WeddingTask t) {
         t.setParentTask(parentTask);
         parentTask.getSubtasks().add(t);
     }
 
-    
-    
     public void removeTask(WeddingTask t) {
         WeddingTask parentTask = t.getParentTask();
+        WeddingChecklist checklist = t.getWeddingChecklist();
+        checklist.getWeddingTasks().remove(t); // remove it from wedding checklist
         if (parentTask != null) {
             parentTask.getSubtasks().remove(t);
         }
-        
+
         em.remove(t); // don't have to worry about t's subtasks because CascadeType.REMOVE
     }
 
     // --- END CRUD for WeddingTask ---
-    
     // --- CHECKING OFF TASK Methods ---
-    
-    
     public void checkOffTask(WeddingTask t) {
         t.setIsDone(!t.isIsDone());
 
-        for (WeddingTask subtask : t.getSubtasks() ) {
+        for (WeddingTask subtask : t.getSubtasks()) {
             checkOffTask(subtask, t.isIsDone());
         }
 
@@ -77,7 +81,5 @@ public class WeddingChecklistBean implements WeddingChecklistBeanLocal {
 
     // maybe we need a 3rd method to check whether all subtasks are checked,
     // and if so check off the parent task
-    
     // --- END CHECKING OFF TASK Methods ---
-
 }

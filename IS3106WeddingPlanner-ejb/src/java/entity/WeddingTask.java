@@ -37,14 +37,12 @@ public class WeddingTask implements Serializable {
     @ManyToOne // this is nullable
     private WeddingTask parentTask;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private WeddingChecklist weddingChecklist;
     
     public WeddingTask() {
     }
     
-//    @ManyToOne
-//    private WeddingChecklist weddingChecklist;
     
     // orphan removal isn't really needed in this context but just in case.
     // CascadeType.REMOVE is for removing subtasks. When a task is deleted,
