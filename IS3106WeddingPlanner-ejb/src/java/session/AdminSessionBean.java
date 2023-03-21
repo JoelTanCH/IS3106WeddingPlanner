@@ -37,12 +37,12 @@ public class AdminSessionBean implements AdminSessionBeanLocal {
         em.remove(admin);
     }
 
-    public List<Admin> getAdminsByUsernamePassword(String email, String password) {
+    // case-sensitive match
+    public List<Admin> getAdminsByUsernamePassword(String username, String password) {
         Query q;
-        q = em.createQuery("SELECT a FROM Admin a WHERE a.email LIKE :email AND a.password LIKE :password");
-        q.setParameter("email", email);
+        q = em.createQuery("SELECT a FROM Admin a WHERE a.username LIKE :username AND a.password LIKE :password");
+        q.setParameter("username", username);
         q.setParameter("password", password);
-        // test and see if it works with empty strings
         return q.getResultList();
     }
 
