@@ -12,6 +12,8 @@ import entity.Request;
 import entity.WeddingProject;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
@@ -22,6 +24,7 @@ import session.AdminSessionBeanLocal;
 import session.GuestSessionBeanLocal;
 import session.GuestTableSessionBeanLocal;
 import session.RequestSessionBeanLocal;
+import util.exception.InvalidAssociationException;
 
 /**
  *
@@ -49,24 +52,28 @@ public class TestingDataInitBean {
     @PostConstruct
     public void init() {
         if (em.find(WeddingProject.class, 1L) == null) {
-            WeddingProject weddingProject = new WeddingProject();
-            em.persist(weddingProject);
-            em.flush();
-            Guest guest = new Guest();
-            guest.setAttendingSide("BRIDE");
-            guest.setEmail("RANDOM@EMAIL.COM");
-            guest.setName("TEST");
-            guest.setNumPax(1);
-            guest.setRsvp(false);
-            guestSessionBean.createGuest(guest, weddingProject.getWeddingProjectId());
-            GuestTable guestTable = new GuestTable();
-            guestTable.setCapacity(10);
-            guestTable.setCurrOccupancy(0);
-            guestTable.setLocationX(0);
-            guestTable.setLocationY(0);
-            guestTable.setTableNumber(1);
-            guestTable.setTableSize(100);
-            guestTableSessionBean.createGuestTable(guestTable, 1L);
+            try {
+                WeddingProject weddingProject = new WeddingProject();
+                em.persist(weddingProject);
+                em.flush();
+                Guest guest = new Guest();
+                guest.setAttendingSide("BRIDE");
+                guest.setEmail("RANDOM@EMAIL.COM");
+                guest.setName("TEST");
+                guest.setNumPax(1);
+                guest.setRsvp(false);
+                guestSessionBean.createGuest(guest, weddingProject.getWeddingProjectId());
+                GuestTable guestTable = new GuestTable();
+                guestTable.setCapacity(10);
+                guestTable.setCurrOccupancy(0);
+                guestTable.setLocationX(0);
+                guestTable.setLocationY(0);
+                guestTable.setTableNumber(1);
+                guestTable.setTableSize(100);
+                guestTableSessionBean.createGuestTable(guestTable, 1L);
+            } catch (InvalidAssociationException ex) {
+                //Logger.getLogger(TestingDataInitBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
         }
         

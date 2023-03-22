@@ -6,7 +6,11 @@
 package session;
 
 import entity.Guest;
+import java.util.List;
 import javax.ejb.Local;
+import util.exception.InvalidAssociationException;
+import util.exception.InvalidGetException;
+import util.exception.InvalidUpdateException;
 
 /**
  *
@@ -15,8 +19,12 @@ import javax.ejb.Local;
 @Local
 public interface GuestSessionBeanLocal {
 
-    public void createGuest(Guest guest, Long weddingProjectId);
+    public void createGuest(Guest guest, Long weddingProjectId) throws InvalidAssociationException;
 
     public void deleteGuest(Long guestId);
+
+    public void updateGuest(Guest guest) throws InvalidUpdateException;
+
+    public List<Guest> getGuests(Long weddingId) throws InvalidGetException;
     
 }

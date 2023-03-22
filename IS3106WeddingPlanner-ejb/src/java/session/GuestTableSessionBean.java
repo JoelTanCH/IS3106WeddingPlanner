@@ -43,6 +43,17 @@ public class GuestTableSessionBean implements GuestTableSessionBeanLocal {
     }
     
     @Override
+    public void removeGuestFromTable(Long guestId, Long guestTableId) throws InvalidAssociationException {
+        Guest guest = em.find(Guest.class, guestId);
+        GuestTable guestTable = em.find(GuestTable.class, guestTableId);
+        if (!guest.getWeddingProject().equals(guestTable.getWeddingProject())) {
+            throw new InvalidAssociationException();
+        }
+        guest.setGuestTable(null);
+        guestTable.getGuests().remove(guest);
+    }
+    
+    @Override
     public void deleteGuestTable(Long guestTableId) {
         GuestTable guestTable = em.find(GuestTable.class, guestTableId);
         WeddingProject weddingProject = guestTable.getWeddingProject();

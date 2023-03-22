@@ -8,9 +8,14 @@ package session;
 import entity.Guest;
 import entity.GuestTable;
 import entity.WeddingProject;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import util.exception.InvalidAssociationException;
+import util.exception.InvalidGetException;
+import util.exception.InvalidUpdateException;
 
 /**
  *
@@ -25,14 +30,34 @@ public class GuestSessionBean implements GuestSessionBeanLocal {
     private EntityManager em;
 
     @Override
-    public void createGuest(Guest guest, Long weddingProjectId) {
+    public void createGuest(Guest guest, Long weddingProjectId) throws InvalidAssociationException {
         WeddingProject weddingProject = em.find(WeddingProject.class, weddingProjectId);
         em.persist(guest);
         guest.setWeddingProject(weddingProject);
         weddingProject.getGuests().add(guest);
     }
    
-    
+    @Override
+    public void updateGuest(Guest guest) throws InvalidUpdateException {
+        if (guest != null) {
+            Guest toUpdate = em.find(Guest.class, guest.getId());
+            if (guest.getGuestTable() != null) {
+                GuestTable table = em.find(GuestTable.class, guest.getGuestTable().getId());
+                if (table == null) {
+                    throw new InvalidUpdateException();
+                }
+                toUpdate.setGuestTable(table);
+            }
+            toUpdate.setAttendingSide(guest.getAttendingSide());
+            toUpdate.setEmail(guest.getEmail());
+            toUpdate.setName(guest.getName());
+            toUpdate.setNumPax(guest.getNumPax());
+            toUpdate.setRsvp(guest.getRsvp());
+        } else {
+            throw new InvalidUpdateException();
+        }
+
+    }
     @Override
     public void deleteGuest(Long guestId) {
         Guest guest = em.find(Guest.class, guestId);
@@ -45,6 +70,17 @@ public class GuestSessionBean implements GuestSessionBeanLocal {
         }
         em.remove(guest);
     }
+    
+    @Override
+    public List<Guest> getGuests(Long weddingId) throws InvalidGetException {
+        if (weddingId != null && em.find(WeddingProject.class, weddingId) != null) {
+            Query query = em.createQuery("SELECT g FROM Guest g WHERE g.weddingProject.weddingProjectId = ?1").setParameter(1, weddingId);
+            return query.getResultList();
+        } else {
+            throw new InvalidGetException();
+        }
+    }
+ 
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
