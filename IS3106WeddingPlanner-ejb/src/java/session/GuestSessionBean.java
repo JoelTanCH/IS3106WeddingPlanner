@@ -14,6 +14,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import util.exception.InvalidAssociationException;
+import util.exception.InvalidDeleteException;
 import util.exception.InvalidGetException;
 import util.exception.InvalidUpdateException;
 
@@ -32,21 +33,27 @@ public class GuestSessionBean implements GuestSessionBeanLocal {
     @Override
     public void createGuest(Guest guest, Long weddingProjectId) throws InvalidAssociationException {
         WeddingProject weddingProject = em.find(WeddingProject.class, weddingProjectId);
-        em.persist(guest);
-        guest.setWeddingProject(weddingProject);
-        weddingProject.getGuests().add(guest);
+        if (weddingProject != null && guest != null) {
+            em.persist(guest);
+            guest.setWeddingProject(weddingProject);
+            weddingProject.getGuests().add(guest);
+        } else {
+            throw new InvalidAssociationException();
+        }
     }
    
     @Override
     public void updateGuest(Guest guest) throws InvalidUpdateException {
         if (guest != null) {
             Guest toUpdate = em.find(Guest.class, guest.getId());
-            if (guest.getGuestTable() != null) {
+            if (toUpdate != null && guest.getGuestTable() != null) {
                 GuestTable table = em.find(GuestTable.class, guest.getGuestTable().getId());
                 if (table == null) {
                     throw new InvalidUpdateException();
                 }
                 toUpdate.setGuestTable(table);
+            } else {
+                throw new InvalidUpdateException();
             }
             toUpdate.setAttendingSide(guest.getAttendingSide());
             toUpdate.setEmail(guest.getEmail());
@@ -59,16 +66,20 @@ public class GuestSessionBean implements GuestSessionBeanLocal {
 
     }
     @Override
-    public void deleteGuest(Long guestId) {
+    public void deleteGuest(Long guestId) throws InvalidDeleteException {
         Guest guest = em.find(Guest.class, guestId);
-        WeddingProject weddingProject = guest.getWeddingProject();
-        weddingProject.getGuests().remove(guest);
-        if (guest.getGuestTable() != null) {
-            GuestTable table = guest.getGuestTable();
-            table.getGuests().remove(guest);
-            guest.setGuestTable(null);
+        if (guest != null) {
+            WeddingProject weddingProject = guest.getWeddingProject();
+            weddingProject.getGuests().remove(guest);
+            if (guest.getGuestTable() != null) {
+                GuestTable table = guest.getGuestTable();
+                table.getGuests().remove(guest);
+                guest.setGuestTable(null);
+            }
+            em.remove(guest);
+        } else {
+            throw new InvalidDeleteException();
         }
-        em.remove(guest);
     }
     
     @Override

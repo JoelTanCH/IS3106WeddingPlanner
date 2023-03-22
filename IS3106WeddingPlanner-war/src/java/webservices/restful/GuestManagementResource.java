@@ -86,7 +86,7 @@ public class GuestManagementResource {
             guestSBL.createGuest(g, wId);
             return Response.status(204).build();
         } catch (InvalidAssociationException ex) {
-            JsonObject exception = Json.createObjectBuilder().add("error", "Invalid Wedding").build();
+            JsonObject exception = Json.createObjectBuilder().add("Error", "Invalid Wedding").build();
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     }
@@ -100,7 +100,7 @@ public class GuestManagementResource {
             return Response.status(204).build();
         } catch (InvalidUpdateException e) {
             JsonObject exception = Json.createObjectBuilder()
-                    .add("error", "Update Invalid")
+                    .add("Error", "Update Invalid")
                     .build();
             return Response.status(404).entity(exception)
                     .type(MediaType.APPLICATION_JSON).build();
@@ -110,10 +110,10 @@ public class GuestManagementResource {
     @GET
     @Path("/query")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getGuestsFromWedding(@QueryParam("weddingId") Long wedding) {
+    public Response getGuestsFromWedding(@QueryParam("weddingId") Long weddingId) {
         try {
-            List<Guest> guests = guestSBL.getGuests(1L);
-            guests.stream().forEach(guest -> guest.setWeddingProject(null));
+            List<Guest> guests = guestSBL.getGuests(weddingId);
+            guests.forEach(guest -> guest.setWeddingProject(null));
             GenericEntity<List<Guest>> entity = new GenericEntity<List<Guest>>(guests) { };
             return Response.status(200).entity(entity).type(MediaType.APPLICATION_JSON).build();
         } catch (InvalidGetException ex) {
@@ -130,13 +130,13 @@ public class GuestManagementResource {
     @DELETE
     @Path("/{guestId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteField(@PathParam("guestId") Long guestId) {
+    public Response deleteGuest(@PathParam("guestId") Long guestId) {
         try {
             guestSBL.deleteGuest(guestId);
             return Response.status(204).build();
-        } catch (NoResultException e) {
+        } catch (Exception e) {
             JsonObject exception = Json.createObjectBuilder()
-                    .add("error", "Guest not found")
+                    .add("Error", "Guest not found")
                     .build();
             return Response.status(404).entity(exception).build();
         }

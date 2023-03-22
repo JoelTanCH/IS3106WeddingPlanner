@@ -9,6 +9,7 @@ import entity.Guest;
 import java.util.List;
 import javax.ejb.Local;
 import util.exception.InvalidAssociationException;
+import util.exception.InvalidDeleteException;
 import util.exception.InvalidGetException;
 import util.exception.InvalidUpdateException;
 
@@ -21,7 +22,7 @@ public interface GuestSessionBeanLocal {
 
     public void createGuest(Guest guest, Long weddingProjectId) throws InvalidAssociationException;
 
-    public void deleteGuest(Long guestId);
+    public void deleteGuest(Long guestId) throws InvalidDeleteException;
 
     public void updateGuest(Guest guest) throws InvalidUpdateException;
 
