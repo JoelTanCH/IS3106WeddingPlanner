@@ -55,6 +55,9 @@ public class WeddingProject implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long weddingProjectId;
+    
+    private String name;
+    private String description;
 
     @ManyToOne
     private WeddingOrganiser weddingOrganiser;
@@ -189,6 +192,34 @@ public class WeddingProject implements Serializable {
     @Override
     public String toString() {
         return "entity.WeddingProject[ id=" + weddingProjectId + " ]";
+    }
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
     }
     
 }
