@@ -52,6 +52,7 @@ public class WeddingOrganiserSessionBean implements WeddingOrganiserSessionBeanL
     @Override
     public void deleteWeddingOrganiser(Long wId) throws WeddingOrganiserNotFoundException {
         WeddingOrganiser w = getWeddingOrganiser(wId);
+        w.setWeddingProjects(null);
         em.remove(w);
     }
      
