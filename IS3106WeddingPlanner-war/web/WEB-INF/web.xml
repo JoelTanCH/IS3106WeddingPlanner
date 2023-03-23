@@ -45,4 +45,10 @@
         <local>session.GuestSessionBeanLocal</local>
         <ejb-link>IS3106WeddingPlanner-ejb.jar#GuestSessionBean</ejb-link>
     </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>GuestTableSessionBean</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>session.GuestTableSessionBeanLocal</local>
+        <ejb-link>IS3106WeddingPlanner-ejb.jar#GuestTableSessionBean</ejb-link>
+    </ejb-local-ref>
 </web-app>

@@ -86,7 +86,9 @@ public class GuestSessionBean implements GuestSessionBeanLocal {
     public List<Guest> getGuests(Long weddingId) throws InvalidGetException {
         if (weddingId != null && em.find(WeddingProject.class, weddingId) != null) {
             Query query = em.createQuery("SELECT g FROM Guest g WHERE g.weddingProject.weddingProjectId = ?1").setParameter(1, weddingId);
-            return query.getResultList();
+            List<Guest> guests = query.getResultList();
+            guests.forEach(g -> em.detach(g));
+            return guests;
         } else {
             throw new InvalidGetException();
         }
