@@ -31,7 +31,12 @@ import session.GuestSessionBeanLocal;
 import util.exception.InvalidAssociationException;
 import util.exception.InvalidGetException;
 import util.exception.InvalidUpdateException;
-
+import java.security.Key;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import jwt.JWTSessionBeanLocal;
 /**
  * REST Web Service
  *
@@ -41,11 +46,15 @@ import util.exception.InvalidUpdateException;
 @RequestScoped
 public class GuestManagementResource {
 
+
     @EJB
     private GuestSessionBeanLocal guestSBL;
 
     @Context
     private UriInfo context;
+    
+    @EJB
+    private JWTSessionBeanLocal jwtSBL;
 
     /**
      * Creates a new instance of GuestmanagementResource
@@ -77,6 +86,7 @@ public class GuestManagementResource {
     public void putJson(String content) {
     }
 
+    
     @POST
     @Path("/{wId}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -141,5 +151,40 @@ public class GuestManagementResource {
             return Response.status(404).entity(exception).build();
         }
     } //end deleteField
+    
+    @GET
+    @Path("/simulateLogin")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveToken(@QueryParam("username") String username, @QueryParam("password") String password) {
+        try {
+            String token = jwtSBL.generateToken("ADMIN");
+            JsonObject successMsg = Json.createObjectBuilder().add("TOKEN", token).build();
+            return Response.status(200).entity(successMsg).build();
+        } catch (Exception e) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("Error", "Guest not found")
+                    .build();
+            return Response.status(404).entity(exception).build();
+        }
+    } //end deleteField
+    
+    @POST
+    @Path("/simulateLogin")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveToken(@QueryParam("token") String token) {
+        try {
+            if (jwtSBL.verifyToken(token).equals("ADMIN")) {
+                return Response.status(204).build();
+            } else {
+                throw new InvalidGetException();
+            }
+        } catch (Exception e) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("Error", "Token INVALID")
+                    .build();
+            return Response.status(404).entity(exception).build();
+        }
+    } //end deleteField
+
 
 }

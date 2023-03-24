@@ -7,7 +7,9 @@ package session;
 
 import entity.WeddingOrganiser;
 import error.WeddingOrganiserNotFoundException;
+import error.WeddingProjectNotFoundException;
 import javax.ejb.Local;
+import util.exception.InvalidDeleteException;
 
 /**
  *
@@ -16,12 +18,12 @@ import javax.ejb.Local;
 @Local
 public interface WeddingOrganiserSessionBeanLocal {
 
-    public void updateWeddingOrganiser(WeddingOrganiser w) throws WeddingOrganiserNotFoundException;
+    public void deleteWeddingOrganiser(Long wId) throws WeddingOrganiserNotFoundException, WeddingProjectNotFoundException, InvalidDeleteException;
 
-    public void createWeddingOrganiser(WeddingOrganiser w);
+    public void updateWeddingOrganiser(WeddingOrganiser w) throws WeddingOrganiserNotFoundException;
 
     public WeddingOrganiser getWeddingOrganiser(Long wId) throws WeddingOrganiserNotFoundException;
 
-    public void deleteWeddingOrganiser(Long wId) throws WeddingOrganiserNotFoundException;
+    public void createWeddingOrganiser(WeddingOrganiser w);
     
 }

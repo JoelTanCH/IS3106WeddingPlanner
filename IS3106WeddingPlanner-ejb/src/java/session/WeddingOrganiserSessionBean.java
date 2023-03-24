@@ -8,11 +8,13 @@ package session;
 import entity.WeddingOrganiser;
 import entity.WeddingProject;
 import error.WeddingOrganiserNotFoundException;
+import error.WeddingProjectNotFoundException;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import util.exception.InvalidDeleteException;
 
 /**
  *
@@ -20,9 +22,11 @@ import javax.persistence.Query;
  */
 @Stateless
 public class WeddingOrganiserSessionBean implements WeddingOrganiserSessionBeanLocal {
-
     @PersistenceContext(unitName = "IS3106WeddingPlanner-ejbPU")
     private EntityManager em;
+    
+    /*@EJB
+    WeddingProjectSessionBean weddingProjectSessionBean;*/
 
     @Override
     public void createWeddingOrganiser(WeddingOrganiser w) {
@@ -50,11 +54,18 @@ public class WeddingOrganiserSessionBean implements WeddingOrganiserSessionBeanL
     }
     
     @Override
-    public void deleteWeddingOrganiser(Long wId) throws WeddingOrganiserNotFoundException {
+    public void deleteWeddingOrganiser(Long wId) throws WeddingOrganiserNotFoundException, WeddingProjectNotFoundException, InvalidDeleteException {
         WeddingOrganiser w = getWeddingOrganiser(wId);
+        
+        List<WeddingProject> projects = w.getWeddingProjects();
         w.setWeddingProjects(null);
+        
+        for(WeddingProject project : projects) {
+            //weddingProjectSessionBean.deleteWeddingProject(project.getWeddingProjectId());
+            project.setWeddingOrganiser(null);
+        }
         em.remove(w);
     }
-     
-
+    // Add business logic below. (Right-click in editor and choose
+    // "Insert Code > Add Business Method")
 }
