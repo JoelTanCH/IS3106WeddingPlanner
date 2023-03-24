@@ -10,10 +10,13 @@ import entity.Guest;
 import entity.GuestTable;
 import entity.Request;
 import entity.WeddingProject;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import java.math.BigDecimal;
+import java.security.InvalidKeyException;
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
@@ -25,7 +28,13 @@ import session.GuestSessionBeanLocal;
 import session.GuestTableSessionBeanLocal;
 import session.RequestSessionBeanLocal;
 import util.exception.InvalidAssociationException;
-
+import java.security.SecureRandom;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import jwt.JWTSessionBeanLocal;
+import jwt.KeyHolderLocal;
 /**
  *
  * @author leomi
@@ -45,9 +54,16 @@ public class TestingDataInitBean {
 
     @EJB
     private GuestSessionBeanLocal guestSessionBean;
-
+    @EJB
+    private JWTSessionBeanLocal jwtSBL;
+    
+    @EJB
+    private KeyHolderLocal keyHolderSBL;
     @PersistenceContext(unitName = "IS3106WeddingPlanner-ejbPU")
     private EntityManager em;
+    
+    public TestingDataInitBean() {
+    }
 
     @PostConstruct
     public void init() {
@@ -76,6 +92,12 @@ public class TestingDataInitBean {
             }
 
         }
+
+        Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+        keyHolderSBL.setKey(key);
+        String token = jwtSBL.generateToken("ADMIN");
+        System.out.println(token);
+        System.out.println(jwtSBL.verifyToken(token));
         
         if (em.find(Admin.class, (long) 1) == null) {
             Admin a1 = new Admin();
@@ -94,7 +116,5 @@ public class TestingDataInitBean {
 
         }
     }
-
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
 }
+

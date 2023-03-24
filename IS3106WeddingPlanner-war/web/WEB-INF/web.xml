@@ -51,4 +51,16 @@
         <local>session.GuestTableSessionBeanLocal</local>
         <ejb-link>IS3106WeddingPlanner-ejb.jar#GuestTableSessionBean</ejb-link>
     </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>JWTSessionBean</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>jwt.JWTSessionBeanLocal</local>
+        <ejb-link>IS3106WeddingPlanner-ejb.jar#JWTSessionBean</ejb-link>
+    </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>JWTSessionBean1</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>jwt.JWTSessionBeanLocal</local>
+        <ejb-link>IS3106WeddingPlanner-ejb.jar#JWTSessionBean</ejb-link>
+    </ejb-local-ref>
 </web-app>
