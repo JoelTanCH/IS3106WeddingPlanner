@@ -69,8 +69,7 @@ public class AdminsResource {
             // curly braces in the line below is an anonymous inner class. Since GenericEntity is an abstract class,
             // we need to declare sth that extends from it, and cannot instantiate it by itself.
             // the syntax below creates an empty class extending GenericEntity, with the same effect like` A extends GenericEntity {} `
-            GenericEntity<List<Admin>> entityToReturn = new GenericEntity<List<Admin>>(gotAdminsByUsernamePassword) {
-            };
+            GenericEntity<List<Admin>> entityToReturn = new GenericEntity<List<Admin>>(gotAdminsByUsernamePassword) {};
 
             // response status 200 means "OK"
             return Response.status(200).entity(entityToReturn).build();
