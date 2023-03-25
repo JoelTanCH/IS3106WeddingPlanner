@@ -9,7 +9,7 @@
 *.war
 *.ear
 *.zip
-!/IS3106WeddingPlanner/src/*.jar
+!./IS3106WeddingPlanner/src/*.jar
 
 # User defined
 nbproject/private/
