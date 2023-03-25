@@ -5,9 +5,13 @@
  */
 package entity;
 
+import enumeration.BrideGroomEnum;
+import enumeration.StatusEnum;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -27,13 +31,15 @@ public class Guest implements Serializable {
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
-    private String attendingSide;
+    @Enumerated(EnumType.STRING)
+    private BrideGroomEnum attendingSide;
     @Column(nullable = false)
     private String email;
     @Column(nullable = false)
     private int numPax;
     @Column(nullable = false)
-    private Boolean rsvp; 
+    @Enumerated(EnumType.STRING)
+    private StatusEnum rsvp; 
     
     @ManyToOne
     private GuestTable guestTable;
@@ -73,11 +79,11 @@ public class Guest implements Serializable {
         this.name = name;
     }
 
-    public String getAttendingSide() {
+    public BrideGroomEnum getAttendingSide() {
         return attendingSide;
     }
 
-    public void setAttendingSide(String attendingSide) {
+    public void setAttendingSide(BrideGroomEnum attendingSide) {
         this.attendingSide = attendingSide;
     }
 
@@ -97,12 +103,13 @@ public class Guest implements Serializable {
         this.numPax = numPax;
     }
 
-    public Boolean getRsvp() {
+
+    public StatusEnum getRsvp() {
         return rsvp;
     }
 
-    public void setRsvp(Boolean rsvp) {
-        this.rsvp = rsvp;
+    public void setRsvp(StatusEnum status) {
+        this.rsvp = status;
     }
     
     public Long getId() {
