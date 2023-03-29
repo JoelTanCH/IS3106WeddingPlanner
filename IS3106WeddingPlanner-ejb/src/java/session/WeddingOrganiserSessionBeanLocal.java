@@ -8,6 +8,7 @@ package session;
 import entity.WeddingOrganiser;
 import error.WeddingOrganiserNotFoundException;
 import error.WeddingProjectNotFoundException;
+import java.util.List;
 import javax.ejb.Local;
 import util.exception.InvalidDeleteException;
 
@@ -25,5 +26,7 @@ public interface WeddingOrganiserSessionBeanLocal {
     public WeddingOrganiser getWeddingOrganiser(Long wId) throws WeddingOrganiserNotFoundException;
 
     public void createWeddingOrganiser(WeddingOrganiser w);
+
+    public List<WeddingOrganiser> getAllWeddingOrganisers();
     
 }
