@@ -29,7 +29,8 @@ public class Request implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long requestId;
-    @Column(nullable = false)
+    //Made isAccepted nullable, so there is a way of identifying if the request has been rejected. If it defaulted to be false, then there is no way of knowing.
+    @Column
     private Boolean isAccepted;
     @Column(nullable = false)
     private String quotationURL;

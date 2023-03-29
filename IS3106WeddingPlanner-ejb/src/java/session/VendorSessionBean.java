@@ -79,16 +79,23 @@ public class VendorSessionBean implements VendorSessionBeanLocal {
         }
         return vendorsInCategory;
     }
-    
+
     @Override //should names of vendors be unique? 
-    public Vendor getVendorByVendorName(String vendorName) throws VendorNameNotFoundException{
-        try{
+    public Vendor getVendorByVendorName(String vendorName) throws VendorNameNotFoundException {
+        try {
             Query query = em.createQuery("SELECT v FROM Vendor v WHERE v.username =:vendorName");
             query.setParameter("vendorName", vendorName);
-            return (Vendor)query.getSingleResult();
-        }catch(Exception e){
+            return (Vendor) query.getSingleResult();
+        } catch (Exception e) {
             throw new VendorNameNotFoundException(e.getMessage());
         }
+    }
+
+    @Override
+    public Long createVendor(Vendor vendor) {
+        em.persist(vendor);
+        em.flush();
+        return vendor.getUserId();
     }
 
 }

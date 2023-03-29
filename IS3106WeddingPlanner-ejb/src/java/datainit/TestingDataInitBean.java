@@ -9,8 +9,10 @@ import entity.Admin;
 import entity.Guest;
 import entity.GuestTable;
 import entity.Request;
+import entity.Vendor;
 import entity.WeddingProject;
 import static enumeration.BrideGroomEnum.BRIDE;
+import enumeration.CategoryEnum;
 import static enumeration.StatusEnum.NOTSENT;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -37,6 +39,8 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import jwt.JWTSessionBeanLocal;
 import jwt.KeyHolderLocal;
+import session.VendorSessionBeanLocal;
+
 /**
  *
  * @author leomi
@@ -44,6 +48,9 @@ import jwt.KeyHolderLocal;
 @Startup
 @Singleton
 public class TestingDataInitBean {
+
+    @EJB(name = "VendorSessionBeanLocal")
+    private VendorSessionBeanLocal vendorSessionBeanLocal;
 
     @EJB
     private AdminSessionBeanLocal adminSessionBean;
@@ -56,14 +63,16 @@ public class TestingDataInitBean {
 
     @EJB
     private GuestSessionBeanLocal guestSessionBean;
+
     @EJB
     private JWTSessionBeanLocal jwtSBL;
-    
+
     @EJB
     private KeyHolderLocal keyHolderSBL;
+
     @PersistenceContext(unitName = "IS3106WeddingPlanner-ejbPU")
     private EntityManager em;
-    
+
     public TestingDataInitBean() {
     }
 
@@ -100,7 +109,7 @@ public class TestingDataInitBean {
         String token = jwtSBL.generateToken("ADMIN");
         System.out.println(token);
         System.out.println(jwtSBL.verifyToken(token));
-        
+
         if (em.find(Admin.class, (long) 1) == null) {
             Admin a1 = new Admin();
             a1.setEmail("joestar@gmail.com");
@@ -108,15 +117,37 @@ public class TestingDataInitBean {
             a1.setPassword("caesar");
             adminSessionBean.createAdmin(a1);
 
+            Vendor vendor = new Vendor();
+            vendor.setUsername("TestVendor");
+            vendor.setEmail("sampleVendorEmail@email.com");
+            vendor.setPassword("password");
+            vendor.setDescription("Sample vendor description. I do these stuff");
+            vendor.setBanner("This is a banner");
+            vendor.setWebsiteUrl("vendorURL.com");
+            vendor.setInstagramUrl("This is the URL of instagram");
+            vendor.setFacebookUrl("Facebook url");
+            vendor.setWhatsappUrl("Whatsapp url");
+            vendor.setCategory(CategoryEnum.ENTERTAINMENT);
+
             Request sampleRequest = new Request();
-            sampleRequest.setIsAccepted(false);
+            sampleRequest.setIsAccepted(null);
             sampleRequest.setQuotationURL("www.fakeUrl.com");
             sampleRequest.setQuotedPrice(BigDecimal.valueOf(1000L));
             sampleRequest.setRequestDate(new Date());
             sampleRequest.setRequestDetails("Do something for me");
+            sampleRequest.setVendor(vendor);
+            vendor.getRequests().add(sampleRequest);
             requestSessionBeanLocal.createRequest(sampleRequest);
-
+            sampleRequest = new Request();
+            sampleRequest.setIsAccepted(null);
+            sampleRequest.setQuotationURL("www.anotherfakeUrl.com");
+            sampleRequest.setQuotedPrice(BigDecimal.valueOf(200L));
+            sampleRequest.setRequestDate(new Date());
+            sampleRequest.setRequestDetails("Small gig");
+            sampleRequest.setVendor(vendor);
+            vendor.getRequests().add(sampleRequest);
+            requestSessionBeanLocal.createRequest(sampleRequest);
+            vendorSessionBeanLocal.createVendor(vendor);
         }
     }
 }
-

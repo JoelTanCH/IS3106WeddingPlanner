@@ -6,6 +6,7 @@
 package webservices.restful;
 
 import entity.Request;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -19,6 +20,7 @@ import javax.ws.rs.PUT;
 import javax.enterprise.context.RequestScoped;
 import javax.json.Json;
 import javax.json.JsonObject;
+import javax.json.JsonStructure;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.persistence.NoResultException;
@@ -53,7 +55,7 @@ public class RequestsResource {
             Request request = requestSessionBeanLocal.retrieveRequest(requestId);
             return Response.status(200).entity(request).type(MediaType.APPLICATION_JSON).build();
         } catch (NoResultException e) {
-            
+
             //Template to throw error. Can change
             JsonObject exception = Json.createObjectBuilder()
                     .add("error", "Not found")
@@ -61,5 +63,41 @@ public class RequestsResource {
             return Response.status(404).entity(exception)
                     .type(MediaType.APPLICATION_JSON).build();
         }
+    }
+
+    @GET
+    @Path("vendorRequests/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getVendorRequests(@PathParam("id") Long vendorId) {
+        try {
+            List<Request> requests = requestSessionBeanLocal.retrieveVendorRequests(vendorId);
+            for (Request req : requests) {
+                //Disassociation
+                req.setVendor(null);
+                req.setWeddingProject(null);
+            }
+            return Response.status(200).entity(requests).type(MediaType.APPLICATION_JSON).build();
+        } catch (NoResultException e) {
+
+            //Template to throw error. Can change
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found")
+                    .build();
+            return Response.status(404).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    }
+
+    @PUT
+    @Path("vendorRequests/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void respondToVendorRequest(JsonStructure json, @PathParam("id") Long requestId) {
+        Boolean isAccepted = Boolean.valueOf(json.getValue("/isAccepted").toString());
+        if (isAccepted) {
+            requestSessionBeanLocal.acceptRequest(requestId);
+        } else {
+            requestSessionBeanLocal.rejectRequest(requestId);
+        }
+        
     }
 }
