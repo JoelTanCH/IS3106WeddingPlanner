@@ -54,6 +54,10 @@ public class AdminSessionBean implements AdminSessionBeanLocal {
         // test and see if it works with empty strings
         return q.getResultList();
     }
+    
+    public void updateAdmin(Admin a) {
+        em.merge(a);
+    }
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")

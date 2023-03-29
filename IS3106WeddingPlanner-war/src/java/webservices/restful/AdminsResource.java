@@ -6,7 +6,6 @@
 package webservices.restful;
 
 import entity.Admin;
-import java.math.BigDecimal;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.core.Context;
@@ -20,6 +19,7 @@ import javax.json.JsonObject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.GenericEntity;
@@ -69,7 +69,8 @@ public class AdminsResource {
             // curly braces in the line below is an anonymous inner class. Since GenericEntity is an abstract class,
             // we need to declare sth that extends from it, and cannot instantiate it by itself.
             // the syntax below creates an empty class extending GenericEntity, with the same effect like` A extends GenericEntity {} `
-            GenericEntity<List<Admin>> entityToReturn = new GenericEntity<List<Admin>>(gotAdminsByUsernamePassword) {};
+            GenericEntity<List<Admin>> entityToReturn = new GenericEntity<List<Admin>>(gotAdminsByUsernamePassword) {
+            };
 
             // response status 200 means "OK"
             return Response.status(200).entity(entityToReturn).build();
@@ -102,6 +103,20 @@ public class AdminsResource {
         } catch (Exception e) {
             // response status 500 is internal server error
             JsonObject exception = Json.createObjectBuilder().add("error", "Probably admin with same attributes already exists")
+                    .add("exceptionMessage", e.getMessage())
+                    .build();
+            return Response.status(500).entity(exception).build();
+        }
+    }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateAdmin(Admin admin) {
+        try {
+            adminSessionBeanLocal.updateAdmin(admin);
+            return Response.status(200).build();
+        } catch (Exception e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "no idea what happened, update went wrong ")
                     .add("exceptionMessage", e.getMessage())
                     .build();
             return Response.status(500).entity(exception).build();

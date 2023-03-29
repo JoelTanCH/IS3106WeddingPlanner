@@ -27,6 +27,11 @@ public class VendorSessionBean implements VendorSessionBeanLocal {
     private EntityManager em;
 
     @Override
+    public void createVendor(Vendor v) {
+        em.persist(v);
+    }
+    
+    @Override
     public List<Vendor> getAllVendors() {
         Query query = em.createQuery("SELECT v FROM Vendor v");
         return query.getResultList();
@@ -91,4 +96,8 @@ public class VendorSessionBean implements VendorSessionBeanLocal {
         }
     }
 
+    @Override
+    public void updateVendor(Vendor v) {
+        em.merge(v);
+    }
 }
