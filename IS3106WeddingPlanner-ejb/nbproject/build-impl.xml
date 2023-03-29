@@ -782,21 +782,21 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${libs.jpa20-persistence.classpath}" todir="${build.classes.dir}"/>
         <copyfiles files="${libs.JWT.classpath}" todir="${build.classes.dir}"/>
         <copyfiles files="${libs.JWTImpl.classpath}" todir="${build.classes.dir}"/>
-        <copyfiles files="${libs.JJWTJackson.classpath}" todir="${build.classes.dir}"/>
+        <copyfiles files="${libs.JWTJackson.classpath}" todir="${build.classes.dir}"/>
     </target>
     <target if="is.server.weblogic" name="-library-inclusion-in-archive-weblogic">
         <basename file="${libs.jakartaee-api-8.0.classpath}" property="manifest.libs.jakartaee-api-8.0.classpath"/>
         <basename file="${libs.jpa20-persistence.classpath}" property="manifest.libs.jpa20-persistence.classpath"/>
         <basename file="${libs.JWT.classpath}" property="manifest.libs.JWT.classpath"/>
         <basename file="${libs.JWTImpl.classpath}" property="manifest.libs.JWTImpl.classpath"/>
-        <basename file="${libs.JJWTJackson.classpath}" property="manifest.libs.JJWTJackson.classpath"/>
+        <basename file="${libs.JWTJackson.classpath}" property="manifest.libs.JWTJackson.classpath"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
             <attribute name="Extension-List" value="jar-1 jar-2 jar-3 jar-4 jar-5 "/>
             <attribute name="jar-1-Extension-Name" value="${manifest.libs.jakartaee-api-8.0.classpath}"/>
             <attribute name="jar-2-Extension-Name" value="${manifest.libs.jpa20-persistence.classpath}"/>
             <attribute name="jar-3-Extension-Name" value="${manifest.libs.JWT.classpath}"/>
             <attribute name="jar-4-Extension-Name" value="${manifest.libs.JWTImpl.classpath}"/>
-            <attribute name="jar-5-Extension-Name" value="${manifest.libs.JJWTJackson.classpath}"/>
+            <attribute name="jar-5-Extension-Name" value="${manifest.libs.JWTJackson.classpath}"/>
         </manifest>
     </target>
     <target depends="compile" name="library-inclusion-in-manifest">
@@ -804,7 +804,7 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${libs.jpa20-persistence.classpath}" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${libs.JWT.classpath}" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${libs.JWTImpl.classpath}" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${libs.JJWTJackson.classpath}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${libs.JWTJackson.classpath}" todir="${dist.ear.dir}/lib"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update"/>
     </target>
     <target name="-copy-meta-inf">

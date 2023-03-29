@@ -22,10 +22,9 @@ public class ApplicationConfig extends javax.ws.rs.core.Application {
     }
 
     /**
-     * Do not modify addRestResourceClasses() method.
-     * It is automatically populated with
-     * all resources defined in the project.
-     * If required, comment out calling this method in getClasses().
+     * Do not modify addRestResourceClasses() method. It is automatically
+     * populated with all resources defined in the project. If required, comment
+     * out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(webservices.restful.AdminsResource.class);
@@ -33,8 +32,11 @@ public class ApplicationConfig extends javax.ws.rs.core.Application {
         resources.add(webservices.restful.GuestManagementResource.class);
         resources.add(webservices.restful.RequestsResource.class);
         resources.add(webservices.restful.TableManagementResource.class);
+        resources.add(webservices.restful.VendorsResource.class);
         resources.add(webservices.restful.WeddingChecklistsResource.class);
+        resources.add(webservices.restful.WeddingOrganisersResource.class);
+//        resources.add(webservices.restful.WeddingProjectsResource.class);
         resources.add(webservices.restful.WeddingProjectsResource.class);
     }
-    
+
 }

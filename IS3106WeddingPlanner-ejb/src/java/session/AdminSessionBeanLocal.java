@@ -23,5 +23,7 @@ public interface AdminSessionBeanLocal {
     public List<Admin> getAdminsByUsernamePassword(String email, String password);
 
     public List<Admin> searchAdminsByUsernameEmail(String username, String email);
+
+    public void updateAdmin(Admin a);
     
 }
