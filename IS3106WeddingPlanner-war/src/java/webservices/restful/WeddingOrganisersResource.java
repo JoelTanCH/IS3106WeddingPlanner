@@ -29,7 +29,7 @@ import session.WeddingOrganiserSessionBeanLocal;
  *
  * @author wangp
  */
-@Path("vendors")
+@Path("wedding-organisers")
 @RequestScoped
 public class WeddingOrganisersResource {
 
