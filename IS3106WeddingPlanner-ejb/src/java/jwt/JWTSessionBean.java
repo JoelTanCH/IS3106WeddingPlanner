@@ -19,12 +19,14 @@ import javax.ejb.Stateless;
 public class JWTSessionBean implements JWTSessionBeanLocal {
     @EJB
     private KeyHolderLocal keyHolder;
+    @Override
     public String generateToken(String role) { 
             Date date = new Date();
             date.setDate(date.getDate() + 1);
             return Jwts.builder().setSubject(role).setExpiration(date).signWith(keyHolder.getKey()).compact(); 
     }
     
+    @Override
     public String verifyToken(String token) throws JwtException {
         try {
             return Jwts.parserBuilder().setSigningKey(keyHolder.getKey()).build().parseClaimsJws(token).getBody().getSubject();

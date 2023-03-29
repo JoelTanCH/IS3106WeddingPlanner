@@ -9,7 +9,6 @@
 *.war
 *.ear
 *.zip
-
 # User defined
 nbproject/private/
 build/
