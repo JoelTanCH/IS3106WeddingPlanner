@@ -98,6 +98,7 @@ public class VendorSessionBean implements VendorSessionBeanLocal {
         return vendor.getUserId();
     }
 
+    @Override
     public void updateVendor(Vendor v) {
         em.merge(v);
     }

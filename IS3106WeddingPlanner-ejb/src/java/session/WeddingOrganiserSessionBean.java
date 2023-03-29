@@ -56,7 +56,7 @@ public class WeddingOrganiserSessionBean implements WeddingOrganiserSessionBeanL
 
         wOld.setUsername(w.getUsername());
         wOld.setEmail(w.getEmail());
-        wOld.setIsBanned(w.isIsBanned());
+        wOld.setPassword(w.getPassword());
     }
 
     @Override
