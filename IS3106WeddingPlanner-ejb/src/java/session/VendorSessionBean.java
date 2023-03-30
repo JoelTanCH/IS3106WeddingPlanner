@@ -33,41 +33,43 @@ public class VendorSessionBean implements VendorSessionBeanLocal {
     }
 
     @Override
-    public List<Vendor> getVendorByCategory(String vendorCategorySelection) throws InvalidVendorCategory { //ENSURE STRING GIVEN SAME AS ENUMERATION STRING IN FROTNEND
+    public List<Vendor> getVendorByCategory(String selection) throws InvalidVendorCategory { //ENSURE STRING GIVEN SAME AS ENUMERATION STRING IN FROTNEND
         List<Vendor> allVendors = getAllVendors();
         List<Vendor> vendorsInCategory = new ArrayList<>();
-        if (vendorCategorySelection == "Entertainment") {
+        String vendorCategorySelection = selection.toLowerCase();
+        System.out.println("vendorCategorySelection = " + vendorCategorySelection);
+        if (vendorCategorySelection.equals("entertainment")) { //could use .contains here 
             for (Vendor vendor : allVendors) {
                 if (vendor.getCategory() == CategoryEnum.ENTERTAINMENT) {
                     vendorsInCategory.add(vendor);
                 }
             }
-        } else if (vendorCategorySelection == "Food") {
+        } else if (vendorCategorySelection.equals("food")) {
             for (Vendor vendor : allVendors) {
                 if (vendor.getCategory() == CategoryEnum.FOOD) {
                     vendorsInCategory.add(vendor);
                 }
             }
-        } else if (vendorCategorySelection == "Lighting") {
+        } else if (vendorCategorySelection.equals("lighting")) {
             for (Vendor vendor : allVendors) {
                 if (vendor.getCategory() == CategoryEnum.LIGHTING) {
                     vendorsInCategory.add(vendor);
                 }
             }
-        } else if (vendorCategorySelection == "Decoration") {
+        } else if (vendorCategorySelection.equals("decoration")) {
             for (Vendor vendor : allVendors) {
                 if (vendor.getCategory() == CategoryEnum.DECORATION) {
                     vendorsInCategory.add(vendor);
                 }
             }
-        } else if (vendorCategorySelection == "Dresses&Suits") {
+        } else if (vendorCategorySelection.equals("clothes")) {
 
             for (Vendor vendor : allVendors) {
-                if (vendor.getCategory() == CategoryEnum.DRESSES_SUITS) {
+                if (vendor.getCategory() == CategoryEnum.CLOTHES) {
                     vendorsInCategory.add(vendor);
                 }
             }
-        } else if (vendorCategorySelection == "Entertainment") {
+        } else if (vendorCategorySelection.equals("entertainment")) {
 
             for (Vendor vendor : allVendors) {
                 if (vendor.getCategory() == CategoryEnum.ENTERTAINMENT) {
@@ -77,6 +79,7 @@ public class VendorSessionBean implements VendorSessionBeanLocal {
         } else {
             throw new InvalidVendorCategory("Invalid Vendor Category: " + vendorCategorySelection);
         }
+        System.out.println("vendors in category = "+ vendorsInCategory.get(0));
         return vendorsInCategory;
     }
 

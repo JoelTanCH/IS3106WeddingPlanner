@@ -52,8 +52,57 @@ public class VendorsResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Vendor> getAllVendors() {
-        return vendorSessionBeanLocal.getAllVendors();
+        List<Vendor> allVendors = vendorSessionBeanLocal.getAllVendors();
+        for(Vendor vendor : allVendors){
+            vendor.setRequests(null);
+        }
+        //return Response.status(200).entity(allVendors).type(MediaType.APPLICATION_JSON).build();
+        return allVendors;
     }
+    
+    @GET
+    @Path("{vendorName}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getVendor(@PathParam("vendorName") String vendorName) {
+        try {
+            Vendor vendor = vendorSessionBeanLocal.getVendorByVendorName(vendorName);
+            vendor.setRequests(null);
+            return Response.status(200).entity(vendor).type(MediaType.APPLICATION_JSON).build();
+        } catch (Exception e) {
+            System.out.println("Error === "+ e.getMessage());
+            //Template to throw error. Can change
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found")
+                    .build();
+            return Response.status(404).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    }
+    
+    @GET
+    @Path("allCategories/{category}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllVendorsInCategory(@PathParam("category") String category) {
+        try{
+            List<Vendor> vendorsInCategory = vendorSessionBeanLocal.getVendorByCategory(category);
+            for(Vendor vendor : vendorsInCategory){
+                vendor.setRequests(null);
+            }
+            return Response.status(200).entity(vendorsInCategory).type(MediaType.APPLICATION_JSON).build();
+        }catch (Exception e) {
+            System.out.println("Error === "+ e.getMessage());
+
+            //Template to throw error. Can change
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found")
+                    .build();
+            return Response.status(404).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    }
+    
+    
+    
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
