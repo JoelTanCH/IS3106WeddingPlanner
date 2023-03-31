@@ -10,6 +10,7 @@ import entity.Guest;
 import entity.GuestTable;
 import entity.Request;
 import entity.Vendor;
+import entity.WeddingOrganiser;
 import entity.WeddingProject;
 import static enumeration.BrideGroomEnum.BRIDE;
 import enumeration.CategoryEnum;
@@ -40,6 +41,7 @@ import javax.crypto.spec.SecretKeySpec;
 import jwt.JWTSessionBeanLocal;
 import jwt.KeyHolderLocal;
 import session.VendorSessionBeanLocal;
+import session.WeddingOrganiserSessionBeanLocal;
 
 /**
  *
@@ -54,6 +56,9 @@ public class TestingDataInitBean {
 
     @EJB
     private AdminSessionBeanLocal adminSessionBean;
+
+    @EJB
+    private WeddingOrganiserSessionBeanLocal weddingOrganiserSessionBeanLocal;
 
     @EJB
     private RequestSessionBeanLocal requestSessionBeanLocal;
@@ -148,7 +153,7 @@ public class TestingDataInitBean {
             vendor_entertainment.getRequests().add(sampleRequest);
             requestSessionBeanLocal.createRequest(sampleRequest);
             vendorSessionBeanLocal.createVendor(vendor_entertainment);
-            
+
             Vendor vendor_entertainment2 = new Vendor();
             vendor_entertainment2.setUsername("EntertainmentVendor2");
             vendor_entertainment2.setEmail("EntertainmentVendor2@email.com");
@@ -161,7 +166,7 @@ public class TestingDataInitBean {
             vendor_entertainment2.setWhatsappUrl("Whatsapp url");
             vendor_entertainment2.setCategory(CategoryEnum.ENTERTAINMENT);
             vendorSessionBeanLocal.createVendor(vendor_entertainment2);
-            
+
             Vendor vendor_food = new Vendor();
             vendor_food.setUsername("FoodVendor");
             vendor_food.setEmail("FoodVendor@email.com");
@@ -174,7 +179,7 @@ public class TestingDataInitBean {
             vendor_food.setWhatsappUrl("Whatsapp url");
             vendor_food.setCategory(CategoryEnum.FOOD);
             vendorSessionBeanLocal.createVendor(vendor_food);
-            
+
             Vendor vendor_lighting = new Vendor();
             vendor_lighting.setUsername("LightingVendor");
             vendor_lighting.setEmail("LightingVendor@email.com");
@@ -187,7 +192,7 @@ public class TestingDataInitBean {
             vendor_lighting.setWhatsappUrl("Whatsapp url");
             vendor_lighting.setCategory(CategoryEnum.LIGHTING);
             vendorSessionBeanLocal.createVendor(vendor_lighting);
-            
+
             Vendor vendor_decoration = new Vendor();
             vendor_decoration.setUsername("DecorationVendor");
             vendor_decoration.setEmail("DecorationVendor@email.com");
@@ -200,7 +205,7 @@ public class TestingDataInitBean {
             vendor_decoration.setWhatsappUrl("Whatsapp url");
             vendor_decoration.setCategory(CategoryEnum.DECORATION);
             vendorSessionBeanLocal.createVendor(vendor_decoration);
-            
+
             Vendor vendor_clothes = new Vendor();
             vendor_clothes.setUsername("ClothesVendor");
             vendor_clothes.setEmail("ClothesVendor@email.com");
@@ -213,7 +218,7 @@ public class TestingDataInitBean {
             vendor_clothes.setWhatsappUrl("Whatsapp url");
             vendor_clothes.setCategory(CategoryEnum.CLOTHES);
             vendorSessionBeanLocal.createVendor(vendor_clothes);
-            
+
             Vendor vendor_venue = new Vendor();
             vendor_venue.setUsername("VenueVendor");
             vendor_venue.setEmail("VenueVendor@email.com");
@@ -226,6 +231,27 @@ public class TestingDataInitBean {
             vendor_venue.setWhatsappUrl("Whatsapp url");
             vendor_venue.setCategory(CategoryEnum.VENUE);
             vendorSessionBeanLocal.createVendor(vendor_venue);
+
+            WeddingOrganiser w1 = new WeddingOrganiser();
+            w1.setEmail("weddingOrganiser1@email.com");
+            w1.setUsername("weddingOrganiser1");
+            w1.setPassword("password");
+            weddingOrganiserSessionBeanLocal.createWeddingOrganiser(w1);
+            WeddingOrganiser w2 = new WeddingOrganiser();
+            w2.setEmail("weddingOrganiser2@email.com");
+            w2.setUsername("weddingOrganiser2");
+            w2.setPassword("password");
+            weddingOrganiserSessionBeanLocal.createWeddingOrganiser(w2);
+
+        }
+
+        // TESTING VENDOR 2'S LIST OF REQUEST
+        try {
+            Vendor vendor2 = vendorSessionBeanLocal.getVendorByVendorName("EntertainmentVendor");
+
+            System.out.println("vendor2's request list size" + vendor2.getRequests().size());
+        } catch (Exception e) {
+            // do nothing
         }
     }
 }
