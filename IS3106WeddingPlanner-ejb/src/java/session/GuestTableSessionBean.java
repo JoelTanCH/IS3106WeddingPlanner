@@ -29,12 +29,14 @@ public class GuestTableSessionBean implements GuestTableSessionBeanLocal {
     private EntityManager em;
 
     @Override
-    public void createGuestTable(GuestTable guestTable, Long weddingProjectId) throws InvalidAssociationException {
+    public Long createGuestTable(GuestTable guestTable, Long weddingProjectId) throws InvalidAssociationException {
         WeddingProject weddingProject = em.find(WeddingProject.class, weddingProjectId);
         if (weddingProject != null) {
             em.persist(guestTable);
             guestTable.setWeddingProject(weddingProject);
             weddingProject.getTables().add(guestTable);
+            em.flush();
+            return guestTable.getId();
         } else {
             throw new InvalidAssociationException();
         }
@@ -50,6 +52,7 @@ public class GuestTableSessionBean implements GuestTableSessionBeanLocal {
             }
             guest.setGuestTable(guestTable);
             guestTable.getGuests().add(guest);
+            guestTable.setCurrOccupancy(guestTable.getCurrOccupancy() + 1);
         } else {
             throw new InvalidAssociationException();
         }
@@ -65,6 +68,7 @@ public class GuestTableSessionBean implements GuestTableSessionBeanLocal {
             }
             guest.setGuestTable(null);
             guestTable.getGuests().remove(guest);
+            guestTable.setCurrOccupancy(guestTable.getCurrOccupancy() - 1);
         } else {
             throw new InvalidAssociationException();
         }
@@ -89,18 +93,21 @@ public class GuestTableSessionBean implements GuestTableSessionBeanLocal {
     
     @Override
     public List<GuestTable> getGuestTables(Long weddingId) throws InvalidGetException {
-        if (em.find(WeddingProject.class, weddingId) != null) {
+       // System.out.println("weddingID" + weddingId);
+        if (weddingId != null && em.find(WeddingProject.class, weddingId) != null) {
             Stream <GuestTable> tables = em.createQuery("SELECT g FROM GuestTable g WHERE g.weddingProject.weddingProjectId = ?1").setParameter(1, weddingId)
                                             .getResultStream();
-            return tables.map(g -> {
-                                em.detach(g);
-                                return g;
+            return tables.map(t -> {
+                                em.detach(t);
+                                t.getGuests().forEach(g -> em.detach(g));
+                                return t;
                                 }).collect(Collectors.toList());
         } else {
             throw new InvalidGetException();
         }
     }
-
+    
+    
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
 }

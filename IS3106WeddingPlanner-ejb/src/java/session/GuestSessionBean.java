@@ -31,12 +31,15 @@ public class GuestSessionBean implements GuestSessionBeanLocal {
     private EntityManager em;
 
     @Override
-    public void createGuest(Guest guest, Long weddingProjectId) throws InvalidAssociationException {
+    public Long createGuest(Guest guest, Long weddingProjectId) throws InvalidAssociationException {
         WeddingProject weddingProject = em.find(WeddingProject.class, weddingProjectId);
         if (weddingProject != null && guest != null) {
             em.persist(guest);
+      
             guest.setWeddingProject(weddingProject);
             weddingProject.getGuests().add(guest);
+            em.flush();
+            return guest.getId();
         } else {
             throw new InvalidAssociationException();
         }
@@ -52,7 +55,7 @@ public class GuestSessionBean implements GuestSessionBeanLocal {
                     throw new InvalidUpdateException();
                 }
                 toUpdate.setGuestTable(table);
-            } else {
+            } else if (toUpdate == null) {
                 throw new InvalidUpdateException();
             }
             toUpdate.setAttendingSide(guest.getAttendingSide());
@@ -84,10 +87,16 @@ public class GuestSessionBean implements GuestSessionBeanLocal {
     
     @Override
     public List<Guest> getGuests(Long weddingId) throws InvalidGetException {
+        System.out.println("HERE");
         if (weddingId != null && em.find(WeddingProject.class, weddingId) != null) {
             Query query = em.createQuery("SELECT g FROM Guest g WHERE g.weddingProject.weddingProjectId = ?1").setParameter(1, weddingId);
             List<Guest> guests = query.getResultList();
             guests.forEach(g -> em.detach(g));
+            guests.forEach(guest -> {
+                if (guest.getGuestTable() != null) {
+                    em.detach(guest.getGuestTable());
+                }
+                    });
             return guests;
         } else {
             throw new InvalidGetException();

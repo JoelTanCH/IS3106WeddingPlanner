@@ -55,30 +55,15 @@ public class TableManagementResource {
      * Retrieves representation of an instance of webservices.restful.TableManagementResource
      * @return an instance of java.lang.String
      */
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public String getJson() {
-        //TODO return proper representation object
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * PUT method for updating or creating an instance of TableManagementResource
-     * @param content representation for the resource
-     */
-    @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void putJson(String content) {
-    }
-    
     @POST
     @Path("/{wId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createTable(GuestTable t, @PathParam("wId") Long wId) {
         try {
-            tableSBL.createGuestTable(t, wId);
-            return Response.status(204).build();
+            Long id = tableSBL.createGuestTable(t, wId);
+            JsonObject guestId = Json.createObjectBuilder().add("GUESTID", id).build();
+            return Response.status(200).entity(guestId).build();
         } catch (InvalidAssociationException ex) {
             JsonObject exception = Json.createObjectBuilder().add("Error", "Invalid Wedding").build();
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
@@ -90,9 +75,15 @@ public class TableManagementResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTablesFromWedding(@QueryParam("weddingId") Long weddingId) {
         try {
-            List<GuestTable> guests = tableSBL.getGuestTables(weddingId);
-            guests.forEach(guest -> guest.setWeddingProject(null));
-            GenericEntity<List<GuestTable>> entity = new GenericEntity<List<GuestTable>>(guests) { };
+            List<GuestTable> tables = tableSBL.getGuestTables(weddingId);
+            tables.forEach(table -> {
+                table.setWeddingProject(null);
+                table.getGuests().forEach(g -> {
+                    g.setGuestTable(null);
+                    g.setWeddingProject(null);
+                });
+            });
+            GenericEntity<List<GuestTable>> entity = new GenericEntity<List<GuestTable>>(tables) { };
             return Response.status(200).entity(entity).type(MediaType.APPLICATION_JSON).build();
         } catch (InvalidGetException ex) {
             JsonObject exception = Json.createObjectBuilder()
@@ -145,6 +136,11 @@ public class TableManagementResource {
                     .build();
             return Response.status(404).entity(exception).build();
         }
+    }
+    @PUT
+    @Path("/saveTables/{wId}") 
+    public Response updateTables(List<GuestTable> tables,  @PathParam("wId") Long wId) {
+        return Response.status(204).build();
     }
     
 
