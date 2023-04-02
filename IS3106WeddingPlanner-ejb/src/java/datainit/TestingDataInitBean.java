@@ -18,9 +18,7 @@ import static enumeration.StatusEnum.NOTSENT;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import java.math.BigDecimal;
-import java.security.InvalidKeyException;
 import java.security.Key;
-import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -33,11 +31,6 @@ import session.GuestSessionBeanLocal;
 import session.GuestTableSessionBeanLocal;
 import session.RequestSessionBeanLocal;
 import util.exception.InvalidAssociationException;
-import java.security.SecureRandom;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 import jwt.JWTSessionBeanLocal;
 import jwt.KeyHolderLocal;
 import session.VendorSessionBeanLocal;
@@ -83,6 +76,13 @@ public class TestingDataInitBean {
 
     @PostConstruct
     public void init() {
+
+        Key keyGenerated = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+        keyHolderSBL.setKey(keyGenerated);
+        String token = jwtSBL.generateToken("ADMIN");
+        System.out.println(token);
+        System.out.println(jwtSBL.verifyToken(token));
+
         if (em.find(WeddingProject.class, 1L) == null) {
             try {
                 WeddingProject weddingProject = new WeddingProject();
@@ -108,12 +108,6 @@ public class TestingDataInitBean {
             }
 
         }
-
-        Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-        keyHolderSBL.setKey(key);
-        String token = jwtSBL.generateToken("ADMIN");
-        System.out.println(token);
-        System.out.println(jwtSBL.verifyToken(token));
 
         if (em.find(Admin.class, (long) 1) == null) {
             Admin a1 = new Admin();
