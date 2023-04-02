@@ -50,6 +50,16 @@ public class WeddingOrganiserSessionBean implements WeddingOrganiserSessionBeanL
         }
     }
 
+    // im using List instead of the single one because idw to throw an exception
+    @Override
+    public List<WeddingOrganiser> getWeddingOrganisersByUsernamePassword(String username, String password) {
+        Query q;
+        q = em.createQuery("SELECT w FROM WeddingOrganiser w WHERE w.username LIKE :username AND w.password LIKE :password");
+        q.setParameter("username", username);
+        q.setParameter("password", password);
+        return q.getResultList();
+    }
+
     @Override
     public void updateWeddingOrganiser(WeddingOrganiser w) throws WeddingOrganiserNotFoundException {
         WeddingOrganiser wOld = getWeddingOrganiser(w.getUserId());

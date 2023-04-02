@@ -28,4 +28,6 @@ public interface VendorSessionBeanLocal {
     
     public Long createVendor(Vendor vendor);
 
+    public List<Vendor> getVendorsByUsernamePassword(String username, String password);
+
 }

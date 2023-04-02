@@ -32,6 +32,16 @@ public class VendorSessionBean implements VendorSessionBeanLocal {
         return query.getResultList();
     }
 
+    // im using List instead of the single one because idw to throw an exception
+    @Override
+    public List<Vendor> getVendorsByUsernamePassword(String username, String password) {
+        Query q;
+        q = em.createQuery("SELECT v FROM Vendor v WHERE v.username LIKE :username AND v.password LIKE :password");
+        q.setParameter("username", username);
+        q.setParameter("password", password);
+        return q.getResultList();
+    }
+
     @Override
     public List<Vendor> getVendorByCategory(String selection) throws InvalidVendorCategory { //ENSURE STRING GIVEN SAME AS ENUMERATION STRING IN FROTNEND
         List<Vendor> allVendors = getAllVendors();
@@ -79,7 +89,7 @@ public class VendorSessionBean implements VendorSessionBeanLocal {
         } else {
             throw new InvalidVendorCategory("Invalid Vendor Category: " + vendorCategorySelection);
         }
-        System.out.println("vendors in category = "+ vendorsInCategory.get(0));
+        System.out.println("vendors in category = " + vendorsInCategory.get(0));
         return vendorsInCategory;
     }
 
