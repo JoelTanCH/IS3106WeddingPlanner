@@ -28,5 +28,7 @@ public interface GuestTableSessionBeanLocal {
     public void removeGuestFromTable(Long guestId, Long guestTableId) throws InvalidAssociationException;
 
     public List<GuestTable> getGuestTables(Long weddingId) throws InvalidGetException;
+
+    public void updateGuestTables(List<GuestTable> tables, Long weddingId) throws InvalidAssociationException;
     
 }

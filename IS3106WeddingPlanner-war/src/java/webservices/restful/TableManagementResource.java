@@ -137,10 +137,19 @@ public class TableManagementResource {
             return Response.status(404).entity(exception).build();
         }
     }
+    
     @PUT
     @Path("/saveTables/{wId}") 
     public Response updateTables(List<GuestTable> tables,  @PathParam("wId") Long wId) {
-        return Response.status(204).build();
+        try {
+            tableSBL.updateGuestTables(tables, wId);
+            return Response.status(204).build();
+        } catch (Exception e) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("Error", "Saving Tables Error")
+                    .build();
+            return Response.status(404).entity(exception).build();        
+        }
     }
     
 
