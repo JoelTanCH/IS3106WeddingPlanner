@@ -128,6 +128,22 @@ public class GuestSessionBean implements GuestSessionBeanLocal {
         }
 
     }
+    
+    @Override
+    public void updateGuestRSVP(String email, String rsvpStatus, Long weddingId) throws Throwable {
+        String emailQuery = email;
+        Guest g = (Guest) em.createQuery("SELECT g FROM Guest g JOIN g.weddingProject w WHERE g.email = :e AND w.weddingProjectId = :weddingId")
+                .setParameter("e", emailQuery).setParameter("weddingId", weddingId).getResultStream()
+                .findFirst().orElseThrow(() -> new InvalidUpdateException());
+        g.setEmail(email);
+        if (rsvpStatus.equalsIgnoreCase("NOTATTENDING")) {
+            g.setRsvp(StatusEnum.NOTATTENDING);
+        } else if (rsvpStatus.equalsIgnoreCase("CONFIRMED")) {
+            g.setRsvp(StatusEnum.CONFIRMED);
+        } else {
+            throw new InvalidUpdateException();
+        }
+    }
  
 
     // Add business logic below. (Right-click in editor and choose

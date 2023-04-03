@@ -124,6 +124,22 @@ public class GuestManagementResource {
                     .type(MediaType.APPLICATION_JSON).build();
         }
     } //end editCustomer
+    @PUT
+    @Path("/updatersvp/{email}/{rsvpStatus}/{weddingId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateFromRSVPForm(@PathParam("email") String email, @PathParam("rsvpStatus") String rsvpStatus, @PathParam("weddingId") Long weddingId) {
+        try {
+            guestSBL.updateGuestRSVP(email, rsvpStatus, weddingId);
+            return Response.status(204).build();
+        } catch (Throwable e) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("Error", "Invalid RSVP update")
+                    .build();
+            return Response.status(404).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end editCustomer
     @GET
     @Path("/query")
     @Produces(MediaType.APPLICATION_JSON)

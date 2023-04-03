@@ -29,5 +29,7 @@ public interface GuestSessionBeanLocal {
     public List<Guest> getGuests(Long weddingId) throws InvalidGetException;
 
     public void updateGuestsRSVP(List<Guest> guests) throws InvalidUpdateException;
+
+    public void updateGuestRSVP(String email, String rsvpStatus, Long weddingId) throws Throwable;
     
 }
