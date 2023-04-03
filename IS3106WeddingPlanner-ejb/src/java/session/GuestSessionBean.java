@@ -8,6 +8,7 @@ package session;
 import entity.Guest;
 import entity.GuestTable;
 import entity.WeddingProject;
+import enumeration.StatusEnum;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -35,7 +36,6 @@ public class GuestSessionBean implements GuestSessionBeanLocal {
         WeddingProject weddingProject = em.find(WeddingProject.class, weddingProjectId);
         if (weddingProject != null && guest != null) {
             em.persist(guest);
-      
             guest.setWeddingProject(weddingProject);
             weddingProject.getGuests().add(guest);
             em.flush();
@@ -50,11 +50,22 @@ public class GuestSessionBean implements GuestSessionBeanLocal {
         if (guest != null) {
             Guest toUpdate = em.find(Guest.class, guest.getId());
             if (toUpdate != null && guest.getGuestTable() != null) {
-                GuestTable table = em.find(GuestTable.class, guest.getGuestTable().getId());
-                if (table == null) {
-                    throw new InvalidUpdateException();
+                if (toUpdate.getGuestTable() == null) { //guest has no previous table
+                    GuestTable table = em.find(GuestTable.class, guest.getGuestTable().getId());
+                    if (table == null) {
+                        throw new InvalidUpdateException();
+                    }
+                    table.setCurrOccupancy(table.getCurrOccupancy() + guest.getNumPax());
+                    toUpdate.setGuestTable(table);
+                } else {
+                     GuestTable table = em.find(GuestTable.class, guest.getGuestTable().getId());
+                     if (table == null) {
+                        throw new InvalidUpdateException();
+                     }
+                    table.setCurrOccupancy(table.getCurrOccupancy() + guest.getNumPax()); //add occupancy of new table
+                    toUpdate.getGuestTable().setCurrOccupancy(toUpdate.getGuestTable().getCurrOccupancy() - toUpdate.getNumPax()); // where guest has a previous table
+                    toUpdate.setGuestTable(table);
                 }
-                toUpdate.setGuestTable(table);
             } else if (toUpdate == null) {
                 throw new InvalidUpdateException();
             }
@@ -76,6 +87,7 @@ public class GuestSessionBean implements GuestSessionBeanLocal {
             weddingProject.getGuests().remove(guest);
             if (guest.getGuestTable() != null) {
                 GuestTable table = guest.getGuestTable();
+                table.setCurrOccupancy(table.getCurrOccupancy() - guest.getNumPax());
                 table.getGuests().remove(guest);
                 guest.setGuestTable(null);
             }
@@ -87,7 +99,7 @@ public class GuestSessionBean implements GuestSessionBeanLocal {
     
     @Override
     public List<Guest> getGuests(Long weddingId) throws InvalidGetException {
-        System.out.println("HERE");
+        //System.out.println("HERE");
         if (weddingId != null && em.find(WeddingProject.class, weddingId) != null) {
             Query query = em.createQuery("SELECT g FROM Guest g WHERE g.weddingProject.weddingProjectId = ?1").setParameter(1, weddingId);
             List<Guest> guests = query.getResultList();
@@ -101,6 +113,20 @@ public class GuestSessionBean implements GuestSessionBeanLocal {
         } else {
             throw new InvalidGetException();
         }
+    }
+    
+    @Override
+    public void updateGuestsRSVP(List<Guest> guests) throws InvalidUpdateException {
+        //StatusEnum e = toType.equalsIgnoreCase("PENDING") ? StatusEnum.PENDING : toType.equalsIgnoreCase("NOTATTENDING") ? StatusEnum.NOTATTENDING : toType.equalsIgnoreCase("CONFIRMED")?  StatusEnum.CONFIRMED : StatusEnum.NOTSENT;
+        for (Guest g : guests) {
+            Guest managedGuest = em.find(Guest.class, g.getId());
+            if (managedGuest != null) {
+                managedGuest.setRsvp(g.getRsvp());
+            } else {
+                throw new InvalidUpdateException();
+            }
+        }
+
     }
  
 

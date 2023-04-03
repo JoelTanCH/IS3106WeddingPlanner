@@ -108,6 +108,22 @@ public class GuestManagementResource {
         }
     } //end editCustomer
 
+    @PUT
+    @Path("/changersvp")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateGuestsRSVP(List<Guest> guests) {
+        try {
+            guestSBL.updateGuestsRSVP(guests);
+            return Response.status(204).build();
+        } catch (InvalidUpdateException e) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("Error", "One or more invalid guest rsvp updates")
+                    .build();
+            return Response.status(404).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end editCustomer
     @GET
     @Path("/query")
     @Produces(MediaType.APPLICATION_JSON)
