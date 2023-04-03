@@ -75,4 +75,10 @@
         <local>session.VendorSessionBeanLocal</local>
         <ejb-link>IS3106WeddingPlanner-ejb.jar#VendorSessionBean</ejb-link>
     </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>StageSessionBean</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>session.StageSessionBeanLocal</local>
+        <ejb-link>IS3106WeddingPlanner-ejb.jar#StageSessionBean</ejb-link>
+    </ejb-local-ref>
 </web-app>

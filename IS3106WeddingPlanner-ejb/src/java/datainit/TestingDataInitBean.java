@@ -101,7 +101,7 @@ public class TestingDataInitBean {
                 guestTable.setLocationX(0);
                 guestTable.setLocationY(0);
                 guestTable.setTableNumber(1);
-                guestTable.setTableSize(100);
+                guestTable.setTableSize(200);
                 guestTableSessionBean.createGuestTable(guestTable, 1L);
             } catch (InvalidAssociationException ex) {
                 //Logger.getLogger(TestingDataInitBean.class.getName()).log(Level.SEVERE, null, ex);

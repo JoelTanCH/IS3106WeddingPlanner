@@ -38,11 +38,7 @@ public class Stage implements Serializable {
     @Column(nullable = false)
     private double stageWidth;
     
-    
-    @OneToMany(mappedBy = "guestTable")
-    private List<Guest> guests;
-
-    @ManyToOne(optional = false)
+    @ManyToOne
     private WeddingProject weddingProject;
 
     public Stage() {
@@ -78,13 +74,6 @@ public class Stage implements Serializable {
         this.weddingProject = weddingProject;
     }
     
-    public List<Guest> getGuests() {
-        return guests;
-    }
-
-    public void setGuests(List<Guest> guests) {
-        this.guests = guests;
-    }
 
     public int getTableNumber() {
         return tableNumber;

@@ -7,7 +7,10 @@ package webservices.restful;
 
 import entity.Guest;
 import entity.GuestTable;
+import entity.Stage;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -19,6 +22,8 @@ import javax.ws.rs.PUT;
 import javax.enterprise.context.RequestScoped;
 import javax.json.Json;
 import javax.json.JsonObject;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.PathParam;
@@ -27,6 +32,7 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import session.GuestTableSessionBeanLocal;
+import session.StageSessionBeanLocal;
 import util.exception.InvalidAssociationException;
 import util.exception.InvalidDeleteException;
 import util.exception.InvalidGetException;
@@ -39,6 +45,7 @@ import util.exception.InvalidGetException;
 @Path("tablemanagement")
 @RequestScoped
 public class TableManagementResource {
+
     @EJB
     private GuestTableSessionBeanLocal tableSBL;
 
@@ -69,7 +76,7 @@ public class TableManagementResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     }
-    
+ 
     @GET
     @Path("/query")
     @Produces(MediaType.APPLICATION_JSON)
@@ -95,6 +102,7 @@ public class TableManagementResource {
         }
 
     }
+    
     @DELETE
     @Path("/{tableId}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -151,6 +159,9 @@ public class TableManagementResource {
             return Response.status(404).entity(exception).build();        
         }
     }
+    
+
+    
     
 
 }
