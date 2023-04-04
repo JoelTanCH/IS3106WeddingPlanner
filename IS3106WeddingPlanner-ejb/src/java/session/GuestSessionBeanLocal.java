@@ -20,12 +20,16 @@ import util.exception.InvalidUpdateException;
 @Local
 public interface GuestSessionBeanLocal {
 
-    public void createGuest(Guest guest, Long weddingProjectId) throws InvalidAssociationException;
+    public Long createGuest(Guest guest, Long weddingProjectId) throws InvalidAssociationException;
 
     public void deleteGuest(Long guestId) throws InvalidDeleteException;
 
     public void updateGuest(Guest guest) throws InvalidUpdateException;
 
     public List<Guest> getGuests(Long weddingId) throws InvalidGetException;
+
+    public void updateGuestsRSVP(List<Guest> guests) throws InvalidUpdateException;
+
+    public void updateGuestRSVP(String email, String rsvpStatus, Long weddingId) throws Throwable;
     
 }

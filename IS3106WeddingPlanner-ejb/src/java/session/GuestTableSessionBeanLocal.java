@@ -23,10 +23,12 @@ public interface GuestTableSessionBeanLocal {
 
     public void addGuestToTable(Long guestId, Long guestTableId) throws InvalidAssociationException;
 
-    public void createGuestTable(GuestTable guestTable, Long weddingProjectId) throws InvalidAssociationException;
+    public Long createGuestTable(GuestTable guestTable, Long weddingProjectId) throws InvalidAssociationException;
 
     public void removeGuestFromTable(Long guestId, Long guestTableId) throws InvalidAssociationException;
 
     public List<GuestTable> getGuestTables(Long weddingId) throws InvalidGetException;
+
+    public void updateGuestTables(List<GuestTable> tables, Long weddingId) throws InvalidAssociationException;
     
 }

@@ -28,5 +28,7 @@ public interface WeddingOrganiserSessionBeanLocal {
     public void createWeddingOrganiser(WeddingOrganiser w);
 
     public List<WeddingOrganiser> getAllWeddingOrganisers();
+
+    public List<WeddingOrganiser> getWeddingOrganisersByUsernamePassword(String username, String password);
     
 }

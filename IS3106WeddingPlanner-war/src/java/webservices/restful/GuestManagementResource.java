@@ -68,12 +68,6 @@ public class GuestManagementResource {
      *
      * @return an instance of java.lang.String
      */
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public String getJson() {
-        //TODO return proper representation object
-        throw new UnsupportedOperationException();
-    }
 
     /**
      * PUT method for updating or creating an instance of
@@ -81,10 +75,6 @@ public class GuestManagementResource {
      *
      * @param content representation for the resource
      */
-    @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void putJson(String content) {
-    }
 
     
     @POST
@@ -93,8 +83,9 @@ public class GuestManagementResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response createGuest(Guest g, @PathParam("wId") Long wId) {
         try {
-            guestSBL.createGuest(g, wId);
-            return Response.status(204).build();
+            Long id = guestSBL.createGuest(g, wId);
+            JsonObject guestId = Json.createObjectBuilder().add("GUESTID", id).build();
+            return Response.status(200).entity(guestId).build();
         } catch (InvalidAssociationException ex) {
             JsonObject exception = Json.createObjectBuilder().add("Error", "Invalid Wedding").build();
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
@@ -117,13 +108,51 @@ public class GuestManagementResource {
         }
     } //end editCustomer
 
+    @PUT
+    @Path("/changersvp")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateGuestsRSVP(List<Guest> guests) {
+        try {
+            guestSBL.updateGuestsRSVP(guests);
+            return Response.status(204).build();
+        } catch (InvalidUpdateException e) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("Error", "One or more invalid guest rsvp updates")
+                    .build();
+            return Response.status(404).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end editCustomer
+    @PUT
+    @Path("/updatersvp/{email}/{rsvpStatus}/{weddingId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateFromRSVPForm(@PathParam("email") String email, @PathParam("rsvpStatus") String rsvpStatus, @PathParam("weddingId") Long weddingId) {
+        try {
+            guestSBL.updateGuestRSVP(email, rsvpStatus, weddingId);
+            return Response.status(204).build();
+        } catch (Throwable e) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("Error", "Invalid RSVP update")
+                    .build();
+            return Response.status(404).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end editCustomer
     @GET
     @Path("/query")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getGuestsFromWedding(@QueryParam("weddingId") Long weddingId) {
+    public Response getGuestsFromWedding(@QueryParam("wId") Long weddingId) {
         try {
             List<Guest> guests = guestSBL.getGuests(weddingId);
             guests.forEach(guest -> guest.setWeddingProject(null));
+            guests.forEach(guest -> {
+                if (guest.getGuestTable() != null) {
+                    guest.getGuestTable().setGuests(null);
+                    guest.getGuestTable().setWeddingProject(null);
+                }
+            });
             GenericEntity<List<Guest>> entity = new GenericEntity<List<Guest>>(guests) { };
             return Response.status(200).entity(entity).type(MediaType.APPLICATION_JSON).build();
         } catch (InvalidGetException ex) {
@@ -132,7 +161,6 @@ public class GuestManagementResource {
                     .build();
             return Response.status(404).entity(exception)
                     .type(MediaType.APPLICATION_JSON).build();
-
         }
 
     }

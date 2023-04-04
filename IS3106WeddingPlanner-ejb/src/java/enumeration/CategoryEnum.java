@@ -14,6 +14,6 @@ public enum CategoryEnum {
     FOOD,
     LIGHTING,
     DECORATION,
-    DRESSES_SUITS,
+    CLOTHES,
     VENUE
 }
