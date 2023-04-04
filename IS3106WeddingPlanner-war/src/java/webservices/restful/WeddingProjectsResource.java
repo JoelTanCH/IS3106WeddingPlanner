@@ -6,6 +6,7 @@
 package webservices.restful;
 
 import entity.WeddingProject;
+import error.WeddingOrganiserNotFoundException;
 import error.WeddingProjectNotFoundException;
 import java.util.List;
 import javax.ejb.EJB;
@@ -21,6 +22,7 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.ws.rs.POST;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -91,20 +93,41 @@ public class WeddingProjectsResource {
         }
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllProjectsByWeddingOrganiserId(@QueryParam("wedding-organiser-id") Long wOrganiserId) {
+
+        try {
+            List<WeddingProject> projects = weddingProjectSessionBeanLocal.getAllWeddingProjectbyOrganiser(wOrganiserId);
+
+            for (WeddingProject w : projects) {
+                nullifyBidirectionalWeddingProject(w);
+            }
+
+            GenericEntity<List<WeddingProject>> entityToReturn = new GenericEntity<List<WeddingProject>>(projects) {
+            };
+
+            return Response.status(200).entity(entityToReturn).type(MediaType.APPLICATION_JSON).build();
+
+            // error shouldnt even happen because an empty list would be returned
+        } catch (WeddingOrganiserNotFoundException e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Wedding Projects from Wedding Organiser with id " + wOrganiserId + " not found")
+                    .build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    }
+
     @POST
-    @Path("/{wedding-organiser-id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createWeddingProject(@PathParam("wedding-organiser-id") Long organiserId, WeddingProject w) {
+    public Response createWeddingProject(@QueryParam("wedding-organiser-id") Long organiserId, WeddingProject w) {
         weddingProjectSessionBeanLocal.createWeddingProject(organiserId, w);
         return Response.status(200).build();
     }
 
-    
     // should work in updating all the bidirectional stuff as well, but need to test in the future
     @PUT
-    @Path("/{wedding-checklist-id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateWeddingProject(@PathParam("wedding-organiser-id") Long organiserId, WeddingProject w) {
+    public Response updateWeddingProject(@QueryParam("wedding-organiser-id") Long organiserId, WeddingProject w) {
         try {
             weddingProjectSessionBeanLocal.updateWeddingProject(w);
             return Response.status(200).build();
