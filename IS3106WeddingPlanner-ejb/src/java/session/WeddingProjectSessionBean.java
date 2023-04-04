@@ -77,6 +77,7 @@ public class WeddingProjectSessionBean implements WeddingProjectSessionBeanLocal
         WeddingProject wOld = getWeddingProject(w.getWeddingProjectId());
         wOld.setName(w.getName());
         wOld.setDescription(w.getDescription());
+        wOld.setCompleted(w.getCompleted());
     }
 
     //should everything such as request, tables, etc be deleted if the wedding project is deleted ?

@@ -53,6 +53,8 @@ public class RequestsResource {
     public Response getRequests(@PathParam("id") Long requestId) {
         try {
             Request request = requestSessionBeanLocal.retrieveRequest(requestId);
+            request.setVendor(null);
+            request.setWeddingProject(null);
             return Response.status(200).entity(request).type(MediaType.APPLICATION_JSON).build();
         } catch (NoResultException e) {
 

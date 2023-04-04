@@ -37,7 +37,7 @@ import session.AdminSessionBeanLocal;
 public class AdminsResource {
 
     @EJB
-    AdminSessionBeanLocal adminSessionBeanLocal;
+    private AdminSessionBeanLocal adminSessionBeanLocal;
 
     @Context
     private UriInfo context;
