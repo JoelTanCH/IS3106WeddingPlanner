@@ -35,6 +35,7 @@ import jwt.JWTSessionBeanLocal;
 import jwt.KeyHolderLocal;
 import session.VendorSessionBeanLocal;
 import session.WeddingOrganiserSessionBeanLocal;
+import session.WeddingProjectSessionBeanLocal;
 
 /**
  *
@@ -50,6 +51,8 @@ public class TestingDataInitBean {
     @EJB
     private AdminSessionBeanLocal adminSessionBean;
 
+    @EJB
+    private WeddingProjectSessionBeanLocal weddingProjectSessionBeanLocal;
     @EJB
     private WeddingOrganiserSessionBeanLocal weddingOrganiserSessionBeanLocal;
 
@@ -210,7 +213,8 @@ public class TestingDataInitBean {
             w2.setUsername("weddingOrganiser2");
             w2.setPassword("password");
             weddingOrganiserSessionBeanLocal.createWeddingOrganiser(w2);
-
+            em.flush();
+            
             if (em.find(WeddingProject.class, 1L) == null) {
                 try {
                     WeddingProject weddingProject1 = new WeddingProject();
@@ -218,7 +222,8 @@ public class TestingDataInitBean {
                     weddingProject1.setDescription("description for project1");
                     weddingProject1.setCompleted(Boolean.FALSE);
                     weddingProject1.setWeddingOrganiser(w1);
-                    em.persist(weddingProject1);
+                    weddingProjectSessionBeanLocal.createWeddingProject(w1.getUserId(), weddingProject1);
+                    
                     em.flush();
                     Guest guest = new Guest();
                     guest.setAttendingSide(BRIDE);

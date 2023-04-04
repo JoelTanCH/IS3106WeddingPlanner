@@ -110,8 +110,7 @@ public class WeddingProjectsResource {
 
             return Response.status(200).entity(entityToReturn).type(MediaType.APPLICATION_JSON).build();
 
-            // weird that WeddingOrganiserNotFound exception cant be caught, so using Exception instead
-        } catch (Exception e) {
+        } catch (WeddingOrganiserNotFoundException e) {
             JsonObject exception = Json.createObjectBuilder().add("error", "Wedding Projects from Wedding Organiser with id " + wOrganiserId + " not found")
                     .build();
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
