@@ -5,8 +5,6 @@
  */
 package webservices.restful;
 
-import com.sun.xml.rpc.processor.modeler.j2ee.xml.emptyType;
-import entity.Admin;
 import entity.WeddingProject;
 import error.WeddingProjectNotFoundException;
 import java.util.List;
@@ -14,11 +12,14 @@ import javax.ejb.EJB;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PUT;
 import javax.enterprise.context.RequestScoped;
 import javax.json.Json;
 import javax.json.JsonObject;
+import javax.ws.rs.POST;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
@@ -70,15 +71,15 @@ public class WeddingProjectsResource {
     }
 
     @GET
-    @Path("/{wProjectId}")
+    @Path("/{wedding-project-id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProjectById(@PathParam("wProjectId") Long wProjectId) {
+    public Response getProjectById(@PathParam("wedding-project-id") Long wProjectId) {
         try {
 
             WeddingProject wProject = weddingProjectSessionBeanLocal.getWeddingProject(wProjectId);
 
             nullifyBidirectionalWeddingProject(wProject);
-            
+
             GenericEntity<WeddingProject> entityToReturn = new GenericEntity<WeddingProject>(wProject) {
             };
 
@@ -87,6 +88,31 @@ public class WeddingProjectsResource {
             JsonObject exception = Json.createObjectBuilder().add("error", "Wedding Project with id " + wProjectId + " not found")
                     .build();
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    }
+
+    @POST
+    @Path("/{wedding-organiser-id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createWeddingProject(@PathParam("wedding-organiser-id") Long organiserId, WeddingProject w) {
+        weddingProjectSessionBeanLocal.createWeddingProject(organiserId, w);
+        return Response.status(200).build();
+    }
+
+    
+    // should work in updating all the bidirectional stuff as well, but need to test in the future
+    @PUT
+    @Path("/{wedding-checklist-id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateWeddingProject(@PathParam("wedding-organiser-id") Long organiserId, WeddingProject w) {
+        try {
+            weddingProjectSessionBeanLocal.updateWeddingProject(w);
+            return Response.status(200).build();
+        } catch (Exception e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Problem with the wedding project")
+                    .add("exceptionMessage", e.getMessage())
+                    .build();
+            return Response.status(500).entity(exception).build();
         }
     }
 

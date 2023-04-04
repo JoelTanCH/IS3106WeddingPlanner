@@ -85,8 +85,11 @@ public class TestingDataInitBean {
 
         if (em.find(WeddingProject.class, 1L) == null) {
             try {
-                WeddingProject weddingProject = new WeddingProject();
-                em.persist(weddingProject);
+                WeddingProject weddingProject1 = new WeddingProject();
+                weddingProject1.setName("weddingProject1");
+                weddingProject1.setDescription("description for project1");
+                weddingProject1.setCompleted(Boolean.FALSE);
+                em.persist(weddingProject1);
                 em.flush();
                 Guest guest = new Guest();
                 guest.setAttendingSide(BRIDE);
@@ -94,7 +97,7 @@ public class TestingDataInitBean {
                 guest.setName("TEST");
                 guest.setNumPax(1);
                 guest.setRsvp(NOTSENT);
-                guestSessionBean.createGuest(guest, weddingProject.getWeddingProjectId());
+                guestSessionBean.createGuest(guest, weddingProject1.getWeddingProjectId());
                 GuestTable guestTable = new GuestTable();
                 guestTable.setCapacity(10);
                 guestTable.setCurrOccupancy(0);

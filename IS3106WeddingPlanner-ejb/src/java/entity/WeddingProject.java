@@ -58,6 +58,7 @@ public class WeddingProject implements Serializable {
     
     private String name;
     private String description;
+    private Boolean completed;
 
     @ManyToOne
     private WeddingOrganiser weddingOrganiser;
@@ -220,6 +221,20 @@ public class WeddingProject implements Serializable {
      */
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    /**
+     * @return the completed
+     */
+    public Boolean getCompleted() {
+        return completed;
+    }
+
+    /**
+     * @param completed the completed to set
+     */
+    public void setCompleted(Boolean completed) {
+        this.completed = completed;
     }
     
 }
