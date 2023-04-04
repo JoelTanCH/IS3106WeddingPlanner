@@ -127,7 +127,7 @@ public class WeddingProjectsResource {
     // should work in updating all the bidirectional stuff as well, but need to test in the future
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateWeddingProject(@QueryParam("wedding-organiser-id") Long organiserId, WeddingProject w) {
+    public Response updateWeddingProject(WeddingProject w) {
         try {
             weddingProjectSessionBeanLocal.updateWeddingProject(w);
             return Response.status(200).build();
