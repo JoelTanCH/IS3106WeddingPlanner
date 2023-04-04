@@ -94,6 +94,7 @@ public class WeddingProjectsResource {
     }
 
     @GET
+    @Path("query")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllProjectsByWeddingOrganiserId(@QueryParam("wedding-organiser-id") Long wOrganiserId) {
 
@@ -118,6 +119,7 @@ public class WeddingProjectsResource {
     }
 
     @POST
+    @Path("query")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createWeddingProject(@QueryParam("wedding-organiser-id") Long organiserId, WeddingProject w) {
         weddingProjectSessionBeanLocal.createWeddingProject(organiserId, w);
