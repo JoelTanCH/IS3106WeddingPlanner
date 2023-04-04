@@ -94,6 +94,7 @@ public class WeddingProjectsResource {
     }
 
     @GET
+    @Path("getByOrgId")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllProjectsByWeddingOrganiserId(@QueryParam("wedding-organiser-id") Long wOrganiserId) {
 
