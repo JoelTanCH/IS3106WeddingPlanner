@@ -56,6 +56,9 @@ public class WeddingProjectSessionBean implements WeddingProjectSessionBeanLocal
 
     @Override
     public void createWeddingProject(Long organiserId, WeddingProject w) {
+        WeddingOrganiser organiser = em.find(WeddingOrganiser.class, organiserId);
+        organiser.getWeddingProjects().add(w);
+
         em.persist(w);
     }
 
@@ -132,6 +135,22 @@ public class WeddingProjectSessionBean implements WeddingProjectSessionBeanLocal
         WeddingOrganiser w = em.find(WeddingOrganiser.class, wId);
         List<WeddingProject> project = w.getWeddingProjects();
         return project;
+    }
+    
+     @Override
+    public List<WeddingProject> getAllCompletedWeddingProject(Long wId) throws WeddingOrganiserNotFoundException {
+        WeddingOrganiser w = em.find(WeddingOrganiser.class, wId);
+        Query q = em.createQuery("SELECT w FROM WeddingOrganiser w WHERE w.weddingProjects.completed = true");
+        q.setParameter("w", w);
+        return q.getResultList();
+    }
+    
+     @Override
+    public List<WeddingProject> getAllNotCompletedWeddingProject(Long wId) throws WeddingOrganiserNotFoundException {
+        WeddingOrganiser w = em.find(WeddingOrganiser.class, wId);
+        Query q = em.createQuery("SELECT w FROM WeddingOrganiser w WHERE w.weddingProjects.completed = false");
+        q.setParameter("w", w);
+        return q.getResultList();
     }
 
     @Override

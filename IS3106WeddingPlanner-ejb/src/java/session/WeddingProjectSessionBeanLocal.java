@@ -32,5 +32,9 @@ public interface WeddingProjectSessionBeanLocal {
     public void deleteWeddingProject(Long wId) throws WeddingProjectNotFoundException, InvalidDeleteException;
 
     public List<WeddingProject> searchWeddingProjectbyName(String name) throws WeddingProjectNotFoundException;
+
+    public List<WeddingProject> getAllCompletedWeddingProject(Long wId) throws WeddingOrganiserNotFoundException;
+
+    public List<WeddingProject> getAllNotCompletedWeddingProject(Long wId) throws WeddingOrganiserNotFoundException;
     
 }
