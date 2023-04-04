@@ -5,6 +5,7 @@
  */
 package webservices.restful;
 
+import com.sun.xml.rpc.processor.modeler.j2ee.xml.emptyType;
 import entity.Admin;
 import entity.WeddingProject;
 import error.WeddingProjectNotFoundException;
@@ -44,15 +45,28 @@ public class WeddingProjectsResource {
      */
     public WeddingProjectsResource() {
     }
-    
+
+    private void nullifyBidirectionalWeddingProject(WeddingProject w) {
+        w.setRequests(null);
+        w.setWeddingItineraries(null);
+        w.setWeddingOrganiser(null);
+        w.setWeddingBudgetList(null);
+        w.setTables(null);
+        w.setGuests(null);
+        w.setWeddingChecklist(null);
+        w.setWeddingOrganiser(null);
+    }
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<WeddingProject> getAllProjects() {
         List<WeddingProject> weddingProjects = weddingProjectSessionBeanLocal.getAllWeddingProject();
-        
+
         for (WeddingProject w : weddingProjects) {
-            
+            nullifyBidirectionalWeddingProject(w);
         }
+
+        return weddingProjects;
     }
 
     @GET
@@ -63,6 +77,8 @@ public class WeddingProjectsResource {
 
             WeddingProject wProject = weddingProjectSessionBeanLocal.getWeddingProject(wProjectId);
 
+            nullifyBidirectionalWeddingProject(wProject);
+            
             GenericEntity<WeddingProject> entityToReturn = new GenericEntity<WeddingProject>(wProject) {
             };
 
