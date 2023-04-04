@@ -87,31 +87,24 @@ public class WeddingProjectSessionBean implements WeddingProjectSessionBeanLocal
         List<Guest> guest = w.getGuests();
         w.setGuests(null);
         for (Guest s : guest) {
-            //guestSessionBean.deleteGuest(s.getId());
             s.setWeddingProject(null);
         }
 
         List<Request> requests = w.getRequests();
         w.setRequests(null);
         for (Request r : requests) {
-            //requestSessionBean.deleteRequest(r.getRequestId());
             r.setWeddingProject(null);
         }
 
         List<GuestTable> table = w.getTables();
         w.setTables(null);
         for (GuestTable t : table) {
-            //guestTableSessionBean.deleteGuestTable(t.getId());
             t.setWeddingProject(null);
         }
-
-        //weddingBudgetSessionBean.deleteWeddingBudgetList(w.getWeddingBudgetList().getWeddingBudgetListId());
-        
+ 
         w.getWeddingBudgetList().setWeddingProject(null);
         w.setWeddingBudgetList(null);
-        
-
-        //weddingChecklistSessionBean.deleteWeddingChecklist(w.getWeddingChecklist().getWeddingCheckListId());
+    
         w.getWeddingChecklist().setWeddingProject(null);
         w.setWeddingChecklist(null);
         
@@ -119,7 +112,6 @@ public class WeddingProjectSessionBean implements WeddingProjectSessionBeanLocal
         List<WeddingItinerary> weddingItineraries = w.getWeddingItineraries();
         w.setWeddingItineraries(null);
         for (WeddingItinerary itinerary : weddingItineraries) {
-            //weddingItinerarySessionBean.deleteItinerary(itinerary.getWeddingItineraryId());
             itinerary.setWeddingProject(null);
         }
 
@@ -133,24 +125,36 @@ public class WeddingProjectSessionBean implements WeddingProjectSessionBeanLocal
     @Override
     public List<WeddingProject> getAllWeddingProjectbyOrganiser(Long wId) throws WeddingOrganiserNotFoundException {
         WeddingOrganiser w = em.find(WeddingOrganiser.class, wId);
-        List<WeddingProject> project = w.getWeddingProjects();
+         if (w != null) {
+            List<WeddingProject> project = w.getWeddingProjects();
         return project;
+        } else {
+            throw new WeddingOrganiserNotFoundException("Wedding Organiser Not Found");
+        }
+        
     }
     
      @Override
     public List<WeddingProject> getAllCompletedWeddingProject(Long wId) throws WeddingOrganiserNotFoundException {
-        WeddingOrganiser w = em.find(WeddingOrganiser.class, wId);
-        Query q = em.createQuery("SELECT w FROM WeddingOrganiser w WHERE w.weddingProjects.completed = true");
+        WeddingOrganiser w = em.find(WeddingOrganiser.class, wId);if (w != null) {
+            Query q = em.createQuery("SELECT w FROM WeddingOrganiser w WHERE w.weddingProjects.completed = true");
         q.setParameter("w", w);
         return q.getResultList();
+        } else {
+            throw new WeddingOrganiserNotFoundException("Wedding Organiser Not Found");
+        }
+        
     }
     
      @Override
     public List<WeddingProject> getAllNotCompletedWeddingProject(Long wId) throws WeddingOrganiserNotFoundException {
-        WeddingOrganiser w = em.find(WeddingOrganiser.class, wId);
-        Query q = em.createQuery("SELECT w FROM WeddingOrganiser w WHERE w.weddingProjects.completed = false");
+        WeddingOrganiser w = em.find(WeddingOrganiser.class, wId);if (w != null) {
+            Query q = em.createQuery("SELECT w FROM WeddingOrganiser w WHERE w.weddingProjects.completed = true");
         q.setParameter("w", w);
         return q.getResultList();
+        } else {
+            throw new WeddingOrganiserNotFoundException("Wedding Organiser Not Found");
+        }
     }
 
     @Override
@@ -161,9 +165,13 @@ public class WeddingProjectSessionBean implements WeddingProjectSessionBeanLocal
 
     @Override
     public List<WeddingProject> searchWeddingProjectbyName(String name) throws WeddingProjectNotFoundException {
+        try{
         Query q = em.createQuery("SELECT w FROM WeddingProject w WHERE w.name LIKE :name");
         q.setParameter("name", "%" + name + "%");
         return q.getResultList();
+        } catch (Exception e) {
+            throw new WeddingProjectNotFoundException(e.getMessage());
+        }
     }
 
 }
