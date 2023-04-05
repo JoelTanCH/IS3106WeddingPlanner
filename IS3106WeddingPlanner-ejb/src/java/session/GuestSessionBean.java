@@ -99,7 +99,6 @@ public class GuestSessionBean implements GuestSessionBeanLocal {
     
     @Override
     public List<Guest> getGuests(Long weddingId) throws InvalidGetException {
-        //System.out.println("HERE");
         if (weddingId != null && em.find(WeddingProject.class, weddingId) != null) {
             Query query = em.createQuery("SELECT g FROM Guest g WHERE g.weddingProject.weddingProjectId = ?1").setParameter(1, weddingId);
             List<Guest> guests = query.getResultList();

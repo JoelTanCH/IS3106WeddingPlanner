@@ -49,7 +49,6 @@ public class StageSessionBean implements StageSessionBeanLocal {
         WeddingProject wd = em.find(WeddingProject.class, weddingId);
         if (wd != null) {
             if (!stages.isEmpty()) {
-                stages.forEach(s -> System.out.println(s));
                 stages.forEach(s -> s.setStageId(s.getStageId()));
                 em.createQuery("DELETE FROM Stage s WHERE s.weddingProject.weddingProjectId = :id").setParameter("id", weddingId).executeUpdate();
                 stages.forEach(s -> {
