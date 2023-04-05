@@ -35,6 +35,7 @@ import jwt.JWTSessionBeanLocal;
 import jwt.KeyHolderLocal;
 import session.VendorSessionBeanLocal;
 import session.WeddingOrganiserSessionBeanLocal;
+import session.WeddingProjectSessionBeanLocal;
 
 /**
  *
@@ -50,6 +51,8 @@ public class TestingDataInitBean {
     @EJB
     private AdminSessionBeanLocal adminSessionBean;
 
+    @EJB
+    private WeddingProjectSessionBeanLocal weddingProjectSessionBeanLocal;
     @EJB
     private WeddingOrganiserSessionBeanLocal weddingOrganiserSessionBeanLocal;
 
@@ -82,32 +85,6 @@ public class TestingDataInitBean {
         String token = jwtSBL.generateToken("ADMIN");
         System.out.println(token);
         System.out.println(jwtSBL.verifyToken(token));
-
-        if (em.find(WeddingProject.class, 1L) == null) {
-            try {
-                WeddingProject weddingProject = new WeddingProject();
-                em.persist(weddingProject);
-                em.flush();
-                Guest guest = new Guest();
-                guest.setAttendingSide(BRIDE);
-                guest.setEmail("RANDOM@EMAIL.COM");
-                guest.setName("TEST");
-                guest.setNumPax(1);
-                guest.setRsvp(NOTSENT);
-                guestSessionBean.createGuest(guest, weddingProject.getWeddingProjectId());
-                GuestTable guestTable = new GuestTable();
-                guestTable.setCapacity(10);
-                guestTable.setCurrOccupancy(0);
-                guestTable.setLocationX(0);
-                guestTable.setLocationY(0);
-                guestTable.setTableNumber(1);
-                guestTable.setTableSize(200);
-                guestTableSessionBean.createGuestTable(guestTable, 1L);
-            } catch (InvalidAssociationException ex) {
-                //Logger.getLogger(TestingDataInitBean.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        }
 
         if (em.find(Admin.class, (long) 1) == null) {
             Admin a1 = new Admin();
@@ -236,6 +213,52 @@ public class TestingDataInitBean {
             w2.setUsername("weddingOrganiser2");
             w2.setPassword("password");
             weddingOrganiserSessionBeanLocal.createWeddingOrganiser(w2);
+            em.flush();
+
+            if (em.find(WeddingProject.class, 1L) == null) {
+                try {
+                    WeddingProject weddingProject1 = new WeddingProject();
+                    weddingProject1.setName("weddingProject1");
+                    weddingProject1.setDescription("description for project1");
+                    weddingProject1.setCompleted(Boolean.FALSE);
+                    weddingProject1.setWeddingOrganiser(w1);
+                    weddingProjectSessionBeanLocal.createWeddingProject(w1.getUserId(), weddingProject1);
+
+                    WeddingProject weddingProject2 = new WeddingProject();
+                    weddingProject2.setName("weddingProject2");
+                    weddingProject2.setDescription("description for project2");
+                    weddingProject2.setCompleted(Boolean.TRUE);
+                    weddingProject2.setWeddingOrganiser(w1);
+                    weddingProjectSessionBeanLocal.createWeddingProject(w1.getUserId(), weddingProject2);
+
+                    WeddingProject weddingProject3 = new WeddingProject();
+                    weddingProject3.setName("weddingProject3");
+                    weddingProject3.setDescription("description for project3, this belongs to wedding-organiser with id of 10 i think");
+                    weddingProject3.setCompleted(Boolean.FALSE);
+                    weddingProject3.setWeddingOrganiser(w2);
+                    weddingProjectSessionBeanLocal.createWeddingProject(w2.getUserId(), weddingProject3);
+                    em.flush();
+                    
+                    Guest guest = new Guest();
+                    guest.setAttendingSide(BRIDE);
+                    guest.setEmail("RANDOM@EMAIL.COM");
+                    guest.setName("TEST");
+                    guest.setNumPax(1);
+                    guest.setRsvp(NOTSENT);
+                    guestSessionBean.createGuest(guest, weddingProject1.getWeddingProjectId());
+                    GuestTable guestTable = new GuestTable();
+                    guestTable.setCapacity(10);
+                    guestTable.setCurrOccupancy(0);
+                    guestTable.setLocationX(0);
+                    guestTable.setLocationY(0);
+                    guestTable.setTableNumber(1);
+                    guestTable.setTableSize(200);
+                    guestTableSessionBean.createGuestTable(guestTable, 1L);
+                } catch (InvalidAssociationException ex) {
+                    //Logger.getLogger(TestingDataInitBean.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
 
         }
 
