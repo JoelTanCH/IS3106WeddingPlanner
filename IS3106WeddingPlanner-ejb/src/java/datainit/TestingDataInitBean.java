@@ -214,7 +214,7 @@ public class TestingDataInitBean {
             w2.setPassword("password");
             weddingOrganiserSessionBeanLocal.createWeddingOrganiser(w2);
             em.flush();
-            
+
             if (em.find(WeddingProject.class, 1L) == null) {
                 try {
                     WeddingProject weddingProject1 = new WeddingProject();
@@ -223,8 +223,22 @@ public class TestingDataInitBean {
                     weddingProject1.setCompleted(Boolean.FALSE);
                     weddingProject1.setWeddingOrganiser(w1);
                     weddingProjectSessionBeanLocal.createWeddingProject(w1.getUserId(), weddingProject1);
-                    
+
+                    WeddingProject weddingProject2 = new WeddingProject();
+                    weddingProject2.setName("weddingProject2");
+                    weddingProject2.setDescription("description for project2");
+                    weddingProject2.setCompleted(Boolean.TRUE);
+                    weddingProject2.setWeddingOrganiser(w1);
+                    weddingProjectSessionBeanLocal.createWeddingProject(w1.getUserId(), weddingProject2);
+
+                    WeddingProject weddingProject3 = new WeddingProject();
+                    weddingProject3.setName("weddingProject3");
+                    weddingProject3.setDescription("description for project3, this belongs to wedding-organiser with id of 10 i think");
+                    weddingProject3.setCompleted(Boolean.FALSE);
+                    weddingProject3.setWeddingOrganiser(w2);
+                    weddingProjectSessionBeanLocal.createWeddingProject(w2.getUserId(), weddingProject3);
                     em.flush();
+                    
                     Guest guest = new Guest();
                     guest.setAttendingSide(BRIDE);
                     guest.setEmail("RANDOM@EMAIL.COM");

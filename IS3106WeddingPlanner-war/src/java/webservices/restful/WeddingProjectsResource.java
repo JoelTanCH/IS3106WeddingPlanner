@@ -96,24 +96,67 @@ public class WeddingProjectsResource {
     @GET
     @Path("query")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllProjectsByWeddingOrganiserId(@QueryParam("wedding-organiser-id") Long wOrganiserId) {
+    public Response getAllProjectsByWeddingOrganiserId(@QueryParam("wedding-organiser-id") Long wOrganiserId, @QueryParam("isCompleted") Boolean isCompleted) {
 
-        try {
-            List<WeddingProject> projects = weddingProjectSessionBeanLocal.getAllWeddingProjectbyOrganiser(wOrganiserId);
-
-            for (WeddingProject w : projects) {
-                nullifyBidirectionalWeddingProject(w);
-            }
-
-            GenericEntity<List<WeddingProject>> entityToReturn = new GenericEntity<List<WeddingProject>>(projects) {
-            };
-
-            return Response.status(200).entity(entityToReturn).type(MediaType.APPLICATION_JSON).build();
-
-        } catch (WeddingOrganiserNotFoundException e) {
-            JsonObject exception = Json.createObjectBuilder().add("error", "Wedding Projects from Wedding Organiser with id " + wOrganiserId + " not found")
+        if (wOrganiserId == null) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Wedding Organiser id query param not provided")
                     .build();
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+
+        // if wedding organiser id is provided but isCompleted is not provided, just get all projects by that particular organiser
+        if (isCompleted == null) {
+
+            try {
+                List<WeddingProject> projects = weddingProjectSessionBeanLocal.getAllWeddingProjectbyOrganiser(wOrganiserId);
+
+                for (WeddingProject w : projects) {
+                    nullifyBidirectionalWeddingProject(w);
+                }
+
+                GenericEntity<List<WeddingProject>> entityToReturn = new GenericEntity<List<WeddingProject>>(projects) {
+                };
+
+                return Response.status(200).entity(entityToReturn).type(MediaType.APPLICATION_JSON).build();
+
+            } catch (WeddingOrganiserNotFoundException e) {
+                JsonObject exception = Json.createObjectBuilder().add("error", "Wedding Projects from Wedding Organiser with id " + wOrganiserId + " not found")
+                        .build();
+                return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+            }
+        } else if (isCompleted) {
+            try {
+                List<WeddingProject> projects = weddingProjectSessionBeanLocal.getAllCompletedWeddingProject(wOrganiserId);
+                for (WeddingProject w : projects) {
+                    nullifyBidirectionalWeddingProject(w);
+                }
+
+                GenericEntity<List<WeddingProject>> entityToReturn = new GenericEntity<List<WeddingProject>>(projects) {
+                };
+
+                return Response.status(200).entity(entityToReturn).type(MediaType.APPLICATION_JSON).build();
+            } catch (WeddingOrganiserNotFoundException e) {
+                JsonObject exception = Json.createObjectBuilder().add("error", "Completed Wedding Projects from Wedding Organiser with id " + wOrganiserId + " not found")
+                        .build();
+                return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+            }
+
+        } else {
+            try {
+                List<WeddingProject> projects = weddingProjectSessionBeanLocal.getAllNotCompletedWeddingProject(wOrganiserId);
+                for (WeddingProject w : projects) {
+                    nullifyBidirectionalWeddingProject(w);
+                }
+
+                GenericEntity<List<WeddingProject>> entityToReturn = new GenericEntity<List<WeddingProject>>(projects) {
+                };
+
+                return Response.status(200).entity(entityToReturn).type(MediaType.APPLICATION_JSON).build();
+            } catch (WeddingOrganiserNotFoundException e) {
+                JsonObject exception = Json.createObjectBuilder().add("error", "Uncompleted Wedding Projects from Wedding Organiser with id " + wOrganiserId + " not found")
+                        .build();
+                return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+            }
         }
     }
 

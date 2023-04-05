@@ -140,17 +140,17 @@ public class WeddingProjectSessionBean implements WeddingProjectSessionBeanLocal
     
      @Override
     public List<WeddingProject> getAllCompletedWeddingProject(Long wId) throws WeddingOrganiserNotFoundException {
-        WeddingOrganiser w = em.find(WeddingOrganiser.class, wId);
-        Query q = em.createQuery("SELECT w FROM WeddingOrganiser w WHERE w.weddingProjects.completed = true");
-        q.setParameter("w", w);
+//        WeddingOrganiser w = em.find(WeddingOrganiser.class, wId);
+        Query q = em.createQuery("SELECT p FROM WeddingOrganiser w JOIN w.weddingProjects p WHERE w.userId = :wId AND p.completed = true");
+        q.setParameter("wId", wId);
         return q.getResultList();
     }
     
      @Override
     public List<WeddingProject> getAllNotCompletedWeddingProject(Long wId) throws WeddingOrganiserNotFoundException {
-        WeddingOrganiser w = em.find(WeddingOrganiser.class, wId);
-        Query q = em.createQuery("SELECT w FROM WeddingOrganiser w WHERE w.weddingProjects.completed = false");
-        q.setParameter("w", w);
+//        WeddingOrganiser w = em.find(WeddingOrganiser.class, wId);
+        Query q = em.createQuery("SELECT p FROM WeddingOrganiser w JOIN w.weddingProjects p WHERE w.userId = :wId AND p.completed = false");
+        q.setParameter("wId", wId);
         return q.getResultList();
     }
 
