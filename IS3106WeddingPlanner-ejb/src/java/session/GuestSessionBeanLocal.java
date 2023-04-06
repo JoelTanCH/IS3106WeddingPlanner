@@ -7,6 +7,7 @@ package session;
 
 import entity.Guest;
 import java.util.List;
+import java.util.Optional;
 import javax.ejb.Local;
 import util.exception.InvalidAssociationException;
 import util.exception.InvalidDeleteException;
@@ -31,5 +32,7 @@ public interface GuestSessionBeanLocal {
     public void updateGuestsRSVP(List<Guest> guests) throws InvalidUpdateException;
 
     public void updateGuestRSVP(String email, String rsvpStatus, Long weddingId) throws Throwable;
+
+    public Optional<Guest> getGuest(String email, Long weddingId);
     
 }
