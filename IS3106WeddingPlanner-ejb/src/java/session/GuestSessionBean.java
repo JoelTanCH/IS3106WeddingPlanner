@@ -10,6 +10,7 @@ import entity.GuestTable;
 import entity.WeddingProject;
 import enumeration.StatusEnum;
 import java.util.List;
+import java.util.Optional;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -143,7 +144,25 @@ public class GuestSessionBean implements GuestSessionBeanLocal {
             throw new InvalidUpdateException();
         }
     }
- 
+    
+    public Optional<Guest> getGuest(String email, Long weddingId) {
+        System.out.println("EMAIL " + email);
+        System.out.println("Wedding ID " + weddingId);
+        if (weddingId != null && email != null) {
+            WeddingProject project = em.find(WeddingProject.class, weddingId);
+            if (project != null) {
+                Optional<Guest> guest = em.createQuery("SELECT g FROM Guest g WHERE g.weddingProject.weddingProjectId = :wId AND g.email = :guestEmail")
+                        .setParameter("wId", weddingId).setParameter("guestEmail", email).getResultStream().findFirst();
+                return guest.map(g -> {
+                    em.detach(g);
+                    g.setWeddingProject(null);
+                    g.setGuestTable(null);
+                    return g;
+                        });
+            }
+        }
+        return Optional.empty();
+    }
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
