@@ -48,7 +48,13 @@ public class WeddingOrganisersResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<WeddingOrganiser> getAllWeddingOrganisers() {
-        return weddingOrganiserSessionBeanLocal.getAllWeddingOrganisers();
+        List<WeddingOrganiser> wOrganisers = weddingOrganiserSessionBeanLocal.getAllWeddingOrganisers();
+        
+        for (WeddingOrganiser w : wOrganisers) {
+            w.setWeddingProjects(null);
+        }
+        
+        return wOrganisers;
     }
 
     @PUT
