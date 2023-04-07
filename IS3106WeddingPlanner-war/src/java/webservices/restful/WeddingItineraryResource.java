@@ -5,6 +5,7 @@
  */
 package webservices.restful;
 
+import entity.Guest;
 import entity.WeddingItinerary;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import session.WeddingItinerarySessionBeanLocal;
@@ -91,7 +93,23 @@ public class WeddingItineraryResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     }
-    
+    @GET
+    @Path("/wedding/{weddingId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getWeddingItinerary(@PathParam("weddingId") Long wId) {
+        try {
+            List<WeddingItinerary> list = weddingItinerarySessionBean.getWeddingItinerary(wId);
+            GenericEntity<List<WeddingItinerary>> entity = new GenericEntity<List<WeddingItinerary>>(list) { };
+
+            return Response.status(200).entity(entity).type(MediaType.APPLICATION_JSON).build();
+        } catch (Exception e) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not Found")
+                    .build();
+          
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    }
     @PUT
     @Path("/update/itinerary")
     @Consumes(MediaType.APPLICATION_JSON)

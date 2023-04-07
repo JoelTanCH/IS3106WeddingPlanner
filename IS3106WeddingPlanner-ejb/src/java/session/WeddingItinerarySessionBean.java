@@ -7,6 +7,7 @@ package session;
 
 import entity.WeddingItinerary;
 import entity.WeddingProject;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -46,7 +47,7 @@ public class WeddingItinerarySessionBean implements WeddingItinerarySessionBeanL
         
         for (WeddingItinerary itinerary : itineraries) {
             if (itinerary.getWeddingProject() != null) {
-                itinerary.setWeddingProject(null);
+                itinerary.setWeddingProject(null);  
             }
         }
         return itineraries;
@@ -78,5 +79,17 @@ public class WeddingItinerarySessionBean implements WeddingItinerarySessionBeanL
         
         itinerary.setWeddingProject(null);
         em.remove(itinerary);
+    }
+    
+    public List<WeddingItinerary> getWeddingItinerary(Long weddingId) {
+        if (weddingId != null) {
+           List<WeddingItinerary> itinerary = em.createQuery("SELECT w FROM WeddingItinerary w WHERE w.weddingProject.weddingProjectId = :wId").setParameter("wId", weddingId).getResultList();
+           itinerary.forEach(i -> {
+               em.detach(i);
+               i.setWeddingProject(null);
+           });
+           return itinerary;
+        }
+        return new ArrayList<>();
     }
 }

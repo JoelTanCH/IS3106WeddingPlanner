@@ -32,7 +32,7 @@ public class StageSessionBean implements StageSessionBeanLocal {
             em.persist(stage);
             stage.setWeddingProject(wd);
             em.flush();
-            return stage.getStageId() * -1;
+            return stage.getStageId() ;
         } else {
             throw new InvalidAssociationException();
         }
@@ -72,7 +72,7 @@ public class StageSessionBean implements StageSessionBeanLocal {
                 s.setWeddingProject(null);
             });
             result.forEach(s -> {
-                s.setStageId(s.getStageId() * -1);
+                s.setStageId(s.getStageId());
             });
             return result;
         } else {
