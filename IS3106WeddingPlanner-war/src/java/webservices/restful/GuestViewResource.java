@@ -49,8 +49,6 @@ public class GuestViewResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getGuestsFromWedding(@QueryParam("email") String email, @QueryParam("weddingId") Long weddingId) {
-        System.out.println("email " + email);
-        System.out.println("weddingId" + weddingId);
             Optional<Guest> guestId = guestSBL.getGuest(email, weddingId);
             JsonObject exception = Json.createObjectBuilder()
                     .add("Error", "Invalid Wedding ID")
