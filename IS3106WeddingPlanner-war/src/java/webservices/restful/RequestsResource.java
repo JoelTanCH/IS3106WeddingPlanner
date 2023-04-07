@@ -7,8 +7,6 @@ package webservices.restful;
 
 import entity.Request;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -21,9 +19,8 @@ import javax.enterprise.context.RequestScoped;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonStructure;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.persistence.NoResultException;
+import javax.ws.rs.POST;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -45,6 +42,13 @@ public class RequestsResource {
     private UriInfo context;
 
     public RequestsResource() {
+    }
+
+    @POST 
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public void createRequest(Request request){
+        requestSessionBeanLocal.createRequest(request);
     }
 
     @GET

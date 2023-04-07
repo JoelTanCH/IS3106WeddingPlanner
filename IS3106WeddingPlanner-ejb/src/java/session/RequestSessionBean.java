@@ -30,6 +30,7 @@ public class RequestSessionBean implements RequestSessionBeanLocal {
         return req;
     }
 
+    @Override
     public void createRequest(Request request) {
         em.persist(request);
     }
