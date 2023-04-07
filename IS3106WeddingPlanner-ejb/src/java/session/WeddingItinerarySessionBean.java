@@ -6,9 +6,13 @@
 package session;
 
 import entity.WeddingItinerary;
+import entity.WeddingProject;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import util.exception.InvalidAssociationException;
 
 /**
  *
@@ -21,13 +25,51 @@ public class WeddingItinerarySessionBean implements WeddingItinerarySessionBeanL
     private EntityManager em;
     
     @Override
-    public void createNewItinerary(WeddingItinerary i) {
-        em.persist(i);
+    public Long createNewItinerary(WeddingItinerary i, Long weddingProjectId) throws InvalidAssociationException {
+        WeddingProject weddingProject = em.find(WeddingProject.class, weddingProjectId);
+        if (i != null && weddingProject != null) {
+            em.persist(i);
+            
+            i.setWeddingProject(weddingProject);
+            weddingProject.getWeddingItineraries().add(i);
+            em.flush();
+            return i.getWeddingItineraryId();
+        } else {
+            throw new InvalidAssociationException();
+        }
     }
     
     @Override
+    public List<WeddingItinerary> getAllItineraries() {
+        Query query = em.createQuery("SELECT i FROM WeddingItinerary i");
+        List<WeddingItinerary> itineraries = query.getResultList();
+        
+        for (WeddingItinerary itinerary : itineraries) {
+            if (itinerary.getWeddingProject() != null) {
+                itinerary.setWeddingProject(null);
+            }
+        }
+        return itineraries;
+    }
+    
+    @Override
+    public WeddingItinerary getItinerary(Long weddingItineraryId) {
+        return em.find(WeddingItinerary.class, weddingItineraryId);
+    }
+//    @Override
+//    public void createNewItinerary(WeddingItinerary i) {
+//        em.persist(i);
+//    }
+    
+    @Override
     public void updateItinerary(WeddingItinerary i) {
-        em.merge(i);
+        WeddingItinerary weddingItinerary = em.find(WeddingItinerary.class, i.getWeddingItineraryId());
+        if (weddingItinerary != null) {
+            weddingItinerary.setEventName(i.getEventName());
+            weddingItinerary.setEventDate(i.getEventDate());
+            weddingItinerary.setEventStartTime(i.getEventStartTime());
+            weddingItinerary.setEventEndTime(i.getEventEndTime());
+        }
     }
     
     @Override
