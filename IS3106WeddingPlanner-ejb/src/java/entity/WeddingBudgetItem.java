@@ -31,6 +31,9 @@ public class WeddingBudgetItem implements Serializable {
     private Long weddingBudgetItemId;
 
     @Column(nullable = false)
+    private String name;
+    
+    @Column(nullable = false)
     private BigDecimal cost;
     
     @Column(nullable = false)
@@ -110,6 +113,20 @@ public class WeddingBudgetItem implements Serializable {
      */
     public void setWeddingBudgetList(WeddingBudgetList weddingBudgetList) {
         this.weddingBudgetList = weddingBudgetList;
+    }
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
     }
 
 }

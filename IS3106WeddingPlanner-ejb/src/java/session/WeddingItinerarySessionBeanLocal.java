@@ -6,7 +6,9 @@
 package session;
 
 import entity.WeddingItinerary;
+import java.util.List;
 import javax.ejb.Local;
+import util.exception.InvalidAssociationException;
 
 /**
  *
@@ -14,11 +16,17 @@ import javax.ejb.Local;
  */
 @Local
 public interface WeddingItinerarySessionBeanLocal {
+    
+    public Long createNewItinerary(WeddingItinerary i, Long weddingProjectId) throws InvalidAssociationException;
 
-    public void createNewItinerary(WeddingItinerary i);
+//    public void createNewItinerary(WeddingItinerary i);
 
     public void updateItinerary(WeddingItinerary i);
 
     public void deleteItinerary(Long itineraryId);
+
+    public List<WeddingItinerary> getAllItineraries();
+
+    public WeddingItinerary getItinerary(Long weddingItineraryId);
     
 }
