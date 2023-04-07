@@ -256,7 +256,7 @@ public class TestingDataInitBean {
                     weddingProject2.setWeddingOrganiser(w1);
                     weddingProject2.setWeddingDate(startDate); // since the database only stores date anyway, we can just use the same date for both event & startTime
                     weddingProject2.setWeddingStartTime(startDate2);
-                    weddingProject2.setWeddingEndTime(endDate2);
+//                    weddingProject2.setWeddingEndTime(endDate2); // testing what if wedding doesnt have endDate
                     weddingProject2.setVenue("Venue zweiiii");
                     weddingProjectSessionBeanLocal.createWeddingProject(w1.getUserId(), weddingProject2);
 

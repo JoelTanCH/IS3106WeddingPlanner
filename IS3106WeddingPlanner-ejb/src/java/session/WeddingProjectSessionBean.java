@@ -77,6 +77,11 @@ public class WeddingProjectSessionBean implements WeddingProjectSessionBeanLocal
         wOld.setName(w.getName());
         wOld.setDescription(w.getDescription());
         wOld.setCompleted(w.getCompleted());
+        wOld.setVenue(w.getVenue());
+        wOld.setWeddingDate(w.getWeddingDate());
+        wOld.setWeddingStartTime(w.getWeddingStartTime());
+        wOld.setWeddingEndTime(w.getWeddingEndTime());
+
     }
 
     //should everything such as request, tables, etc be deleted if the wedding project is deleted ?
@@ -140,12 +145,11 @@ public class WeddingProjectSessionBean implements WeddingProjectSessionBeanLocal
             Query q = em.createQuery("SELECT p FROM WeddingOrganiser w JOIN w.weddingProjects p WHERE w.userId = :wId AND p.completed = true");
             q.setParameter("wId", wId);
             return q.getResultList();
-            
+
             // Can also get the same result programmatically with a for loop
             // since we have WeddingOrganiser w, we can do a for loop through w.weddingProjects and check each weddingProject.completed boolean
             // then push those that match our condition into a list to return
             // but using JPQL to fetch it straight from the db is less lengthy though the efficiency is questionable?
-            
         } else {
             throw new WeddingOrganiserNotFoundException("Wedding Organiser Not Found");
         }
