@@ -7,6 +7,7 @@ package entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,6 +16,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -55,33 +58,40 @@ public class WeddingProject implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long weddingProjectId;
-    
+
     private String name;
     private String description;
     private Boolean completed;
 
     @ManyToOne
     private WeddingOrganiser weddingOrganiser;
-    
-    @OneToMany(mappedBy="weddingProject")
+
+    @OneToMany(mappedBy = "weddingProject")
     private List<Request> requests;
-    
-    @OneToMany(mappedBy="weddingProject") // unidirectional
+
+    @OneToMany(mappedBy = "weddingProject") // unidirectional
     private List<Guest> guests;
-    
+
     @OneToOne
     private WeddingBudgetList weddingBudgetList;
-    
+
     @OneToOne
     private WeddingChecklist weddingChecklist;
-    
-    @OneToMany(mappedBy="weddingProject")
+
+    @OneToMany(mappedBy = "weddingProject")
     private List<WeddingItinerary> weddingItineraries;
-    
-    @OneToMany(mappedBy="weddingProject")
+
+    @OneToMany(mappedBy = "weddingProject")
     private List<GuestTable> tables;
 
-    
+    @Temporal(TemporalType.DATE)
+    private Date weddingDate;
+    @Temporal(TemporalType.TIME)
+    private Date weddingStartTime;
+    @Temporal(TemporalType.TIME)
+    private Date weddingEndTime;
+
+    private String venue;
     
     
     public WeddingProject() {
@@ -90,7 +100,6 @@ public class WeddingProject implements Serializable {
         this.weddingItineraries = new ArrayList<>();
         this.tables = new ArrayList<>();
     }
-    
 
     /**
      * @return the weddingOrganiser
@@ -161,6 +170,39 @@ public class WeddingProject implements Serializable {
     public void setTables(List<GuestTable> tables) {
         this.tables = tables;
     }
+    
+    public Date getWeddingDate() {
+        return weddingDate;
+    }
+
+    public void setWeddingDate(Date weddingDate) {
+        this.weddingDate = weddingDate;
+    }
+
+    public Date getWeddingStartTime() {
+        return weddingStartTime;
+    }
+
+    public void setWeddingStartTime(Date weddingStartTime) {
+        this.weddingStartTime = weddingStartTime;
+    }
+
+    public Date getWeddingEndTime() {
+        return weddingEndTime;
+    }
+
+    public void setWeddingEndTime(Date weddingEndTime) {
+        this.weddingEndTime = weddingEndTime;
+    }
+
+    public String getVenue() {
+        return venue;
+    }
+
+    public void setVenue(String venue) {
+        this.venue = venue;
+    }
+        
     
     public Long getWeddingProjectId() {
         return weddingProjectId;
@@ -236,5 +278,5 @@ public class WeddingProject implements Serializable {
     public void setCompleted(Boolean completed) {
         this.completed = completed;
     }
-    
+
 }

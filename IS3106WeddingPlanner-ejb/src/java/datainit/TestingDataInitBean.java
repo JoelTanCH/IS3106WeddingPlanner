@@ -19,6 +19,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import java.math.BigDecimal;
 import java.security.Key;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -217,11 +218,35 @@ public class TestingDataInitBean {
 
             if (em.find(WeddingProject.class, 1L) == null) {
                 try {
+
+                    String startDateString = "2023-03-04 1330";
+                    String endDateString = "2023-03-04 1830";
+                    String startDateString2 = "2023-05-04 1230";
+                    String endDateString2 = "2023-05-04 1530";
+
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HHmm");
+                    Date startDate = null;
+                    Date endDate = null;
+                    Date startDate2 = null;
+                    Date endDate2 = null;
+                    try {
+                        startDate = dateFormat.parse(startDateString);
+                        endDate = dateFormat.parse(endDateString);
+                        startDate2 = dateFormat.parse(startDateString2);
+                        endDate2 = dateFormat.parse(endDateString2);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
                     WeddingProject weddingProject1 = new WeddingProject();
                     weddingProject1.setName("weddingProject1");
                     weddingProject1.setDescription("description for project1");
                     weddingProject1.setCompleted(Boolean.FALSE);
                     weddingProject1.setWeddingOrganiser(w1);
+                    weddingProject1.setWeddingDate(startDate); // since the database only stores date anyway, we can just use the same date for both event & startTime
+                    weddingProject1.setWeddingStartTime(startDate);
+                    weddingProject1.setWeddingEndTime(endDate);
+                    weddingProject1.setVenue("Venue oneeeee");
                     weddingProjectSessionBeanLocal.createWeddingProject(w1.getUserId(), weddingProject1);
 
                     WeddingProject weddingProject2 = new WeddingProject();
@@ -229,6 +254,10 @@ public class TestingDataInitBean {
                     weddingProject2.setDescription("description for project2");
                     weddingProject2.setCompleted(Boolean.TRUE);
                     weddingProject2.setWeddingOrganiser(w1);
+                    weddingProject2.setWeddingDate(startDate); // since the database only stores date anyway, we can just use the same date for both event & startTime
+                    weddingProject2.setWeddingStartTime(startDate2);
+                    weddingProject2.setWeddingEndTime(endDate2);
+                    weddingProject2.setVenue("Venue zweiiii");
                     weddingProjectSessionBeanLocal.createWeddingProject(w1.getUserId(), weddingProject2);
 
                     WeddingProject weddingProject3 = new WeddingProject();
@@ -236,9 +265,13 @@ public class TestingDataInitBean {
                     weddingProject3.setDescription("description for project3, this belongs to wedding-organiser with id of 10 i think");
                     weddingProject3.setCompleted(Boolean.FALSE);
                     weddingProject3.setWeddingOrganiser(w2);
+                    weddingProject3.setWeddingDate(startDate); // since the database only stores date anyway, we can just use the same date for both event & startTime
+                    weddingProject3.setWeddingStartTime(startDate);
+                    weddingProject3.setWeddingEndTime(endDate);
+                    weddingProject3.setVenue("Venue threeeeee");
                     weddingProjectSessionBeanLocal.createWeddingProject(w2.getUserId(), weddingProject3);
                     em.flush();
-                    
+
                     Guest guest = new Guest();
                     guest.setAttendingSide(BRIDE);
                     guest.setEmail("RANDOM@EMAIL.COM");
