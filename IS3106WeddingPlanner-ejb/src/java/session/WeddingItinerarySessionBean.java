@@ -7,7 +7,6 @@ package session;
 
 import entity.WeddingItinerary;
 import entity.WeddingProject;
-import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -47,7 +46,8 @@ public class WeddingItinerarySessionBean implements WeddingItinerarySessionBeanL
         
         for (WeddingItinerary itinerary : itineraries) {
             if (itinerary.getWeddingProject() != null) {
-                itinerary.setWeddingProject(null);  
+                em.detach(itinerary);
+                itinerary.setWeddingProject(null);
             }
         }
         return itineraries;
@@ -80,16 +80,10 @@ public class WeddingItinerarySessionBean implements WeddingItinerarySessionBeanL
         itinerary.setWeddingProject(null);
         em.remove(itinerary);
     }
-    
+
+    // idk what this is but without this there is an error
+    @Override
     public List<WeddingItinerary> getWeddingItinerary(Long weddingId) {
-        if (weddingId != null) {
-           List<WeddingItinerary> itinerary = em.createQuery("SELECT w FROM WeddingItinerary w WHERE w.weddingProject.weddingProjectId = :wId").setParameter("wId", weddingId).getResultList();
-           itinerary.forEach(i -> {
-               em.detach(i);
-               i.setWeddingProject(null);
-           });
-           return itinerary;
-        }
-        return new ArrayList<>();
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

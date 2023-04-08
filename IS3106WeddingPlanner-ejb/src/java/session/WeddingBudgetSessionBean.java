@@ -52,6 +52,7 @@ public class WeddingBudgetSessionBean implements WeddingBudgetSessionBeanLocal {
         List<WeddingBudgetItem> items = itemsQuery.getResultList();
         for (WeddingBudgetItem item : items) {
             if (item.getWeddingBudgetList() != null) {
+                em.detach(item);
                 item.setWeddingBudgetList(null);
             }
         }
@@ -106,12 +107,17 @@ public class WeddingBudgetSessionBean implements WeddingBudgetSessionBeanLocal {
     }
 
     @Override
-    public List<WeddingBudgetList> getBudgets(Long weddingProjectId) {
-        Query query = em.createQuery("SELECT bugdet FROM WeddingBudgetList budget");
+    public List<WeddingBudgetList> getBudgets() {
+        Query query = em.createQuery("SELECT budget FROM WeddingBudgetList budget");
         List<WeddingBudgetList> budgets = query.getResultList();
         for (WeddingBudgetList budget : budgets) {
             if (budget.getWeddingProject() != null) {
+                em.detach(budget);
                 budget.setWeddingProject(null);
+            }
+            
+            if (budget.getWeddingBudgetItems() != null) {
+               budget.setWeddingBudgetItems(null);
             }
         }
         return budgets;
