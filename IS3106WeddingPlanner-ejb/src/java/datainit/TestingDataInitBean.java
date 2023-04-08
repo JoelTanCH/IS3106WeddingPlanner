@@ -9,6 +9,7 @@ import entity.Admin;
 import entity.Guest;
 import entity.GuestTable;
 import entity.Request;
+import entity.Transaction;
 import entity.Vendor;
 import entity.WeddingBudgetItem;
 import entity.WeddingBudgetList;
@@ -39,6 +40,7 @@ import session.RequestSessionBeanLocal;
 import util.exception.InvalidAssociationException;
 import jwt.JWTSessionBeanLocal;
 import jwt.KeyHolderLocal;
+import session.TransactionSessionBeanLocal;
 import session.VendorSessionBeanLocal;
 import session.WeddingBudgetSessionBeanLocal;
 import session.WeddingItinerarySessionBeanLocal;
@@ -56,6 +58,8 @@ public class TestingDataInitBean {
     @EJB(name = "VendorSessionBeanLocal")
     private VendorSessionBeanLocal vendorSessionBeanLocal;
 
+    @EJB
+    private TransactionSessionBeanLocal transactionSessionBeanLocal;
     @EJB
     private AdminSessionBeanLocal adminSessionBean;
 
@@ -107,6 +111,7 @@ public class TestingDataInitBean {
             a1.setUsername("Joseph");
             a1.setPassword("caesar");
             adminSessionBean.createAdmin(a1);
+            em.flush(); // need this so it ensures Admin's id is 1
 
             WeddingOrganiser w1 = new WeddingOrganiser();
             w1.setEmail("weddingOrganiser1@email.com");
@@ -198,16 +203,27 @@ public class TestingDataInitBean {
                     sampleRequest.setWeddingProject(weddingProject1);
                     vendor_entertainment.getRequests().add(sampleRequest);
                     requestSessionBeanLocal.createRequest(sampleRequest);
+                    
+                    
                     sampleRequest = new Request();
-                    sampleRequest.setIsAccepted(null);
+                    sampleRequest.setIsAccepted(true);
                     sampleRequest.setQuotationURL("www.anotherfakeUrl.com");
-                    sampleRequest.setQuotedPrice(null);
+                    sampleRequest.setQuotedPrice(BigDecimal.ONE);
                     sampleRequest.setRequestDate(new Date());
                     sampleRequest.setRequestDetails("Small gig");
                     sampleRequest.setVendor(vendor_entertainment);
                     sampleRequest.setWeddingProject(weddingProject2);
+                    
+                    Transaction sampleTransaction = new Transaction();
+                    sampleTransaction.setIsPaid(false);
+                    sampleTransaction.setRequest(sampleRequest);
+                    sampleTransaction.setTotalPrice(BigDecimal.ONE);
+                    sampleTransaction.setTransactionTime(new Date());
+                    sampleRequest.setTransaction(sampleTransaction);
+                    
                     vendor_entertainment.getRequests().add(sampleRequest);
                     requestSessionBeanLocal.createRequest(sampleRequest);
+                    transactionSessionBeanLocal.createTransaction(sampleTransaction);
                     vendorSessionBeanLocal.createVendor(vendor_entertainment);
 
                     Vendor vendor_entertainment2 = new Vendor();
