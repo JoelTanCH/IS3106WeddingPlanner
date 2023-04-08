@@ -6,6 +6,7 @@
 package session;
 
 import entity.WeddingChecklist;
+import entity.WeddingProject;
 import entity.WeddingTask;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -28,6 +29,14 @@ public class WeddingChecklistBean implements WeddingChecklistBeanLocal {
     //
     // however just in case some CRUD code is here anyway
     
+    public Long createWeddingChecklist(WeddingChecklist weddingChecklist, Long weddingProjectId) {
+        WeddingProject weddingProject = em.find(WeddingProject.class, weddingProjectId);
+        weddingChecklist.setWeddingProject(weddingProject);
+        em.persist(weddingChecklist);
+        em.flush();
+        return weddingChecklist.getWeddingCheckListId();
+    }
+    
     public WeddingChecklist getWeddingChecklist(Long checklistId) {
         WeddingChecklist checklist = em.find(WeddingChecklist.class, checklistId);
         return checklist;
@@ -39,6 +48,7 @@ public class WeddingChecklistBean implements WeddingChecklistBeanLocal {
     public void createTask(WeddingTask t, Long checklistId) {
         // add t to WeddingProject's WeddingChecklist's List<WeddingTask> attribute
         WeddingChecklist checklist = em.find(WeddingChecklist.class, checklistId);
+        t.setWeddingChecklist(checklist);
         checklist.getWeddingTasks().add(t);
 
         em.persist(t);

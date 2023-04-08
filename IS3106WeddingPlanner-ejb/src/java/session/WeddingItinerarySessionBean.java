@@ -46,6 +46,7 @@ public class WeddingItinerarySessionBean implements WeddingItinerarySessionBeanL
         
         for (WeddingItinerary itinerary : itineraries) {
             if (itinerary.getWeddingProject() != null) {
+                em.detach(itinerary);
                 itinerary.setWeddingProject(null);
             }
         }

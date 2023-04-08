@@ -41,7 +41,7 @@ public interface WeddingBudgetSessionBeanLocal {
 
     public void updateItem(WeddingBudgetItem weddingBudgetItem);
 
-    public List<WeddingBudgetList> getBudgets(Long weddingProjectId);
+    public List<WeddingBudgetList> getBudgets();
 
     public WeddingBudgetList getBudget(Long weddingBudgetListId);
     

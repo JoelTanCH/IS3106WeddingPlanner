@@ -29,5 +29,7 @@ public interface WeddingChecklistBeanLocal {
     public void checkOffTask(WeddingTask t);
 
     public void checkOffTask(WeddingTask t, boolean valueToSet);
+
+    public Long createWeddingChecklist(WeddingChecklist weddingChecklist, Long weddingProjectId);
     
 }
