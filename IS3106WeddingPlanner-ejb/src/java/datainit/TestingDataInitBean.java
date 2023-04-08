@@ -131,7 +131,7 @@ public class TestingDataInitBean {
             Request sampleRequest = new Request();
             sampleRequest.setIsAccepted(null);
             sampleRequest.setQuotationURL("www.fakeUrl.com");
-            sampleRequest.setQuotedPrice(BigDecimal.valueOf(1000L));
+            sampleRequest.setQuotedPrice(null);
             sampleRequest.setRequestDate(new Date());
             sampleRequest.setRequestDetails("Do something for me");
             sampleRequest.setVendor(vendor_entertainment);
@@ -140,7 +140,7 @@ public class TestingDataInitBean {
             sampleRequest = new Request();
             sampleRequest.setIsAccepted(null);
             sampleRequest.setQuotationURL("www.anotherfakeUrl.com");
-            sampleRequest.setQuotedPrice(BigDecimal.valueOf(200L));
+            sampleRequest.setQuotedPrice(null);
             sampleRequest.setRequestDate(new Date());
             sampleRequest.setRequestDetails("Small gig");
             sampleRequest.setVendor(vendor_entertainment);

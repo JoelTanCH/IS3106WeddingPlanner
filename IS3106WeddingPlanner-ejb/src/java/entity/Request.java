@@ -34,13 +34,13 @@ public class Request implements Serializable {
     private Boolean isAccepted;
     @Column(nullable = false)
     private String quotationURL;
-    @Column(nullable = false)
+    @Column
     private BigDecimal quotedPrice;
     @Temporal(TemporalType.TIMESTAMP)
     private Date requestDate;
     @Column(nullable = false)
     private String requestDetails;
-
+   
     @OneToOne(optional = true, mappedBy="request")
     private WeddingBudgetItem weddingBudgetItem;
 

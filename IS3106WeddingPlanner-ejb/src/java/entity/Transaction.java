@@ -29,20 +29,18 @@ public class Transaction implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long transactionId;
     @Column(nullable = false)
-    private BigDecimal totalPrice; 
+    private BigDecimal totalPrice;
     @Column(nullable = false)
-    private boolean isPaid = false; 
+    private boolean isPaid = false;
     @Temporal(TemporalType.TIMESTAMP)
     private Date transactionTime;
-    
+
     @OneToOne
-    private Request request; 
+    private Request request;
 
     public Transaction() {
     }
 
-    
-    
     public Long getTransactionId() {
         return transactionId;
     }
@@ -131,5 +129,13 @@ public class Transaction implements Serializable {
     public void setTransactionTime(Date transactionTime) {
         this.transactionTime = transactionTime;
     }
-    
+
+    public Request getRequest() {
+        return request;
+    }
+
+    public void setRequest(Request request) {
+        this.request = request;
+    }
+
 }

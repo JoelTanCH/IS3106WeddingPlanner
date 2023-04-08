@@ -6,6 +6,7 @@
 package session;
 
 import entity.Request;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -25,4 +26,10 @@ public interface RequestSessionBeanLocal {
     public void acceptRequest(Long requestId);
     
     public void rejectRequest(Long requestId);
+    
+    public void setNewRequestPrice(Long requestId, BigDecimal newPrice);
+    
+    public void payRequest(Long requestId);
+    
+    public Long checkSchedule(Long vendorId, Long requestId);
 }
