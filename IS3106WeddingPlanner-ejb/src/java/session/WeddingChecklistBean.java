@@ -6,9 +6,10 @@
 package session;
 
 import entity.WeddingChecklist;
+import entity.WeddingParentTask;
 import entity.WeddingProject;
-import entity.WeddingTask;
-import java.util.ArrayList;
+import entity.WeddingSubtask;
+//import entity.WeddingTask;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -49,9 +50,9 @@ public class WeddingChecklistBean implements WeddingChecklistBeanLocal {
                 em.detach(checklist);
                 checklist.setWeddingProject(null);
             }
-            
-            if (checklist.getWeddingTasks() != null) {
-                checklist.setWeddingTasks(null);
+
+            if (checklist.getWeddingParentTasks() != null) {
+                checklist.setWeddingParentTasks(null);
             }
         }
         return checklists;
@@ -62,57 +63,149 @@ public class WeddingChecklistBean implements WeddingChecklistBeanLocal {
         WeddingChecklist checklist = em.find(WeddingChecklist.class, checklistId);
         return checklist;
     }
-
+    
     @Override
-    public Long createTask(WeddingTask t, Long checklistId) throws InvalidAssociationException {
-        // add t to WeddingProject's WeddingChecklist's List<WeddingTask> attribute
+    public Long createParentTask(WeddingParentTask t, Long checklistId) throws InvalidAssociationException {
         WeddingChecklist checklist = em.find(WeddingChecklist.class, checklistId);
         if (t != null && checklist != null) {
             em.persist(t);
             t.setWeddingChecklist(checklist);
-            checklist.getWeddingTasks().add(t);
+            checklist.getWeddingParentTasks().add(t);
             em.flush();
-            return t.getId();
+            return t.getWeddingParentTaskId();
         } else {
             throw new InvalidAssociationException();
         }
     }
-
-//    @Override
-//    public List<WeddingTask> getAllParentTasks() {
-//        Query query = em.createQuery("SELECT task FROM WeddingTask task");
-//        List<WeddingTask> tasks = query.getResultList();
-//
-//        List<WeddingTask> parentTasks = new ArrayList<WeddingTask>();
-//        for (WeddingTask task : tasks) {
-//            if (task.getWeddingChecklist() == null) {
-//                em.detach(task);
-//                parentTasks.add(task);
-//            }
-//        }
-//        return parentTasks;
-//    }
-//
-//    @Override
-//    public List<WeddingTask> getAllSubTasks() {
-//        WeddingTask parentTask = em.find(WeddingTask.class, parentTaskId);
-//        List<WeddingTask> subtasks = parentTask.getSubtasks();
-//
-////        for (WeddingTask task : subtasks) {
-////            em.detach(task);
-////            task.setWeddingChecklist(null);
-////        }
-//        return subtasks;
-//    }
-
+    
     @Override
-    public void updateTask(WeddingTask t) {
-        WeddingTask newTask = em.find(WeddingTask.class, t.getId());
-        if (newTask != null) {
-            newTask.setTaskDescription(t.getTaskDescription());
-            newTask.setIsDone(t.isIsDone());
+    public List<WeddingParentTask> getAllWeddingParentTasks() {
+        Query query = em.createQuery("SELECT p FROM WeddingParentTask p");
+        List<WeddingParentTask> parentTasks = query.getResultList();
+
+        for (WeddingParentTask parentTask : parentTasks) {
+            if (parentTask.getWeddingChecklist() != null || parentTask.getWeddingSubtasks() != null) {
+                em.detach(parentTask);
+                parentTask.setWeddingChecklist(null);
+                parentTask.setWeddingSubtasks(null);
+            }
+        }
+        return parentTasks;
+    }
+    
+    @Override
+    public void updateParentTask(WeddingParentTask parentTask) {
+        WeddingParentTask newParentTask = em.find(WeddingParentTask.class, parentTask.getWeddingParentTaskId());
+        if (newParentTask != null) {
+            newParentTask.setTaskDescription(parentTask.getTaskDescription());
+            newParentTask.setIsDone(parentTask.isIsDone());
         }
     }
+    
+    @Override
+    public void deleteParentTask(Long parentTaskId) {
+        WeddingParentTask parentTask = em.find(WeddingParentTask.class, parentTaskId);
+        if (parentTask != null) {
+            WeddingChecklist weddingChecklist = parentTask.getWeddingChecklist();
+            weddingChecklist.getWeddingParentTasks().remove(parentTask);
+            em.remove(parentTask);
+        }
+    }
+    
+    @Override
+    public Long createSubtask(WeddingSubtask t, Long parentTaskId) throws InvalidAssociationException {
+        WeddingParentTask parentTask = em.find(WeddingParentTask.class, parentTaskId);
+        if (t != null && parentTask != null) {
+            em.persist(t);
+            t.setWeddingParentTask(parentTask);
+            parentTask.getWeddingSubtasks().add(t);
+            em.flush();
+            return t.getWeddingSubtaskId();
+        } else {
+            throw new InvalidAssociationException();
+        }
+    }
+    
+    @Override
+    public List<WeddingSubtask> getAllWeddingSubtasks() {
+        Query query = em.createQuery("SELECT s FROM WeddingSubtask s");
+        List<WeddingSubtask> subtasks = query.getResultList();
+
+        for (WeddingSubtask subtask : subtasks) {
+            if (subtask.getWeddingParentTask() != null) {
+                em.detach(subtask);
+                subtask.setWeddingParentTask(null);
+            }
+        }
+        return subtasks;
+    }
+    
+    @Override
+    public void updateSubtask(WeddingSubtask subtask) {
+        WeddingSubtask newSubtask = em.find(WeddingSubtask.class, subtask.getWeddingSubtaskId());
+        if (newSubtask != null) {
+            newSubtask.setSubtaskDescription(subtask.getSubtaskDescription());
+            newSubtask.setIsDone(subtask.isIsDone());
+        }
+    }
+    
+    @Override
+    public void deleteSubtask(Long subtaskId) {
+        WeddingSubtask subtask = em.find(WeddingSubtask.class, subtaskId);
+        if (subtask != null) {
+            WeddingParentTask weddingParentTask = subtask.getWeddingParentTask();
+            weddingParentTask.getWeddingSubtasks().remove(subtask);
+            em.remove(subtask);
+        }
+    }
+    
+//
+//    @Override
+//    public Long createTask(WeddingTask t, Long checklistId) throws InvalidAssociationException {
+//        // add t to WeddingProject's WeddingChecklist's List<WeddingTask> attribute
+//        WeddingChecklist checklist = em.find(WeddingChecklist.class, checklistId);
+//        if (t != null && checklist != null) {
+//            em.persist(t);
+//            t.setWeddingChecklist(checklist);
+//            checklist.getWeddingTasks().add(t);
+//            em.flush();
+//            return t.getId();
+//        } else {
+//            throw new InvalidAssociationException();
+//        }
+//    }
+//
+//    @Override
+//    public List<WeddingTask> getAllParentTasks() {
+//        Query query = em.createQuery("SELECT task FROM WeddingTask task WHERE task.parentTask IS NULL");
+//        List<WeddingTask> tasks = query.getResultList();
+//
+//        for (WeddingTask task : tasks) {
+//            em.detach(task);
+//            task.setWeddingChecklist(null);
+//        }
+//        return tasks;
+//    }
+//
+////    @Override
+////    public List<WeddingTask> getAllSubTasks() {
+////        WeddingTask parentTask = em.find(WeddingTask.class, parentTaskId);
+////        List<WeddingTask> subtasks = parentTask.getSubtasks();
+////
+//////        for (WeddingTask task : subtasks) {
+//////            em.detach(task);
+//////            task.setWeddingChecklist(null);
+//////        }
+////        return subtasks;
+////    }
+//    @Override
+//    public void updateTask(WeddingTask t) {
+//        WeddingTask newTask = em.find(WeddingTask.class, t.getId());
+//        if (newTask != null) {
+//            newTask.setTaskDescription(t.getTaskDescription());
+//            newTask.setIsDone(t.isIsDone());
+//        }
+//    }
 
     // WIP, this will depend on structure of the main list
 //    public void addSubtaskToTask(WeddingTask parentTask, WeddingTask t) {

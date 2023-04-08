@@ -5,9 +5,9 @@
  */
 package webservices.restful;
 
-import entity.WeddingBudgetList;
 import entity.WeddingChecklist;
-import entity.WeddingTask;
+import entity.WeddingParentTask;
+import entity.WeddingSubtask;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.core.Context;
@@ -16,12 +16,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PUT;
 import javax.enterprise.context.RequestScoped;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -86,10 +86,10 @@ public class WeddingChecklistsResource {
     @Path("/{wedding-checklist-id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createTask(WeddingTask weddingTask, @PathParam("wedding-checklist-id") Long weddingChecklistId) {
+    public Response createParentTask(WeddingParentTask weddingTask, @PathParam("wedding-checklist-id") Long weddingChecklistId) {
         try {
-            Long id = weddingChecklistBeanLocal.createTask(weddingTask, weddingChecklistId);
-            JsonObject weddingBudgetListId = Json.createObjectBuilder().add("ID", id).build();
+            Long id = weddingChecklistBeanLocal.createParentTask(weddingTask, weddingChecklistId);
+            JsonObject weddingBudgetListId = Json.createObjectBuilder().add("WEDDINGPARENTTASKID", id).build();
             return Response.status(200).entity(weddingBudgetListId).build();
         } catch (InvalidAssociationException ex) {
             JsonObject exception = Json.createObjectBuilder().add("Error", "Invalid Wedding").build();
@@ -97,32 +97,94 @@ public class WeddingChecklistsResource {
         }
     }
     
-//    @GET
-//    @Path("/tasks")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public List<WeddingTask> getAllParentTasks() {
-//        return weddingChecklistBeanLocal.getAllParentTasks();
-//    }
-//    
-//    @GET
-//    @Path("/subtasks")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public List<WeddingTask> getAllSubTasks() {
-//        return weddingChecklistBeanLocal.getAllSubTasks();
-//    }
-    
-    @PUT
-    @Path("/update/task")
+    @POST
+    @Path("/subtask/{parent-task-id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateTask(WeddingTask t) {
+    public Response createSubtask(WeddingSubtask weddingTask, @PathParam("parent-task-id") Long weddingParentTaskId) {
         try {
-            weddingChecklistBeanLocal.updateTask(t);
+            Long id = weddingChecklistBeanLocal.createSubtask(weddingTask, weddingParentTaskId);
+            JsonObject weddingBudgetListId = Json.createObjectBuilder().add("WEDDINGSUBTASKID", id).build();
+            return Response.status(200).entity(weddingBudgetListId).build();
+        } catch (InvalidAssociationException ex) {
+            JsonObject exception = Json.createObjectBuilder().add("Error", "Invalid Wedding").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    }
+    
+    @GET
+    @Path("/tasks")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<WeddingParentTask> getAllParentTasks() {
+        return weddingChecklistBeanLocal.getAllWeddingParentTasks();
+    }
+    
+    @GET
+    @Path("/subtasks")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<WeddingSubtask> getAllSubTasks() {
+        return weddingChecklistBeanLocal.getAllWeddingSubtasks();
+    }
+    
+    @PUT
+    @Path("/update/parentTask")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateParentTask(WeddingParentTask t) {
+        try {
+            weddingChecklistBeanLocal.updateParentTask(t);
             return Response.status(204).build();
         } catch (Exception e) {
             JsonObject exception = Json.createObjectBuilder().add("error", "Not Found").build();
             
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    }
+    
+    @PUT
+    @Path("/update/subtask")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateSubtask(WeddingSubtask t) {
+        try {
+            weddingChecklistBeanLocal.updateSubtask(t);
+            return Response.status(204).build();
+        } catch (Exception e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Not Found").build();
+            
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    }
+    
+    @DELETE
+    @Path("/task/{parent-task-id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteParentTask(@PathParam("parent-task-id") Long taskId) {
+        try {
+            weddingChecklistBeanLocal.deleteParentTask(taskId);
+            return Response.status(204).build();
+        } catch(Exception e) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Item not found")
+                    .build();
+            
+            return Response.status(404).entity(exception).build();
+        }
+    }
+    
+    @DELETE
+    @Path("/subtask/{subtask-id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteSubtask(@PathParam("subtask-id") Long subtaskId) {
+        try {
+            weddingChecklistBeanLocal.deleteSubtask(subtaskId);
+            return Response.status(204).build();
+        } catch(Exception e) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Item not found")
+                    .build();
+            
+            return Response.status(404).entity(exception).build();
         }
     }
     
@@ -137,7 +199,7 @@ public class WeddingChecklistsResource {
 //    @Path("/{wedding-checklist-id}")
 //    @Consumes(MediaType.APPLICATION_JSON)
 //    public void createTask(@PathParam("wedding-checklist-id") Long checklistId,
-//            WeddingTask t) {
+//            WeddingSubtask t) {
 //
 //        weddingChecklistBeanLocal.createTask(t, checklistId);
 //                
@@ -149,7 +211,7 @@ public class WeddingChecklistsResource {
 //    @Path("/{wedding-checklist-id}")
 //    @Consumes(MediaType.APPLICATION_JSON)
 //    public void updateTask(@PathParam("wedding-checklist-id") Long checklistId,
-//            WeddingTask t) {
+//            WeddingSubtask t) {
 //
 //        weddingChecklistBeanLocal.updateTask(t);
 //                
@@ -161,7 +223,7 @@ public class WeddingChecklistsResource {
 //    @Path("/{wedding-checklist-id}")
 //    @Consumes(MediaType.APPLICATION_JSON)
 //    public void removeTask(@PathParam("wedding-checklist-id") Long checklistId,
-//            WeddingTask t) {
+//            WeddingSubtask t) {
 //
 //        weddingChecklistBeanLocal.removeTask(t);
 //                

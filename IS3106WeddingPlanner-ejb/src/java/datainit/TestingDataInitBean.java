@@ -16,8 +16,9 @@ import entity.WeddingBudgetList;
 import entity.WeddingChecklist;
 import entity.WeddingItinerary;
 import entity.WeddingOrganiser;
+import entity.WeddingParentTask;
 import entity.WeddingProject;
-import entity.WeddingTask;
+import entity.WeddingSubtask;
 import static enumeration.BrideGroomEnum.BRIDE;
 import enumeration.CategoryEnum;
 import static enumeration.StatusEnum.NOTSENT;
@@ -378,23 +379,22 @@ public class TestingDataInitBean {
                 em.persist(weddingChecklist);
                 em.flush();
                 
-                WeddingTask parentTask = new WeddingTask();
+                WeddingParentTask parentTask = new WeddingParentTask();
                 parentTask.setTaskDescription("Sample Parent Task");
-                weddingChecklistSessionBean.createTask(parentTask, weddingChecklist.getWeddingCheckListId());
+                parentTask.setIsDone(false);
+                weddingChecklistSessionBean.createParentTask(parentTask, weddingChecklist.getWeddingCheckListId());
                 em.persist(parentTask);
                 em.flush();
-                
-                WeddingTask subtask = new WeddingTask();
-                subtask.setTaskDescription("SubTask 1");
+//                
+                WeddingSubtask subtask = new WeddingSubtask();
+                subtask.setSubtaskDescription("SubTask 1");
                 subtask.setIsDone(false);
-                subtask.setParentTask(parentTask);
-                weddingChecklistSessionBean.createTask(subtask, weddingChecklist.getWeddingCheckListId());
-                
-                subtask = new WeddingTask();
-                subtask.setTaskDescription("SubTask 2");
+                weddingChecklistSessionBean.createSubtask(subtask, parentTask.getWeddingParentTaskId());
+//                
+                subtask = new WeddingSubtask();
+                subtask.setSubtaskDescription("SubTask 2");
                 subtask.setIsDone(true);
-                subtask.setParentTask(parentTask);
-                weddingChecklistSessionBean.createTask(subtask, weddingChecklist.getWeddingCheckListId());
+                weddingChecklistSessionBean.createSubtask(subtask, parentTask.getWeddingParentTaskId());
                 } catch (InvalidAssociationException ex) {
                     //Logger.getLogger(TestingDataInitBean.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ParseException ex) {

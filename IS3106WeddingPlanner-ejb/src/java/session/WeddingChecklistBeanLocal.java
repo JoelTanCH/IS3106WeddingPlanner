@@ -6,7 +6,9 @@
 package session;
 
 import entity.WeddingChecklist;
-import entity.WeddingTask;
+import entity.WeddingParentTask;
+import entity.WeddingSubtask;
+//import entity.WeddingTask;
 import java.util.List;
 import javax.ejb.Local;
 import util.exception.InvalidAssociationException;
@@ -18,7 +20,29 @@ import util.exception.InvalidAssociationException;
 @Local
 public interface WeddingChecklistBeanLocal {
 
-//    public WeddingChecklist getWeddingChecklist(Long checklistId);
+    public Long createWeddingChecklist(WeddingChecklist weddingChecklist, Long weddingProjectId) throws InvalidAssociationException;
+
+    public List<WeddingChecklist> getAllWeddingChecklists();
+
+    public WeddingChecklist getWeddingChecklist(Long checklistId);
+
+    public Long createParentTask(WeddingParentTask t, Long checklistId) throws InvalidAssociationException;
+
+    public List<WeddingParentTask> getAllWeddingParentTasks();
+
+    public void updateParentTask(WeddingParentTask parentTask);
+
+    public void deleteParentTask(Long parentTaskId);
+
+    public Long createSubtask(WeddingSubtask t, Long parentTaskId) throws InvalidAssociationException;
+
+    public List<WeddingSubtask> getAllWeddingSubtasks();
+
+    public void updateSubtask(WeddingSubtask subtask);
+
+    public void deleteSubtask(Long subtaskId);
+    
+    //    public WeddingChecklist getWeddingChecklist(Long checklistId);
 //
 //    public Long createTask(WeddingTask t, Long checklistId) throws InvalidAssociationException;
 
@@ -34,18 +58,18 @@ public interface WeddingChecklistBeanLocal {
 //
 //    public Long createWeddingChecklist(WeddingChecklist weddingChecklist, Long weddingProjectId);
 
-    public Long createWeddingChecklist(WeddingChecklist weddingChecklist, Long weddingProjectId) throws InvalidAssociationException;
-
-    public List<WeddingChecklist> getAllWeddingChecklists();
-
-    public WeddingChecklist getWeddingChecklist(Long checklistId);
-
-    public Long createTask(WeddingTask t, Long checklistId) throws InvalidAssociationException;
-
+//    public Long createWeddingChecklist(WeddingChecklist weddingChecklist, Long weddingProjectId) throws InvalidAssociationException;
+//
+//    public List<WeddingChecklist> getAllWeddingChecklists();
+//
+//    public WeddingChecklist getWeddingChecklist(Long checklistId);
+//
+//    public Long createTask(WeddingTask t, Long checklistId) throws InvalidAssociationException;
+//
 //    public List<WeddingTask> getAllParentTasks();
 //
 //    public List<WeddingTask> getAllSubTasks();
-
-    public void updateTask(WeddingTask t);
+//
+//    public void updateTask(WeddingTask t);
     
 }
