@@ -35,4 +35,6 @@ public interface RequestSessionBeanLocal {
     
     public void createRequestFromFrontend(Request request, Long weddingProjectId, Long vendorId);
 
+    public boolean checkIfRequestExists(Long projId, Long vendorId);
+    public List<Request> getAllRequests();
 }

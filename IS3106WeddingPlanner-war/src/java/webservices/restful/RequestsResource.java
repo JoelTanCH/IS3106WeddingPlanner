@@ -65,7 +65,14 @@ public class RequestsResource {
         System.out.println("vendor id = "+ vendorId);
         requestSessionBeanLocal.createRequestFromFrontend(request,projId,vendorId);
     }
-
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public boolean checkIfRequestExists(@QueryParam("weddingProjId") Long projId, @QueryParam("vendorId")Long vendorId){
+        boolean doesRequestExist = requestSessionBeanLocal.checkIfRequestExists(projId, vendorId);
+        return doesRequestExist;
+    }
+            
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
