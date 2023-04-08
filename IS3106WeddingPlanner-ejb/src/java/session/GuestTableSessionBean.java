@@ -96,7 +96,6 @@ public class GuestTableSessionBean implements GuestTableSessionBeanLocal {
     
     @Override
     public List<GuestTable> getGuestTables(Long weddingId) throws InvalidGetException {
-       // System.out.println("weddingID" + weddingId);
         if (weddingId != null && em.find(WeddingProject.class, weddingId) != null) {
             Stream <GuestTable> tables = em.createQuery("SELECT g FROM GuestTable g WHERE g.weddingProject.weddingProjectId = ?1").setParameter(1, weddingId)
                                             .getResultStream();
@@ -124,7 +123,6 @@ public class GuestTableSessionBean implements GuestTableSessionBeanLocal {
                 toDelete.forEach(t -> {
                     try {
                         deleteGuestTable(t);
-                       // System.out.println("EXECUTES");
                     } catch (Exception e) {
                     }
                 });
@@ -153,7 +151,6 @@ public class GuestTableSessionBean implements GuestTableSessionBeanLocal {
                 List<Guest> guests = em.createQuery("SELECT g FROM Guest g WHERE g.id IN :ids").setParameter("ids", guestIds).getResultList();    //credits to chatgpt for debugging my jpql
                 GuestTable t = em.find(GuestTable.class, table.getId());
                 if (t != null) {
-                    //System.out.println("SETS TABLE");
                     guests.forEach(g -> g.setGuestTable(t));
                     t.setGuests(guests);
                     t.setCurrOccupancy(table.getCurrOccupancy());

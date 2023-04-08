@@ -53,9 +53,11 @@ public class WeddingProjectSessionBean implements WeddingProjectSessionBeanLocal
 
     @EJB
     WeddingItinerarySessionBean weddingItinerarySessionBean;*/
-
     @Override
     public void createWeddingProject(Long organiserId, WeddingProject w) {
+        WeddingOrganiser organiser = em.find(WeddingOrganiser.class, organiserId);
+        organiser.getWeddingProjects().add(w);
+
         em.persist(w);
     }
 
@@ -74,6 +76,12 @@ public class WeddingProjectSessionBean implements WeddingProjectSessionBeanLocal
         WeddingProject wOld = getWeddingProject(w.getWeddingProjectId());
         wOld.setName(w.getName());
         wOld.setDescription(w.getDescription());
+        wOld.setCompleted(w.getCompleted());
+        wOld.setVenue(w.getVenue());
+        wOld.setWeddingDate(w.getWeddingDate());
+        wOld.setWeddingStartTime(w.getWeddingStartTime());
+        wOld.setWeddingEndTime(w.getWeddingEndTime());
+
     }
 
     //should everything such as request, tables, etc be deleted if the wedding project is deleted ?
@@ -84,45 +92,35 @@ public class WeddingProjectSessionBean implements WeddingProjectSessionBeanLocal
         List<Guest> guest = w.getGuests();
         w.setGuests(null);
         for (Guest s : guest) {
-            //guestSessionBean.deleteGuest(s.getId());
             s.setWeddingProject(null);
         }
 
         List<Request> requests = w.getRequests();
         w.setRequests(null);
         for (Request r : requests) {
-            //requestSessionBean.deleteRequest(r.getRequestId());
             r.setWeddingProject(null);
         }
 
         List<GuestTable> table = w.getTables();
         w.setTables(null);
         for (GuestTable t : table) {
-            //guestTableSessionBean.deleteGuestTable(t.getId());
             t.setWeddingProject(null);
         }
 
-        //weddingBudgetSessionBean.deleteWeddingBudgetList(w.getWeddingBudgetList().getWeddingBudgetListId());
-        
         w.getWeddingBudgetList().setWeddingProject(null);
         w.setWeddingBudgetList(null);
-        
 
-        //weddingChecklistSessionBean.deleteWeddingChecklist(w.getWeddingChecklist().getWeddingCheckListId());
         w.getWeddingChecklist().setWeddingProject(null);
         w.setWeddingChecklist(null);
-        
 
         List<WeddingItinerary> weddingItineraries = w.getWeddingItineraries();
         w.setWeddingItineraries(null);
         for (WeddingItinerary itinerary : weddingItineraries) {
-            //weddingItinerarySessionBean.deleteItinerary(itinerary.getWeddingItineraryId());
             itinerary.setWeddingProject(null);
         }
 
         w.getWeddingOrganiser().getWeddingProjects().remove(w);
         w.setWeddingOrganiser(null);
-        
 
         em.remove(w);
     }
@@ -130,8 +128,46 @@ public class WeddingProjectSessionBean implements WeddingProjectSessionBeanLocal
     @Override
     public List<WeddingProject> getAllWeddingProjectbyOrganiser(Long wId) throws WeddingOrganiserNotFoundException {
         WeddingOrganiser w = em.find(WeddingOrganiser.class, wId);
-        List<WeddingProject> project = w.getWeddingProjects();
-        return project;
+        if (w != null) {
+            List<WeddingProject> project = w.getWeddingProjects();
+            return project;
+        } else {
+            throw new WeddingOrganiserNotFoundException("Wedding Organiser Not Found");
+        }
+
+    }
+
+    @Override
+    public List<WeddingProject> getAllCompletedWeddingProject(Long wId) throws WeddingOrganiserNotFoundException {
+        WeddingOrganiser w = em.find(WeddingOrganiser.class, wId);
+        // although em.find(WeddingOrg) is technically not needed, it triggers the exception throwing in case of failure so i left it in
+        if (w != null) {
+            Query q = em.createQuery("SELECT p FROM WeddingOrganiser w JOIN w.weddingProjects p WHERE w.userId = :wId AND p.completed = true");
+            q.setParameter("wId", wId);
+            return q.getResultList();
+
+            // Can also get the same result programmatically with a for loop
+            // since we have WeddingOrganiser w, we can do a for loop through w.weddingProjects and check each weddingProject.completed boolean
+            // then push those that match our condition into a list to return
+            // but using JPQL to fetch it straight from the db is less lengthy though the efficiency is questionable?
+        } else {
+            throw new WeddingOrganiserNotFoundException("Wedding Organiser Not Found");
+        }
+
+    }
+
+    @Override
+    public List<WeddingProject> getAllNotCompletedWeddingProject(Long wId) throws WeddingOrganiserNotFoundException {
+        WeddingOrganiser w = em.find(WeddingOrganiser.class, wId);
+        // although em.find(WeddingOrg) is technically not needed, it triggers the exception throwing in case of failure so i left it in
+
+        if (w != null) {
+            Query q = em.createQuery("SELECT p FROM WeddingOrganiser w JOIN w.weddingProjects p WHERE w.userId = :wId AND p.completed = false");
+            q.setParameter("wId", wId);
+            return q.getResultList();
+        } else {
+            throw new WeddingOrganiserNotFoundException("Wedding Organiser Not Found");
+        }
     }
 
     @Override
@@ -142,9 +178,13 @@ public class WeddingProjectSessionBean implements WeddingProjectSessionBeanLocal
 
     @Override
     public List<WeddingProject> searchWeddingProjectbyName(String name) throws WeddingProjectNotFoundException {
-        Query q = em.createQuery("SELECT w FROM WeddingProject w WHERE w.name LIKE :name");
-        q.setParameter("name", "%" + name + "%");
-        return q.getResultList();
+        try {
+            Query q = em.createQuery("SELECT w FROM WeddingProject w WHERE w.name LIKE :name");
+            q.setParameter("name", "%" + name + "%");
+            return q.getResultList();
+        } catch (Exception e) {
+            throw new WeddingProjectNotFoundException(e.getMessage());
+        }
     }
 
 }

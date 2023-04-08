@@ -10,6 +10,9 @@ import entity.Guest;
 import entity.GuestTable;
 import entity.Request;
 import entity.Vendor;
+import entity.WeddingBudgetItem;
+import entity.WeddingBudgetList;
+import entity.WeddingItinerary;
 import entity.WeddingOrganiser;
 import entity.WeddingProject;
 import static enumeration.BrideGroomEnum.BRIDE;
@@ -19,6 +22,9 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import java.math.BigDecimal;
 import java.security.Key;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -34,7 +40,10 @@ import util.exception.InvalidAssociationException;
 import jwt.JWTSessionBeanLocal;
 import jwt.KeyHolderLocal;
 import session.VendorSessionBeanLocal;
+import session.WeddingBudgetSessionBeanLocal;
+import session.WeddingItinerarySessionBeanLocal;
 import session.WeddingOrganiserSessionBeanLocal;
+import session.WeddingProjectSessionBeanLocal;
 
 /**
  *
@@ -51,7 +60,17 @@ public class TestingDataInitBean {
     private AdminSessionBeanLocal adminSessionBean;
 
     @EJB
+    private WeddingProjectSessionBeanLocal weddingProjectSessionBeanLocal;
+    
+    @EJB
     private WeddingOrganiserSessionBeanLocal weddingOrganiserSessionBeanLocal;
+    
+    @EJB
+    private WeddingBudgetSessionBeanLocal weddingBudgetSessionBean;
+
+    @EJB
+    private WeddingItinerarySessionBeanLocal weddingItinerarySessionBean;
+
 
     @EJB
     private RequestSessionBeanLocal requestSessionBeanLocal;
@@ -82,32 +101,6 @@ public class TestingDataInitBean {
         String token = jwtSBL.generateToken("ADMIN");
         System.out.println(token);
         System.out.println(jwtSBL.verifyToken(token));
-
-        if (em.find(WeddingProject.class, 1L) == null) {
-            try {
-                WeddingProject weddingProject = new WeddingProject();
-                em.persist(weddingProject);
-                em.flush();
-                Guest guest = new Guest();
-                guest.setAttendingSide(BRIDE);
-                guest.setEmail("RANDOM@EMAIL.COM");
-                guest.setName("TEST");
-                guest.setNumPax(1);
-                guest.setRsvp(NOTSENT);
-                guestSessionBean.createGuest(guest, weddingProject.getWeddingProjectId());
-                GuestTable guestTable = new GuestTable();
-                guestTable.setCapacity(10);
-                guestTable.setCurrOccupancy(0);
-                guestTable.setLocationX(0);
-                guestTable.setLocationY(0);
-                guestTable.setTableNumber(1);
-                guestTable.setTableSize(200);
-                guestTableSessionBean.createGuestTable(guestTable, 1L);
-            } catch (InvalidAssociationException ex) {
-                //Logger.getLogger(TestingDataInitBean.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        }
 
         if (em.find(Admin.class, (long) 1) == null) {
             Admin a1 = new Admin();
@@ -236,6 +229,133 @@ public class TestingDataInitBean {
             w2.setUsername("weddingOrganiser2");
             w2.setPassword("password");
             weddingOrganiserSessionBeanLocal.createWeddingOrganiser(w2);
+            em.flush();
+
+            if (em.find(WeddingProject.class, 1L) == null) {
+                try {
+
+                    String startDateString = "2023-03-04 1330";
+                    String endDateString = "2023-03-04 1830";
+                    String startDateString2 = "2023-05-04 1230";
+                    String endDateString2 = "2023-05-04 1530";
+
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HHmm");
+                    Date startDate = null;
+                    Date endDate = null;
+                    Date startDate2 = null;
+                    Date endDate2 = null;
+                    try {
+                        startDate = dateFormat.parse(startDateString);
+                        endDate = dateFormat.parse(endDateString);
+                        startDate2 = dateFormat.parse(startDateString2);
+                        endDate2 = dateFormat.parse(endDateString2);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    WeddingProject weddingProject1 = new WeddingProject();
+                    weddingProject1.setName("weddingProject1");
+                    weddingProject1.setDescription("description for project1");
+                    weddingProject1.setCompleted(Boolean.FALSE);
+                    weddingProject1.setWeddingOrganiser(w1);
+                    weddingProject1.setWeddingDate(startDate); // since the database only stores date anyway, we can just use the same date for both event & startTime
+                    weddingProject1.setWeddingStartTime(startDate);
+                    weddingProject1.setWeddingEndTime(endDate);
+                    weddingProject1.setVenue("Venue oneeeee");
+                    weddingProjectSessionBeanLocal.createWeddingProject(w1.getUserId(), weddingProject1);
+
+                    WeddingProject weddingProject2 = new WeddingProject();
+                    weddingProject2.setName("weddingProject2");
+                    weddingProject2.setDescription("description for project2");
+                    weddingProject2.setCompleted(Boolean.TRUE);
+                    weddingProject2.setWeddingOrganiser(w1);
+                    weddingProject2.setWeddingDate(startDate); // since the database only stores date anyway, we can just use the same date for both event & startTime
+                    weddingProject2.setWeddingStartTime(startDate2);
+//                    weddingProject2.setWeddingEndTime(endDate2); // testing what if wedding doesnt have endDate
+                    weddingProject2.setVenue("Venue zweiiii");
+                    weddingProjectSessionBeanLocal.createWeddingProject(w1.getUserId(), weddingProject2);
+
+                    WeddingProject weddingProject3 = new WeddingProject();
+                    weddingProject3.setName("weddingProject3");
+                    weddingProject3.setDescription("description for project3, this belongs to wedding-organiser with id of 10 i think");
+                    weddingProject3.setCompleted(Boolean.FALSE);
+                    weddingProject3.setWeddingOrganiser(w2);
+                    weddingProject3.setWeddingDate(startDate); // since the database only stores date anyway, we can just use the same date for both event & startTime
+                    weddingProject3.setWeddingStartTime(startDate);
+                    weddingProject3.setWeddingEndTime(endDate);
+                    weddingProject3.setVenue("Venue threeeeee");
+                    weddingProjectSessionBeanLocal.createWeddingProject(w2.getUserId(), weddingProject3);
+                    em.flush();
+
+                    Guest guest = new Guest();
+                    guest.setAttendingSide(BRIDE);
+                    guest.setEmail("RANDOM@EMAIL.COM");
+                    guest.setName("TEST");
+                    guest.setNumPax(1);
+                    guest.setRsvp(NOTSENT);
+                    guestSessionBean.createGuest(guest, weddingProject1.getWeddingProjectId());
+                    GuestTable guestTable = new GuestTable();
+                    guestTable.setCapacity(10);
+                    guestTable.setCurrOccupancy(0);
+                    guestTable.setLocationX(0);
+                    guestTable.setLocationY(0);
+                    guestTable.setTableNumber(1);
+                    guestTable.setTableSize(200);
+                    guestTableSessionBean.createGuestTable(guestTable, 1L);
+                    
+                    WeddingItinerary weddingItinerary = new WeddingItinerary();
+                weddingItinerary.setEventName("Sample Event");
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                weddingItinerary.setEventDate(formatter.parse("2023-04-04"));
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(weddingItinerary.getEventDate());
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+
+                formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                Date eventStartTime = formatter.parse(String.format("%04d-%02d-%02d 20:00", year, month + 1, day));
+                Date eventEndTime = formatter.parse(String.format("%04d-%02d-%02d 22:00", year, month + 1, day));
+                weddingItinerary.setEventStartTime(eventStartTime);
+                weddingItinerary.setEventEndTime(eventEndTime);
+//                formatter = new SimpleDateFormat("HH:mm");
+//                weddingItinerary.setEventStartTime(formatter.parse("20:00"));
+//                weddingItinerary.setEventEndTime(formatter.parse("22:00"));
+                weddingItinerarySessionBean.createNewItinerary(weddingItinerary, weddingProject1.getWeddingProjectId());
+
+                WeddingBudgetList budget = new WeddingBudgetList();
+                budget.setBudget(BigDecimal.valueOf(10000));
+                weddingBudgetSessionBean.createBudget(budget, weddingProject1.getWeddingProjectId());
+                em.persist(budget);
+                em.flush();
+                // Sample 1
+                WeddingBudgetItem item = new WeddingBudgetItem();
+                item.setName("Sample 1");
+                item.setCost(BigDecimal.valueOf(2000));
+                item.setIsPaid(true);
+                item.setCategory(CategoryEnum.FOOD);
+                weddingBudgetSessionBean.createItem(item, budget.getWeddingBudgetListId());
+                // Sample 2
+                item = new WeddingBudgetItem();
+                item.setName("Sample 2");
+                item.setCost(BigDecimal.valueOf(2500));
+                item.setIsPaid(false);
+                item.setCategory(CategoryEnum.DECORATION);
+                weddingBudgetSessionBean.createItem(item, budget.getWeddingBudgetListId());
+                // Sample 3
+                item = new WeddingBudgetItem();
+                item.setName("Sample 3");
+                item.setCost(BigDecimal.valueOf(1500));
+                item.setIsPaid(false);
+                item.setCategory(CategoryEnum.DECORATION);
+                weddingBudgetSessionBean.createItem(item, budget.getWeddingBudgetListId());
+                } catch (InvalidAssociationException ex) {
+                    //Logger.getLogger(TestingDataInitBean.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ParseException ex) {
+                    
+                }
+
+            }
 
         }
 

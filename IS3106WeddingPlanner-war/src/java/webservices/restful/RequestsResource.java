@@ -8,8 +8,6 @@ package webservices.restful;
 import entity.Request;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -23,9 +21,8 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonStructure;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.persistence.NoResultException;
+import javax.ws.rs.POST;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -50,12 +47,21 @@ public class RequestsResource {
     public RequestsResource() {
     }
 
+    @POST 
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public void createRequest(Request request){
+        requestSessionBeanLocal.createRequest(request);
+    }
+
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRequests(@PathParam("id") Long requestId) {
         try {
             Request request = requestSessionBeanLocal.retrieveRequest(requestId);
+            request.setVendor(null);
+            request.setWeddingProject(null);
             return Response.status(200).entity(request).type(MediaType.APPLICATION_JSON).build();
         } catch (NoResultException e) {
 

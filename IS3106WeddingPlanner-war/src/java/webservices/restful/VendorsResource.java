@@ -51,13 +51,14 @@ public class VendorsResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Vendor> getAllVendors() {
+    //public List<Vendor> getAllVendors() {
+    public Response getAllVendors(){
         List<Vendor> allVendors = vendorSessionBeanLocal.getAllVendors();
         for(Vendor vendor : allVendors){
             vendor.setRequests(null);
         }
-        //return Response.status(200).entity(allVendors).type(MediaType.APPLICATION_JSON).build();
-        return allVendors;
+        return Response.status(200).entity(allVendors).type(MediaType.APPLICATION_JSON).build();
+        //return allVendors;
     }
     
     @GET

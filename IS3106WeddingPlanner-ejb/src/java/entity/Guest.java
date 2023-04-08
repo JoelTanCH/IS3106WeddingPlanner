@@ -33,7 +33,7 @@ public class Guest implements Serializable {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private BrideGroomEnum attendingSide;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String email;
     @Column(nullable = false)
     private int numPax;
