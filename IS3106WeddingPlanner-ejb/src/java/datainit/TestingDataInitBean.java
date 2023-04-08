@@ -13,9 +13,11 @@ import entity.Transaction;
 import entity.Vendor;
 import entity.WeddingBudgetItem;
 import entity.WeddingBudgetList;
+import entity.WeddingChecklist;
 import entity.WeddingItinerary;
 import entity.WeddingOrganiser;
 import entity.WeddingProject;
+import entity.WeddingTask;
 import static enumeration.BrideGroomEnum.BRIDE;
 import enumeration.CategoryEnum;
 import static enumeration.StatusEnum.NOTSENT;
@@ -43,6 +45,7 @@ import jwt.KeyHolderLocal;
 import session.TransactionSessionBeanLocal;
 import session.VendorSessionBeanLocal;
 import session.WeddingBudgetSessionBeanLocal;
+import session.WeddingChecklistBeanLocal;
 import session.WeddingItinerarySessionBeanLocal;
 import session.WeddingOrganiserSessionBeanLocal;
 import session.WeddingProjectSessionBeanLocal;
@@ -74,6 +77,9 @@ public class TestingDataInitBean {
 
     @EJB
     private WeddingItinerarySessionBeanLocal weddingItinerarySessionBean;
+
+    @EJB
+    private WeddingChecklistBeanLocal weddingChecklistSessionBean;
 
     @EJB
     private RequestSessionBeanLocal requestSessionBeanLocal;
@@ -340,32 +346,55 @@ public class TestingDataInitBean {
 //                weddingItinerary.setEventEndTime(formatter.parse("22:00"));
                     weddingItinerarySessionBean.createNewItinerary(weddingItinerary, weddingProject1.getWeddingProjectId());
 
-                    WeddingBudgetList budget = new WeddingBudgetList();
-                    budget.setBudget(BigDecimal.valueOf(10000));
-                    weddingBudgetSessionBean.createBudget(budget, weddingProject1.getWeddingProjectId());
-                    em.persist(budget);
-                    em.flush();
-                    // Sample 1
-                    WeddingBudgetItem item = new WeddingBudgetItem();
-                    item.setName("Sample 1");
-                    item.setCost(BigDecimal.valueOf(2000));
-                    item.setIsPaid(true);
-                    item.setCategory(CategoryEnum.FOOD);
-                    weddingBudgetSessionBean.createItem(item, budget.getWeddingBudgetListId());
-                    // Sample 2
-                    item = new WeddingBudgetItem();
-                    item.setName("Sample 2");
-                    item.setCost(BigDecimal.valueOf(2500));
-                    item.setIsPaid(false);
-                    item.setCategory(CategoryEnum.DECORATION);
-                    weddingBudgetSessionBean.createItem(item, budget.getWeddingBudgetListId());
-                    // Sample 3
-                    item = new WeddingBudgetItem();
-                    item.setName("Sample 3");
-                    item.setCost(BigDecimal.valueOf(1500));
-                    item.setIsPaid(false);
-                    item.setCategory(CategoryEnum.DECORATION);
-                    weddingBudgetSessionBean.createItem(item, budget.getWeddingBudgetListId());
+                WeddingBudgetList budget = new WeddingBudgetList();
+                budget.setBudget(BigDecimal.valueOf(10000));
+                weddingBudgetSessionBean.createBudget(budget, weddingProject1.getWeddingProjectId());
+                em.persist(budget);
+                em.flush();
+                // Sample 1
+                WeddingBudgetItem item = new WeddingBudgetItem();
+                item.setName("Sample 1");
+                item.setCost(BigDecimal.valueOf(2000));
+                item.setIsPaid(true);
+                item.setCategory(CategoryEnum.FOOD);
+                weddingBudgetSessionBean.createItem(item, budget.getWeddingBudgetListId());
+                // Sample 2
+                item = new WeddingBudgetItem();
+                item.setName("Sample 2");
+                item.setCost(BigDecimal.valueOf(2500));
+                item.setIsPaid(false);
+                item.setCategory(CategoryEnum.DECORATION);
+                weddingBudgetSessionBean.createItem(item, budget.getWeddingBudgetListId());
+                // Sample 3
+                item = new WeddingBudgetItem();
+                item.setName("Sample 3");
+                item.setCost(BigDecimal.valueOf(1500));
+                item.setIsPaid(false);
+                item.setCategory(CategoryEnum.DECORATION);
+                weddingBudgetSessionBean.createItem(item, budget.getWeddingBudgetListId());
+                
+                WeddingChecklist weddingChecklist = new WeddingChecklist();
+                weddingChecklist.setWeddingProject(weddingProject1);
+                em.persist(weddingChecklist);
+                em.flush();
+                
+                WeddingTask parentTask = new WeddingTask();
+                parentTask.setTaskDescription("Sample Parent Task");
+                weddingChecklistSessionBean.createTask(parentTask, weddingChecklist.getWeddingCheckListId());
+                em.persist(parentTask);
+                em.flush();
+                
+                WeddingTask subtask = new WeddingTask();
+                subtask.setTaskDescription("SubTask 1");
+                subtask.setIsDone(false);
+                subtask.setParentTask(parentTask);
+                weddingChecklistSessionBean.createTask(subtask, weddingChecklist.getWeddingCheckListId());
+                
+                subtask = new WeddingTask();
+                subtask.setTaskDescription("SubTask 2");
+                subtask.setIsDone(true);
+                subtask.setParentTask(parentTask);
+                weddingChecklistSessionBean.createTask(subtask, weddingChecklist.getWeddingCheckListId());
                 } catch (InvalidAssociationException ex) {
                     //Logger.getLogger(TestingDataInitBean.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ParseException ex) {
