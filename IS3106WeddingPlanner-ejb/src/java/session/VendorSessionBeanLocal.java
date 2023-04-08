@@ -30,4 +30,6 @@ public interface VendorSessionBeanLocal {
 
     public List<Vendor> getVendorsByUsernamePassword(String username, String password);
 
+    public Vendor getVendorByRequestId(Long requestId);
+
 }

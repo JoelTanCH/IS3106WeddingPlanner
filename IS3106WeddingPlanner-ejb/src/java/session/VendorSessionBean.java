@@ -5,6 +5,7 @@
  */
 package session;
 
+import entity.Request;
 import entity.Vendor;
 import enumeration.CategoryEnum;
 import error.InvalidVendorCategory;
@@ -30,6 +31,13 @@ public class VendorSessionBean implements VendorSessionBeanLocal {
     public List<Vendor> getAllVendors() {
         Query query = em.createQuery("SELECT v FROM Vendor v");
         return query.getResultList();
+    }
+
+    @Override
+    public Vendor getVendorByRequestId(Long requestId) {
+        Request request = em.find(Request.class, requestId);
+        Vendor vendor = request.getVendor();
+        return vendor;
     }
 
     // im using List instead of the single one because idw to throw an exception
