@@ -55,10 +55,15 @@ public class RequestsResource {
     }
 
     @POST
+    @Path("/createRequest")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void createRequest(Request request) {
-        requestSessionBeanLocal.createRequest(request);
+    public void createRequest(Request request, @QueryParam("projId") Long projId, @QueryParam("vendorId")Long vendorId) {
+        System.out.println("enters create request");
+        System.out.println("request date = " + request.getRequestDate());
+        System.out.println("projid = " + projId);
+        System.out.println("vendor id = "+ vendorId);
+        requestSessionBeanLocal.createRequestFromFrontend(request,projId,vendorId);
     }
 
     @GET
