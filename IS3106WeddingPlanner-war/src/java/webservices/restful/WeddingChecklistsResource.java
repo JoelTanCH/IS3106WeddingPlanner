@@ -97,19 +97,19 @@ public class WeddingChecklistsResource {
         }
     }
     
-    @GET
-    @Path("/tasks")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<WeddingTask> getAllParentTasks() {
-        return weddingChecklistBeanLocal.getAllParentTasks();
-    }
-    
-    @GET
-    @Path("/subtasks")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<WeddingTask> getAllSubTasks() {
-        return weddingChecklistBeanLocal.getAllSubTasks();
-    }
+//    @GET
+//    @Path("/tasks")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public List<WeddingTask> getAllParentTasks() {
+//        return weddingChecklistBeanLocal.getAllParentTasks();
+//    }
+//    
+//    @GET
+//    @Path("/subtasks")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public List<WeddingTask> getAllSubTasks() {
+//        return weddingChecklistBeanLocal.getAllSubTasks();
+//    }
     
     @PUT
     @Path("/update/task")

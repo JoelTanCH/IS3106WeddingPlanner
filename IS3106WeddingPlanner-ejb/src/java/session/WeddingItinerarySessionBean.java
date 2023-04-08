@@ -80,4 +80,10 @@ public class WeddingItinerarySessionBean implements WeddingItinerarySessionBeanL
         itinerary.setWeddingProject(null);
         em.remove(itinerary);
     }
+
+    // idk what this is but without this there is an error
+    @Override
+    public List<WeddingItinerary> getWeddingItinerary(Long weddingId) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
