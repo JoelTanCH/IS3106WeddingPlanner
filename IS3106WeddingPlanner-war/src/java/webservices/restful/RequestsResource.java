@@ -6,6 +6,8 @@
 package webservices.restful;
 
 import entity.Request;
+import entity.WeddingProject;
+import error.WeddingProjectNotFoundException;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.ejb.EJB;
@@ -25,9 +27,11 @@ import javax.persistence.NoResultException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import session.RequestSessionBeanLocal;
+import session.WeddingProjectSessionBeanLocal;
 
 /**
  * REST Web Service
@@ -41,16 +45,19 @@ public class RequestsResource {
     @EJB
     RequestSessionBeanLocal requestSessionBeanLocal;
 
+    @EJB
+    WeddingProjectSessionBeanLocal weddingProjectSessionBeanLocal;
+    
     @Context
     private UriInfo context;
 
     public RequestsResource() {
     }
 
-    @POST 
+    @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void createRequest(Request request){
+    public void createRequest(Request request) {
         requestSessionBeanLocal.createRequest(request);
     }
 
@@ -177,4 +184,31 @@ public class RequestsResource {
         }
 
     }
+
+    @GET
+    @Path("/weddingProjectRequests/{wedding-project-id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getRequestsByProject(@PathParam("wedding-project-id") Long wProjectId) {
+        try {
+
+            WeddingProject wProject = weddingProjectSessionBeanLocal.getWeddingProject(wProjectId);
+
+            List<Request> wProjectRequests = wProject.getRequests();
+            
+            for (Request r : wProjectRequests) {
+                r.setWeddingProject(null);
+                r.setVendor(null);
+                r.setTransaction(null);
+            }
+            GenericEntity<List<Request>> entityToReturn = new GenericEntity<List<Request>>(wProjectRequests) {
+            };
+
+            return Response.status(200).entity(entityToReturn).type(MediaType.APPLICATION_JSON).build();
+        } catch (WeddingProjectNotFoundException e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Wedding Project with id " + wProjectId + " not found")
+                    .build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    }
+
 }

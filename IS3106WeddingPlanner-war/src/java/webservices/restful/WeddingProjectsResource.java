@@ -92,7 +92,7 @@ public class WeddingProjectsResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     }
-
+    
     @GET
     @Path("query")
     @Produces(MediaType.APPLICATION_JSON)
