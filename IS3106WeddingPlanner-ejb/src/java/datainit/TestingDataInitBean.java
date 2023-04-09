@@ -114,7 +114,6 @@ public class TestingDataInitBean {
             vendor_entertainment.setEmail("sampleVendorEmail@email.com");
             vendor_entertainment.setPassword("password");
             vendor_entertainment.setDescription("Sample vendor description. I do these stuff");
-            vendor_entertainment.setBanner("This is a banner");
             vendor_entertainment.setWebsiteUrl("vendorURL.com");
             vendor_entertainment.setInstagramUrl("This is the URL of instagram");
             vendor_entertainment.setFacebookUrl("Facebook url");
@@ -146,7 +145,6 @@ public class TestingDataInitBean {
             vendor_entertainment2.setEmail("EntertainmentVendor2@email.com");
             vendor_entertainment2.setPassword("password");
             vendor_entertainment2.setDescription("Sample vendor description. I do these stuff");
-            vendor_entertainment2.setBanner("This is a banner");
             vendor_entertainment2.setWebsiteUrl("vendorURL.com");
             vendor_entertainment2.setInstagramUrl("This is the URL of instagram");
             vendor_entertainment2.setFacebookUrl("Facebook url");
@@ -159,7 +157,6 @@ public class TestingDataInitBean {
             vendor_food.setEmail("FoodVendor@email.com");
             vendor_food.setPassword("password");
             vendor_food.setDescription("Sample vendor description. I do these stuff");
-            vendor_food.setBanner("This is a banner");
             vendor_food.setWebsiteUrl("vendorURL.com");
             vendor_food.setInstagramUrl("This is the URL of instagram");
             vendor_food.setFacebookUrl("Facebook url");
@@ -172,7 +169,6 @@ public class TestingDataInitBean {
             vendor_lighting.setEmail("LightingVendor@email.com");
             vendor_lighting.setPassword("password");
             vendor_lighting.setDescription("Sample vendor description. I do these stuff");
-            vendor_lighting.setBanner("This is a banner");
             vendor_lighting.setWebsiteUrl("vendorURL.com");
             vendor_lighting.setInstagramUrl("This is the URL of instagram");
             vendor_lighting.setFacebookUrl("Facebook url");
@@ -185,7 +181,6 @@ public class TestingDataInitBean {
             vendor_decoration.setEmail("DecorationVendor@email.com");
             vendor_decoration.setPassword("password");
             vendor_decoration.setDescription("Sample vendor description. I do these stuff");
-            vendor_decoration.setBanner("This is a banner");
             vendor_decoration.setWebsiteUrl("vendorURL.com");
             vendor_decoration.setInstagramUrl("This is the URL of instagram");
             vendor_decoration.setFacebookUrl("Facebook url");
@@ -198,7 +193,6 @@ public class TestingDataInitBean {
             vendor_clothes.setEmail("ClothesVendor@email.com");
             vendor_clothes.setPassword("password");
             vendor_clothes.setDescription("Sample vendor description. I do these stuff");
-            vendor_clothes.setBanner("This is a banner");
             vendor_clothes.setWebsiteUrl("vendorURL.com");
             vendor_clothes.setInstagramUrl("This is the URL of instagram");
             vendor_clothes.setFacebookUrl("Facebook url");
@@ -211,7 +205,6 @@ public class TestingDataInitBean {
             vendor_venue.setEmail("VenueVendor@email.com");
             vendor_venue.setPassword("password");
             vendor_venue.setDescription("Sample vendor description. I do these stuff");
-            vendor_venue.setBanner("This is a banner");
             vendor_venue.setWebsiteUrl("vendorURL.com");
             vendor_venue.setInstagramUrl("This is the URL of instagram");
             vendor_venue.setFacebookUrl("Facebook url");
