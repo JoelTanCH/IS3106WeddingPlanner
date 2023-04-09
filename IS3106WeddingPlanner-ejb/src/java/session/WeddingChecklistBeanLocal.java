@@ -71,5 +71,9 @@ public interface WeddingChecklistBeanLocal {
 //    public List<WeddingTask> getAllSubTasks();
 //
 //    public void updateTask(WeddingTask t);
+
+    public List<WeddingParentTask> getAllTasks();
+
+    public List<WeddingSubtask> getAllWeddingSubtasks(Long weddingParentTaskId);
     
 }
