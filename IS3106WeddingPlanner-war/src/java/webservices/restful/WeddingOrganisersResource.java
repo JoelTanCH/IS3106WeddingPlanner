@@ -7,6 +7,7 @@ package webservices.restful;
 
 import entity.Vendor;
 import entity.WeddingOrganiser;
+import error.WeddingOrganiserNotFoundException;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.core.Context;
@@ -20,6 +21,8 @@ import javax.json.JsonObject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import session.WeddingOrganiserSessionBeanLocal;
@@ -44,26 +47,45 @@ public class WeddingOrganisersResource {
      */
     public WeddingOrganisersResource() {
     }
+    
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<WeddingOrganiser> getAllWeddingOrganisers() {
         List<WeddingOrganiser> wOrganisers = weddingOrganiserSessionBeanLocal.getAllWeddingOrganisers();
-        
+
         for (WeddingOrganiser w : wOrganisers) {
             w.setWeddingProjects(null);
         }
-        
+
         return wOrganisers;
     }
 
+    @GET
+    @Path("/{wedding-organiser-id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getWeddingOrganiser(@PathParam("wedding-organiser-id") Long wId) {
+        try {
+            WeddingOrganiser w = weddingOrganiserSessionBeanLocal.getWeddingOrganiser(wId);
+            w.setWeddingProjects(null);
+            return Response.status(200).entity(w).type(MediaType.APPLICATION_JSON).build();
+        } catch (WeddingOrganiserNotFoundException e) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found")
+                    .build();
+            return Response.status(500).entity(exception).build();
+        }
+    }
+
     @PUT
+    @Path("/{wedding-organiser-id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateWeddingOrganiser(WeddingOrganiser w) {
+    public Response updateWeddingOrganiser(@PathParam("wedding-organiser-id") Long wId, WeddingOrganiser w) {
         try {
             weddingOrganiserSessionBeanLocal.updateWeddingOrganiser(w);
+            w.setWeddingProjects(null);
             return Response.status(200).build();
-        } catch (Exception e) {
+        } catch (WeddingOrganiserNotFoundException e) {
             JsonObject exception = Json.createObjectBuilder().add("error", "no idea what happened, update went wrong ")
                     .add("exceptionMessage", e.getMessage())
                     .build();
@@ -86,7 +108,7 @@ public class WeddingOrganisersResource {
             return Response.status(500).entity(exception).build();
         }
     }
-    
+
 //    @GET
 //    @Path("/query")
 //    @Produces(MediaType.APPLICATION_JSON)
@@ -124,5 +146,4 @@ public class WeddingOrganisersResource {
 //
 //    }
 //
-
 }
