@@ -7,7 +7,9 @@ package webservices.restful;
 
 import entity.WeddingChecklist;
 import entity.WeddingParentTask;
+import entity.WeddingProject;
 import entity.WeddingSubtask;
+import error.WeddingProjectNotFoundException;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.core.Context;
@@ -23,9 +25,11 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import session.WeddingChecklistBeanLocal;
+import session.WeddingProjectSessionBeanLocal;
 import util.exception.InvalidAssociationException;
 
 /**
@@ -46,13 +50,16 @@ public class WeddingChecklistsResource {
 
     @EJB
     WeddingChecklistBeanLocal weddingChecklistBeanLocal;
-    
+
+    @EJB
+    WeddingProjectSessionBeanLocal weddingProjectSessionBeanLocal;
+
     /**
      * Creates a new instance of WeddingChecklistsResource
      */
     public WeddingChecklistsResource() {
     }
-    
+
     @POST
     @Path("/create/{wedding-project-id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -67,35 +74,74 @@ public class WeddingChecklistsResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     }
-    
+
     @GET
     @Path("/checklists")
     @Produces(MediaType.APPLICATION_JSON)
     public List<WeddingChecklist> getAllWeddingChecklists() {
         return weddingChecklistBeanLocal.getAllWeddingChecklists();
     }
-    
+
     @GET
     @Path("/checklist/{wedding-checklist-id}")
     @Produces(MediaType.APPLICATION_JSON)
     public WeddingChecklist getWeddingChecklist(@PathParam("wedding-checklist-id") Long weddingChecklistId) {
-        WeddingChecklist checklistObject =  weddingChecklistBeanLocal.getWeddingChecklist(weddingChecklistId);
-        
+        WeddingChecklist checklistObject = weddingChecklistBeanLocal.getWeddingChecklist(weddingChecklistId);
+
         checklistObject.setWeddingProject(null);
-        
+
         List<WeddingParentTask> parentTasks = checklistObject.getWeddingParentTasks();
         for (WeddingParentTask parentTask : parentTasks) {
-            
+
             parentTask.setWeddingChecklist(null);
-            
+
             for (WeddingSubtask subTask : parentTask.getWeddingSubtasks()) {
                 subTask.setWeddingParentTask(null);
             }
         }
-        
+
         return checklistObject;
     }
-    
+
+    @GET
+    @Path("/checklist/getByWeddingProject/{wedding-project-id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getWeddingChecklistByWeddingProject(@PathParam("wedding-project-id") Long weddingProjectId) {
+
+        try {
+            WeddingProject weddingProject = weddingProjectSessionBeanLocal.getWeddingProject(weddingProjectId);
+
+            WeddingChecklist checklistObject = weddingProject.getWeddingChecklist();
+
+            checklistObject.setWeddingProject(null);
+
+            List<WeddingParentTask> parentTasks = checklistObject.getWeddingParentTasks();
+            for (WeddingParentTask parentTask : parentTasks) {
+
+                parentTask.setWeddingChecklist(null);
+
+                for (WeddingSubtask subTask : parentTask.getWeddingSubtasks()) {
+                    subTask.setWeddingParentTask(null);
+                }
+            }
+
+            GenericEntity<WeddingChecklist> entityToReturn = new GenericEntity<WeddingChecklist>(checklistObject) {
+            };
+            return Response.status(200).entity(entityToReturn).build();
+        } catch (WeddingProjectNotFoundException e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "WeddngProjectNotFoundException")
+                    .build();
+
+            return Response.status(404).entity(exception).build();
+
+        } catch (Exception e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Wedding project probably doesn't have a checklist (which shldnt be the case)")
+                    .build();
+
+            return Response.status(404).entity(exception).build();
+        }
+    }
+
     @POST
     @Path("/{wedding-checklist-id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -110,7 +156,7 @@ public class WeddingChecklistsResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     }
-    
+
     @POST
     @Path("/subtask/{parent-task-id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -125,21 +171,21 @@ public class WeddingChecklistsResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     }
-    
+
     @GET
     @Path("/tasks")
     @Produces(MediaType.APPLICATION_JSON)
     public List<WeddingParentTask> getAllParentTasks() {
         return weddingChecklistBeanLocal.getAllWeddingParentTasks();
     }
-    
+
     @GET
     @Path("/subtasks")
     @Produces(MediaType.APPLICATION_JSON)
     public List<WeddingSubtask> getAllSubTasks() {
         return weddingChecklistBeanLocal.getAllWeddingSubtasks();
     }
-    
+
     @PUT
     @Path("/update/parentTask")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -150,11 +196,11 @@ public class WeddingChecklistsResource {
             return Response.status(204).build();
         } catch (Exception e) {
             JsonObject exception = Json.createObjectBuilder().add("error", "Not Found").build();
-            
+
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     }
-    
+
     @PUT
     @Path("/update/subtask")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -165,11 +211,11 @@ public class WeddingChecklistsResource {
             return Response.status(204).build();
         } catch (Exception e) {
             JsonObject exception = Json.createObjectBuilder().add("error", "Not Found").build();
-            
+
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     }
-    
+
     @DELETE
     @Path("/task/{parent-task-id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -177,15 +223,15 @@ public class WeddingChecklistsResource {
         try {
             weddingChecklistBeanLocal.deleteParentTask(taskId);
             return Response.status(204).build();
-        } catch(Exception e) {
+        } catch (Exception e) {
             JsonObject exception = Json.createObjectBuilder()
                     .add("error", "Item not found")
                     .build();
-            
+
             return Response.status(404).entity(exception).build();
         }
     }
-    
+
     @DELETE
     @Path("/subtask/{subtask-id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -193,15 +239,15 @@ public class WeddingChecklistsResource {
         try {
             weddingChecklistBeanLocal.deleteSubtask(subtaskId);
             return Response.status(204).build();
-        } catch(Exception e) {
+        } catch (Exception e) {
             JsonObject exception = Json.createObjectBuilder()
                     .add("error", "Item not found")
                     .build();
-            
+
             return Response.status(404).entity(exception).build();
         }
     }
-    
+
 //    @GET
 //    @Path("/{wedding-checklist-id}")
 //    @Produces(MediaType.APPLICATION_JSON)
