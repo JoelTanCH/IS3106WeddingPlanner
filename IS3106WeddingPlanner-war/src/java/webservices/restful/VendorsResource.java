@@ -7,6 +7,7 @@ package webservices.restful;
 
 import entity.Admin;
 import entity.Vendor;
+import error.VendorNotFoundException;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.core.Context;
@@ -81,6 +82,22 @@ public class VendorsResource {
     }
     
     @GET
+    @Path("/{vendor-id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getVendorbyId(@PathParam("vendor-id") Long vId) {
+        try {
+            Vendor vendor = vendorSessionBeanLocal.getVendorById(vId);
+            vendor.setRequests(null);
+            return Response.status(200).entity(vendor).type(MediaType.APPLICATION_JSON).build();
+        } catch (VendorNotFoundException e) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found")
+                    .build();
+            return Response.status(500).entity(exception).build();
+        }
+    }
+    
+    @GET
     @Path("allCategories/{category}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllVendorsInCategory(@PathParam("category") String category) {
@@ -106,8 +123,10 @@ public class VendorsResource {
     
 
     @PUT
+    @Path("/{vendorId}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateVendor(Vendor v) {
+    public Response updateVendor(@PathParam("vendorId") Long vId, Vendor v) {
+        v.setUserId(vId);
         try {
             vendorSessionBeanLocal.updateVendor(v);
             return Response.status(200).build();
