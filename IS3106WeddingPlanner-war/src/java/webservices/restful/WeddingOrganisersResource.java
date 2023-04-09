@@ -82,14 +82,14 @@ public class WeddingOrganisersResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateWeddingOrganiser(@PathParam("wedding-organiser-id") Long wId, WeddingOrganiser w) {
         try {
+            w.setUserId(wId);
             weddingOrganiserSessionBeanLocal.updateWeddingOrganiser(w);
-            w.setWeddingProjects(null);
             return Response.status(200).build();
         } catch (WeddingOrganiserNotFoundException e) {
             JsonObject exception = Json.createObjectBuilder().add("error", "no idea what happened, update went wrong ")
                     .add("exceptionMessage", e.getMessage())
                     .build();
-            return Response.status(500).entity(exception).build();
+            return Response.status(404).entity(exception).build();
         }
     }
 
