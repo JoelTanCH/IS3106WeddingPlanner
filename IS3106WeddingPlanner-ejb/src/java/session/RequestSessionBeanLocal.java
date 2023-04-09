@@ -22,6 +22,8 @@ public interface RequestSessionBeanLocal {
     public void createRequest(Request request);
     
     public List<Request> retrieveVendorRequests(Long vendorId);
+    
+     public List<Request> retrieveAcceptedVendorRequests(Long vendorId);
 
     public void acceptRequest(Long requestId);
     

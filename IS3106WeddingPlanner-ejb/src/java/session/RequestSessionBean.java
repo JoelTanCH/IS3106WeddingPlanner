@@ -99,4 +99,12 @@ public class RequestSessionBean implements RequestSessionBeanLocal {
 
     }
 
+    @Override
+    public List<Request> retrieveAcceptedVendorRequests(Long vendorId) {
+        String query = "SELECT req FROM Request req WHERE req.vendor.userId = ?1 AND req.isAccepted = TRUE";
+        Query result = em.createQuery(query).setParameter(1, vendorId);
+        List<Request> req = (List<Request>) result.getResultList();
+        return req;
+    }
+
 }
