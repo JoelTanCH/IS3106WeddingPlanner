@@ -134,12 +134,12 @@ public class WeddingChecklistsResource {
 
             return Response.status(404).entity(exception).build();
 
-//        } catch (Exception e) {
-//            JsonObject exception = Json.createObjectBuilder().add("error", "Wedding project probably doesn't have a checklist (which shldnt be the case)")
-//                    .build();
-//
-//            return Response.status(404).entity(exception).build();
-//        }
+        } catch (Exception e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Wedding project probably doesn't have a checklist (which shldnt be the case)")
+                    .build();
+
+            return Response.status(404).entity(exception).build();
+        }
     }
 
     @POST
