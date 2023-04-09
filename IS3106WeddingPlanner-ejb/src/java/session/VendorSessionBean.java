@@ -9,6 +9,7 @@ import entity.Vendor;
 import enumeration.CategoryEnum;
 import error.InvalidVendorCategory;
 import error.VendorNameNotFoundException;
+import error.VendorNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -101,6 +102,17 @@ public class VendorSessionBean implements VendorSessionBeanLocal {
             return (Vendor) query.getSingleResult();
         } catch (Exception e) {
             throw new VendorNameNotFoundException(e.getMessage());
+        }
+    }
+    
+    @Override
+    public Vendor getVendorById(Long vId) throws VendorNotFoundException {
+         Vendor v = em.find(Vendor.class, vId);
+
+        if (v != null) {
+            return v;
+        } else {
+            throw new VendorNotFoundException("Vendor Not Found");
         }
     }
 
