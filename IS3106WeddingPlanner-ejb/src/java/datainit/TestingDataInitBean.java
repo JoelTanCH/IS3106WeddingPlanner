@@ -9,12 +9,16 @@ import entity.Admin;
 import entity.Guest;
 import entity.GuestTable;
 import entity.Request;
+import entity.Transaction;
 import entity.Vendor;
 import entity.WeddingBudgetItem;
 import entity.WeddingBudgetList;
+import entity.WeddingChecklist;
 import entity.WeddingItinerary;
 import entity.WeddingOrganiser;
+import entity.WeddingParentTask;
 import entity.WeddingProject;
+import entity.WeddingSubtask;
 import static enumeration.BrideGroomEnum.BRIDE;
 import enumeration.CategoryEnum;
 import static enumeration.StatusEnum.NOTSENT;
@@ -39,8 +43,10 @@ import session.RequestSessionBeanLocal;
 import util.exception.InvalidAssociationException;
 import jwt.JWTSessionBeanLocal;
 import jwt.KeyHolderLocal;
+import session.TransactionSessionBeanLocal;
 import session.VendorSessionBeanLocal;
 import session.WeddingBudgetSessionBeanLocal;
+import session.WeddingChecklistBeanLocal;
 import session.WeddingItinerarySessionBeanLocal;
 import session.WeddingOrganiserSessionBeanLocal;
 import session.WeddingProjectSessionBeanLocal;
@@ -57,6 +63,8 @@ public class TestingDataInitBean {
     private VendorSessionBeanLocal vendorSessionBeanLocal;
 
     @EJB
+    private TransactionSessionBeanLocal transactionSessionBeanLocal;
+    @EJB
     private AdminSessionBeanLocal adminSessionBean;
 
     @EJB
@@ -70,6 +78,9 @@ public class TestingDataInitBean {
 
     @EJB
     private WeddingItinerarySessionBeanLocal weddingItinerarySessionBean;
+
+    @EJB
+    private WeddingChecklistBeanLocal weddingChecklistSessionBean;
 
     @EJB
     private RequestSessionBeanLocal requestSessionBeanLocal;
@@ -107,6 +118,7 @@ public class TestingDataInitBean {
             a1.setUsername("Joseph");
             a1.setPassword("caesar");
             adminSessionBean.createAdmin(a1);
+            em.flush(); // need this so it ensures Admin's id is 1
 
             WeddingOrganiser w1 = new WeddingOrganiser();
             w1.setEmail("weddingOrganiser1@email.com");
@@ -195,19 +207,29 @@ public class TestingDataInitBean {
                     sampleRequest.setRequestDate(new Date());
                     sampleRequest.setRequestDetails("Do something for me");
                     sampleRequest.setVendor(vendor_entertainment);
-                    sampleRequest.setWeddingProject(weddingProject2);
+                    sampleRequest.setWeddingProject(weddingProject1);
                     vendor_entertainment.getRequests().add(sampleRequest);
                     requestSessionBeanLocal.createRequest(sampleRequest);
+
                     sampleRequest = new Request();
-                    sampleRequest.setIsAccepted(null);
+                    sampleRequest.setIsAccepted(true);
                     sampleRequest.setQuotationURL("www.anotherfakeUrl.com");
-                    sampleRequest.setQuotedPrice(null);
+                    sampleRequest.setQuotedPrice(BigDecimal.ONE);
                     sampleRequest.setRequestDate(new Date());
                     sampleRequest.setRequestDetails("Small gig");
                     sampleRequest.setVendor(vendor_entertainment);
-                    sampleRequest.setWeddingProject(weddingProject3);
+                    sampleRequest.setWeddingProject(weddingProject2);
+
+                    Transaction sampleTransaction = new Transaction();
+                    sampleTransaction.setIsPaid(false);
+                    sampleTransaction.setRequest(sampleRequest);
+                    sampleTransaction.setTotalPrice(BigDecimal.ONE);
+                    sampleTransaction.setTransactionTime(new Date());
+                    sampleRequest.setTransaction(sampleTransaction);
+
                     vendor_entertainment.getRequests().add(sampleRequest);
                     requestSessionBeanLocal.createRequest(sampleRequest);
+                    transactionSessionBeanLocal.createTransaction(sampleTransaction);
                     vendorSessionBeanLocal.createVendor(vendor_entertainment);
 
                     Vendor vendor_entertainment2 = new Vendor();
@@ -350,6 +372,29 @@ public class TestingDataInitBean {
                     item.setIsPaid(false);
                     item.setCategory(CategoryEnum.DECORATION);
                     weddingBudgetSessionBean.createItem(item, budget.getWeddingBudgetListId());
+
+                    WeddingChecklist weddingChecklist = new WeddingChecklist();
+                    weddingChecklist.setWeddingProject(weddingProject1);
+                    weddingProject1.setWeddingChecklist(weddingChecklist);
+                    em.persist(weddingChecklist);
+                    em.flush();
+
+                    WeddingParentTask parentTask = new WeddingParentTask();
+                    parentTask.setTaskDescription("Sample Parent Task");
+                    parentTask.setIsDone(false);
+                    weddingChecklistSessionBean.createParentTask(parentTask, weddingChecklist.getWeddingCheckListId());
+                    em.persist(parentTask);
+                    em.flush();
+//                
+                    WeddingSubtask subtask = new WeddingSubtask();
+                    subtask.setSubtaskDescription("SubTask 1");
+                    subtask.setIsDone(false);
+                    weddingChecklistSessionBean.createSubtask(subtask, parentTask.getWeddingParentTaskId());
+//                
+                    subtask = new WeddingSubtask();
+                    subtask.setSubtaskDescription("SubTask 2");
+                    subtask.setIsDone(true);
+                    weddingChecklistSessionBean.createSubtask(subtask, parentTask.getWeddingParentTaskId());
                 } catch (InvalidAssociationException ex) {
                     //Logger.getLogger(TestingDataInitBean.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ParseException ex) {

@@ -80,10 +80,10 @@ public class WeddingBudgetResource {
     }
     
     @GET
-    @Path("/budgets/{wedding-project-id}")
+    @Path("/budgets")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<WeddingBudgetList> retrieveAllBudgets(@PathParam("wedding-project-id") Long weddingProjectId) {
-        return weddingBudgetSessionBean.getBudgets(weddingProjectId);
+    public List<WeddingBudgetList> retrieveAllBudgets() {
+        return weddingBudgetSessionBean.getBudgets();
     }
     
     @GET

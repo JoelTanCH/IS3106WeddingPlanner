@@ -5,6 +5,7 @@
  */
 package session;
 
+import entity.Request;
 import entity.Transaction;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -23,13 +24,25 @@ public class TransactionSessionBean implements TransactionSessionBeanLocal {
     @Override
     public void createTransaction(Transaction transaction) {
         em.persist(transaction);
-        em.flush();
-        
+//        em.flush();
+
+    }
+
+    @Override
+    public Transaction getTransactionById(Long transactionId) {
+        Transaction trans = em.find(Transaction.class, transactionId);
+        return trans;
+    }
+
+    @Override
+    public Transaction getTransactionByRequestId(Long requestId) {
+        Request request = em.find(Request.class, requestId);
+        Transaction trans = request.getTransaction();
+        return trans;
     }
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
-
     public void persist(Object object) {
         em.persist(object);
     }

@@ -5,10 +5,12 @@
  */
 package session;
 
+import entity.Request;
 import entity.Vendor;
 import enumeration.CategoryEnum;
 import error.InvalidVendorCategory;
 import error.VendorNameNotFoundException;
+import error.VendorNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -30,6 +32,22 @@ public class VendorSessionBean implements VendorSessionBeanLocal {
     public List<Vendor> getAllVendors() {
         Query query = em.createQuery("SELECT v FROM Vendor v");
         return query.getResultList();
+    }
+    @Override
+    public Vendor getVendor(Long vId) throws VendorNotFoundException {
+        Vendor v = em.find(Vendor.class, vId);
+        if (v != null) {
+            return v;
+        } else {
+            throw new VendorNotFoundException("Vendor Not Found");
+        }
+    }
+
+    @Override
+    public Vendor getVendorByRequestId(Long requestId) {
+        Request request = em.find(Request.class, requestId);
+        Vendor vendor = request.getVendor();
+        return vendor;
     }
 
     // im using List instead of the single one because idw to throw an exception

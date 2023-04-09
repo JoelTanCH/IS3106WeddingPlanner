@@ -8,6 +8,7 @@ package session;
 import entity.Vendor;
 import error.InvalidVendorCategory;
 import error.VendorNameNotFoundException;
+import error.VendorNotFoundException;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -17,6 +18,7 @@ import javax.ejb.Local;
  */
 @Local
 public interface VendorSessionBeanLocal {
+    public Vendor getVendor(Long vId) throws VendorNotFoundException;
 
     public List<Vendor> getAllVendors();
 
@@ -29,5 +31,7 @@ public interface VendorSessionBeanLocal {
     public Long createVendor(Vendor vendor);
 
     public List<Vendor> getVendorsByUsernamePassword(String username, String password);
+
+    public Vendor getVendorByRequestId(Long requestId);
 
 }
