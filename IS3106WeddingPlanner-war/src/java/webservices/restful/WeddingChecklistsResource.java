@@ -79,7 +79,21 @@ public class WeddingChecklistsResource {
     @Path("/checklist/{wedding-checklist-id}")
     @Produces(MediaType.APPLICATION_JSON)
     public WeddingChecklist getWeddingChecklist(@PathParam("wedding-checklist-id") Long weddingChecklistId) {
-        return weddingChecklistBeanLocal.getWeddingChecklist(weddingChecklistId);
+        WeddingChecklist checklistObject =  weddingChecklistBeanLocal.getWeddingChecklist(weddingChecklistId);
+        
+        checklistObject.setWeddingProject(null);
+        
+        List<WeddingParentTask> parentTasks = checklistObject.getWeddingParentTasks();
+        for (WeddingParentTask parentTask : parentTasks) {
+            
+            parentTask.setWeddingChecklist(null);
+            
+            for (WeddingSubtask subTask : parentTask.getWeddingSubtasks()) {
+                subTask.setWeddingParentTask(null);
+            }
+        }
+        
+        return checklistObject;
     }
     
     @POST
