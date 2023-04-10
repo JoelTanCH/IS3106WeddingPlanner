@@ -45,4 +45,6 @@ public interface WeddingBudgetSessionBeanLocal {
 
     public WeddingBudgetList getBudget(Long weddingBudgetListId);
     
+    public WeddingBudgetList getBudgetByWeddingProject(Long weddingProjectId);
+    
 }

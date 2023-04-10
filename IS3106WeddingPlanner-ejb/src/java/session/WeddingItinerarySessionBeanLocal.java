@@ -29,6 +29,6 @@ public interface WeddingItinerarySessionBeanLocal {
 
     public WeddingItinerary getItinerary(Long weddingItineraryId);
 
-    public List<WeddingItinerary> getWeddingItinerary(Long weddingId);
+    public List<WeddingItinerary> getWeddingItinerariesByWeddingProject(Long weddingId);
     
 }
