@@ -82,9 +82,9 @@ public class VendorsResource {
     }
     
     @GET
-    @Path("/{vendor-id}")
+    @Path("query")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getVendorbyId(@PathParam("vendor-id") Long vId) {
+    public Response getVendorbyId(@QueryParam("vendor-id") Long vId) {
         try {
             Vendor vendor = vendorSessionBeanLocal.getVendorById(vId);
             vendor.setRequests(null);
@@ -123,11 +123,11 @@ public class VendorsResource {
     
 
     @PUT
-    @Path("/{vendorId}")
+    @Path("query")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateVendor(@PathParam("vendorId") Long vId, Vendor v) {
-        v.setUserId(vId);
+    public Response updateVendor(@QueryParam("vendor-id") Long vId, Vendor v) {
         try {
+            v.setUserId(vId);
             vendorSessionBeanLocal.updateVendor(v);
             return Response.status(200).build();
         } catch (Exception e) {

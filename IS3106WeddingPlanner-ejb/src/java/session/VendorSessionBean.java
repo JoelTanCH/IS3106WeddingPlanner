@@ -124,7 +124,18 @@ public class VendorSessionBean implements VendorSessionBeanLocal {
     }
 
     @Override
-    public void updateVendor(Vendor v) {
-        em.merge(v);
+    public void updateVendor(Vendor v) throws VendorNotFoundException {
+        Vendor vOld = getVendorById(v.getUserId());
+
+        vOld.setUsername(v.getUsername());
+        vOld.setEmail(v.getEmail());
+        vOld.setPassword(v.getPassword());
+        vOld.setIsBanned(v.isIsBanned());
+        vOld.setCategory(v.getCategory());
+        vOld.setDescription(v.getDescription());
+        vOld.setFacebookUrl(v.getFacebookUrl());
+        vOld.setInstagramUrl(v.getInstagramUrl());
+        vOld.setWebsiteUrl(v.getWebsiteUrl());
+        vOld.setWhatsappUrl(v.getWhatsappUrl());
     }
 }
