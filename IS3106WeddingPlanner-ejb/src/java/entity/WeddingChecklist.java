@@ -30,21 +30,12 @@ public class WeddingChecklist implements Serializable {
     @OneToOne(optional = false)
     private WeddingProject weddingProject;
     
-    @OneToMany(mappedBy = "weddingChecklist")
-    private List<WeddingTask> weddingTasks;
+    @OneToMany(mappedBy="weddingChecklist")
+    private List<WeddingParentTask> weddingParentTasks;
     
     public WeddingChecklist(){
-        weddingTasks = new ArrayList<WeddingTask>();
-    }
 
-    public List<WeddingTask> getWeddingTasks() {
-        return weddingTasks;
     }
-
-    public void setWeddingTasks(List<WeddingTask> weddingTasks) {
-        this.weddingTasks = weddingTasks;
-    }
-    
     
     
     
@@ -86,6 +77,20 @@ public class WeddingChecklist implements Serializable {
      */
     public void setWeddingProject(WeddingProject weddingProject) {
         this.weddingProject = weddingProject;
+    }
+
+    /**
+     * @return the weddingParentTasks
+     */
+    public List<WeddingParentTask> getWeddingParentTasks() {
+        return weddingParentTasks;
+    }
+
+    /**
+     * @param weddingParentTasks the weddingParentTasks to set
+     */
+    public void setWeddingParentTasks(List<WeddingParentTask> weddingParentTasks) {
+        this.weddingParentTasks = weddingParentTasks;
     }
     
 }

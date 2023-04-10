@@ -18,6 +18,7 @@ import javax.ejb.Local;
  */
 @Local
 public interface VendorSessionBeanLocal {
+    public Vendor getVendor(Long vId) throws VendorNotFoundException;
 
     public List<Vendor> getAllVendors();
 
@@ -32,5 +33,6 @@ public interface VendorSessionBeanLocal {
     public Vendor getVendorById(Long vId) throws VendorNotFoundException;
 
     public void updateVendor(Vendor v) throws VendorNotFoundException;
+    public Vendor getVendorByRequestId(Long requestId);
 
 }

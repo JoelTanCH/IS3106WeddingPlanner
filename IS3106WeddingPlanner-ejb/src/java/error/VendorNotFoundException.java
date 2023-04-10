@@ -7,7 +7,7 @@ package error;
 
 /**
  *
- * @author PERSONAL
+ * @author joelt
  */
 public class VendorNotFoundException extends Exception {
 

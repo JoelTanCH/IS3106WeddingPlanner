@@ -15,8 +15,9 @@
     <class>entity.WeddingItinerary</class>
     <class>entity.WeddingOrganiser</class>
     <class>entity.WeddingProject</class>
-    <class>entity.WeddingTask</class>
     <class>entity.Stage</class>
+    <class>entity.WeddingParentTask</class>
+    <class>entity.WeddingSubtask</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.schema-generation.database.action" value="create"/>

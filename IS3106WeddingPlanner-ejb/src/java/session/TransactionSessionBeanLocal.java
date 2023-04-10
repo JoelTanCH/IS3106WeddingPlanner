@@ -15,4 +15,8 @@ import javax.ejb.Local;
 @Local
 public interface TransactionSessionBeanLocal {
     public void createTransaction(Transaction transaction);
+
+    public Transaction getTransactionById(Long transactionId);
+
+    public Transaction getTransactionByRequestId(Long requestId);
 }

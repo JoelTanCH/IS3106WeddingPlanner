@@ -9,12 +9,16 @@ import entity.Admin;
 import entity.Guest;
 import entity.GuestTable;
 import entity.Request;
+import entity.Transaction;
 import entity.Vendor;
 import entity.WeddingBudgetItem;
 import entity.WeddingBudgetList;
+import entity.WeddingChecklist;
 import entity.WeddingItinerary;
 import entity.WeddingOrganiser;
+import entity.WeddingParentTask;
 import entity.WeddingProject;
+import entity.WeddingSubtask;
 import static enumeration.BrideGroomEnum.BRIDE;
 import enumeration.CategoryEnum;
 import static enumeration.StatusEnum.NOTSENT;
@@ -39,8 +43,10 @@ import session.RequestSessionBeanLocal;
 import util.exception.InvalidAssociationException;
 import jwt.JWTSessionBeanLocal;
 import jwt.KeyHolderLocal;
+import session.TransactionSessionBeanLocal;
 import session.VendorSessionBeanLocal;
 import session.WeddingBudgetSessionBeanLocal;
+import session.WeddingChecklistBeanLocal;
 import session.WeddingItinerarySessionBeanLocal;
 import session.WeddingOrganiserSessionBeanLocal;
 import session.WeddingProjectSessionBeanLocal;
@@ -57,20 +63,24 @@ public class TestingDataInitBean {
     private VendorSessionBeanLocal vendorSessionBeanLocal;
 
     @EJB
+    private TransactionSessionBeanLocal transactionSessionBeanLocal;
+    @EJB
     private AdminSessionBeanLocal adminSessionBean;
 
     @EJB
     private WeddingProjectSessionBeanLocal weddingProjectSessionBeanLocal;
-    
+
     @EJB
     private WeddingOrganiserSessionBeanLocal weddingOrganiserSessionBeanLocal;
-    
+
     @EJB
     private WeddingBudgetSessionBeanLocal weddingBudgetSessionBean;
 
     @EJB
     private WeddingItinerarySessionBeanLocal weddingItinerarySessionBean;
 
+    @EJB
+    private WeddingChecklistBeanLocal weddingChecklistSessionBean;
 
     @EJB
     private RequestSessionBeanLocal requestSessionBeanLocal;
@@ -108,109 +118,7 @@ public class TestingDataInitBean {
             a1.setUsername("Joseph");
             a1.setPassword("caesar");
             adminSessionBean.createAdmin(a1);
-
-            Vendor vendor_entertainment = new Vendor();
-            vendor_entertainment.setUsername("EntertainmentVendor");
-            vendor_entertainment.setEmail("sampleVendorEmail@email.com");
-            vendor_entertainment.setPassword("password");
-            vendor_entertainment.setDescription("Sample vendor description. I do these stuff");
-            vendor_entertainment.setWebsiteUrl("vendorURL.com");
-            vendor_entertainment.setInstagramUrl("This is the URL of instagram");
-            vendor_entertainment.setFacebookUrl("Facebook url");
-            vendor_entertainment.setWhatsappUrl("Whatsapp url");
-            vendor_entertainment.setCategory(CategoryEnum.ENTERTAINMENT);
-
-            Request sampleRequest = new Request();
-            sampleRequest.setIsAccepted(null);
-            sampleRequest.setQuotationURL("www.fakeUrl.com");
-            sampleRequest.setQuotedPrice(null);
-            sampleRequest.setRequestDate(new Date());
-            sampleRequest.setRequestDetails("Do something for me");
-            sampleRequest.setVendor(vendor_entertainment);
-            vendor_entertainment.getRequests().add(sampleRequest);
-            requestSessionBeanLocal.createRequest(sampleRequest);
-            sampleRequest = new Request();
-            sampleRequest.setIsAccepted(null);
-            sampleRequest.setQuotationURL("www.anotherfakeUrl.com");
-            sampleRequest.setQuotedPrice(null);
-            sampleRequest.setRequestDate(new Date());
-            sampleRequest.setRequestDetails("Small gig");
-            sampleRequest.setVendor(vendor_entertainment);
-            vendor_entertainment.getRequests().add(sampleRequest);
-            requestSessionBeanLocal.createRequest(sampleRequest);
-            vendorSessionBeanLocal.createVendor(vendor_entertainment);
-
-            Vendor vendor_entertainment2 = new Vendor();
-            vendor_entertainment2.setUsername("EntertainmentVendor2");
-            vendor_entertainment2.setEmail("EntertainmentVendor2@email.com");
-            vendor_entertainment2.setPassword("password");
-            vendor_entertainment2.setDescription("Sample vendor description. I do these stuff");
-            vendor_entertainment2.setWebsiteUrl("vendorURL.com");
-            vendor_entertainment2.setInstagramUrl("This is the URL of instagram");
-            vendor_entertainment2.setFacebookUrl("Facebook url");
-            vendor_entertainment2.setWhatsappUrl("Whatsapp url");
-            vendor_entertainment2.setCategory(CategoryEnum.ENTERTAINMENT);
-            vendorSessionBeanLocal.createVendor(vendor_entertainment2);
-
-            Vendor vendor_food = new Vendor();
-            vendor_food.setUsername("FoodVendor");
-            vendor_food.setEmail("FoodVendor@email.com");
-            vendor_food.setPassword("password");
-            vendor_food.setDescription("Sample vendor description. I do these stuff");
-            vendor_food.setWebsiteUrl("vendorURL.com");
-            vendor_food.setInstagramUrl("This is the URL of instagram");
-            vendor_food.setFacebookUrl("Facebook url");
-            vendor_food.setWhatsappUrl("Whatsapp url");
-            vendor_food.setCategory(CategoryEnum.FOOD);
-            vendorSessionBeanLocal.createVendor(vendor_food);
-
-            Vendor vendor_lighting = new Vendor();
-            vendor_lighting.setUsername("LightingVendor");
-            vendor_lighting.setEmail("LightingVendor@email.com");
-            vendor_lighting.setPassword("password");
-            vendor_lighting.setDescription("Sample vendor description. I do these stuff");
-            vendor_lighting.setWebsiteUrl("vendorURL.com");
-            vendor_lighting.setInstagramUrl("This is the URL of instagram");
-            vendor_lighting.setFacebookUrl("Facebook url");
-            vendor_lighting.setWhatsappUrl("Whatsapp url");
-            vendor_lighting.setCategory(CategoryEnum.LIGHTING);
-            vendorSessionBeanLocal.createVendor(vendor_lighting);
-
-            Vendor vendor_decoration = new Vendor();
-            vendor_decoration.setUsername("DecorationVendor");
-            vendor_decoration.setEmail("DecorationVendor@email.com");
-            vendor_decoration.setPassword("password");
-            vendor_decoration.setDescription("Sample vendor description. I do these stuff");
-            vendor_decoration.setWebsiteUrl("vendorURL.com");
-            vendor_decoration.setInstagramUrl("This is the URL of instagram");
-            vendor_decoration.setFacebookUrl("Facebook url");
-            vendor_decoration.setWhatsappUrl("Whatsapp url");
-            vendor_decoration.setCategory(CategoryEnum.DECORATION);
-            vendorSessionBeanLocal.createVendor(vendor_decoration);
-
-            Vendor vendor_clothes = new Vendor();
-            vendor_clothes.setUsername("ClothesVendor");
-            vendor_clothes.setEmail("ClothesVendor@email.com");
-            vendor_clothes.setPassword("password");
-            vendor_clothes.setDescription("Sample vendor description. I do these stuff");
-            vendor_clothes.setWebsiteUrl("vendorURL.com");
-            vendor_clothes.setInstagramUrl("This is the URL of instagram");
-            vendor_clothes.setFacebookUrl("Facebook url");
-            vendor_clothes.setWhatsappUrl("Whatsapp url");
-            vendor_clothes.setCategory(CategoryEnum.CLOTHES);
-            vendorSessionBeanLocal.createVendor(vendor_clothes);
-
-            Vendor vendor_venue = new Vendor();
-            vendor_venue.setUsername("VenueVendor");
-            vendor_venue.setEmail("VenueVendor@email.com");
-            vendor_venue.setPassword("password");
-            vendor_venue.setDescription("Sample vendor description. I do these stuff");
-            vendor_venue.setWebsiteUrl("vendorURL.com");
-            vendor_venue.setInstagramUrl("This is the URL of instagram");
-            vendor_venue.setFacebookUrl("Facebook url");
-            vendor_venue.setWhatsappUrl("Whatsapp url");
-            vendor_venue.setCategory(CategoryEnum.VENUE);
-            vendorSessionBeanLocal.createVendor(vendor_venue);
+            em.flush(); // need this so it ensures Admin's id is 1
 
             WeddingOrganiser w1 = new WeddingOrganiser();
             w1.setEmail("weddingOrganiser1@email.com");
@@ -280,6 +188,121 @@ public class TestingDataInitBean {
                     weddingProjectSessionBeanLocal.createWeddingProject(w2.getUserId(), weddingProject3);
                     em.flush();
 
+                    Vendor vendor_entertainment = new Vendor();
+                    vendor_entertainment.setUsername("EntertainmentVendor");
+                    vendor_entertainment.setEmail("sampleVendorEmail@email.com");
+                    vendor_entertainment.setPassword("password");
+                    vendor_entertainment.setDescription("Sample vendor description. I do these stuff");
+                    vendor_entertainment.setWebsiteUrl("vendorURL.com");
+                    vendor_entertainment.setInstagramUrl("This is the URL of instagram");
+                    vendor_entertainment.setFacebookUrl("Facebook url");
+                    vendor_entertainment.setWhatsappUrl("Whatsapp url");
+                    vendor_entertainment.setCategory(CategoryEnum.ENTERTAINMENT);
+
+                    Request sampleRequest = new Request();
+                    sampleRequest.setIsAccepted(null);
+                    sampleRequest.setQuotationURL("www.fakeUrl.com");
+                    sampleRequest.setQuotedPrice(null);
+                    sampleRequest.setRequestDate(new Date());
+                    sampleRequest.setRequestDetails("Do something for me");
+                    sampleRequest.setVendor(vendor_entertainment);
+                    sampleRequest.setWeddingProject(weddingProject1);
+                    vendor_entertainment.getRequests().add(sampleRequest);
+                    requestSessionBeanLocal.createRequest(sampleRequest);
+
+                    sampleRequest = new Request();
+                    sampleRequest.setIsAccepted(true);
+                    sampleRequest.setQuotationURL("www.anotherfakeUrl.com");
+                    sampleRequest.setQuotedPrice(BigDecimal.ONE);
+                    sampleRequest.setRequestDate(new Date());
+                    sampleRequest.setRequestDetails("Small gig");
+                    sampleRequest.setVendor(vendor_entertainment);
+                    sampleRequest.setWeddingProject(weddingProject2);
+
+                    Transaction sampleTransaction = new Transaction();
+                    sampleTransaction.setIsPaid(false);
+                    sampleTransaction.setRequest(sampleRequest);
+                    sampleTransaction.setTotalPrice(BigDecimal.ONE);
+                    sampleTransaction.setTransactionTime(new Date());
+                    sampleRequest.setTransaction(sampleTransaction);
+
+                    vendor_entertainment.getRequests().add(sampleRequest);
+                    requestSessionBeanLocal.createRequest(sampleRequest);
+                    transactionSessionBeanLocal.createTransaction(sampleTransaction);
+                    vendorSessionBeanLocal.createVendor(vendor_entertainment);
+
+                    Vendor vendor_entertainment2 = new Vendor();
+                    vendor_entertainment2.setUsername("EntertainmentVendor2");
+                    vendor_entertainment2.setEmail("EntertainmentVendor2@email.com");
+                    vendor_entertainment2.setPassword("password");
+                    vendor_entertainment2.setDescription("Sample vendor description. I do these stuff");
+                    vendor_entertainment2.setWebsiteUrl("vendorURL.com");
+                    vendor_entertainment2.setInstagramUrl("This is the URL of instagram");
+                    vendor_entertainment2.setFacebookUrl("Facebook url");
+                    vendor_entertainment2.setWhatsappUrl("Whatsapp url");
+                    vendor_entertainment2.setCategory(CategoryEnum.ENTERTAINMENT);
+                    vendorSessionBeanLocal.createVendor(vendor_entertainment2);
+
+                    Vendor vendor_food = new Vendor();
+                    vendor_food.setUsername("FoodVendor");
+                    vendor_food.setEmail("FoodVendor@email.com");
+                    vendor_food.setPassword("password");
+                    vendor_food.setDescription("Sample vendor description. I do these stuff");
+                    vendor_food.setWebsiteUrl("vendorURL.com");
+                    vendor_food.setInstagramUrl("This is the URL of instagram");
+                    vendor_food.setFacebookUrl("Facebook url");
+                    vendor_food.setWhatsappUrl("Whatsapp url");
+                    vendor_food.setCategory(CategoryEnum.FOOD);
+                    vendorSessionBeanLocal.createVendor(vendor_food);
+
+                    Vendor vendor_lighting = new Vendor();
+                    vendor_lighting.setUsername("LightingVendor");
+                    vendor_lighting.setEmail("LightingVendor@email.com");
+                    vendor_lighting.setPassword("password");
+                    vendor_lighting.setDescription("Sample vendor description. I do these stuff");
+                    vendor_lighting.setWebsiteUrl("vendorURL.com");
+                    vendor_lighting.setInstagramUrl("This is the URL of instagram");
+                    vendor_lighting.setFacebookUrl("Facebook url");
+                    vendor_lighting.setWhatsappUrl("Whatsapp url");
+                    vendor_lighting.setCategory(CategoryEnum.LIGHTING);
+                    vendorSessionBeanLocal.createVendor(vendor_lighting);
+
+                    Vendor vendor_decoration = new Vendor();
+                    vendor_decoration.setUsername("DecorationVendor");
+                    vendor_decoration.setEmail("DecorationVendor@email.com");
+                    vendor_decoration.setPassword("password");
+                    vendor_decoration.setDescription("Sample vendor description. I do these stuff");
+                    vendor_decoration.setWebsiteUrl("vendorURL.com");
+                    vendor_decoration.setInstagramUrl("This is the URL of instagram");
+                    vendor_decoration.setFacebookUrl("Facebook url");
+                    vendor_decoration.setWhatsappUrl("Whatsapp url");
+                    vendor_decoration.setCategory(CategoryEnum.DECORATION);
+                    vendorSessionBeanLocal.createVendor(vendor_decoration);
+
+                    Vendor vendor_clothes = new Vendor();
+                    vendor_clothes.setUsername("ClothesVendor");
+                    vendor_clothes.setEmail("ClothesVendor@email.com");
+                    vendor_clothes.setPassword("password");
+                    vendor_clothes.setDescription("Sample vendor description. I do these stuff");
+                    vendor_clothes.setWebsiteUrl("vendorURL.com");
+                    vendor_clothes.setInstagramUrl("This is the URL of instagram");
+                    vendor_clothes.setFacebookUrl("Facebook url");
+                    vendor_clothes.setWhatsappUrl("Whatsapp url");
+                    vendor_clothes.setCategory(CategoryEnum.CLOTHES);
+                    vendorSessionBeanLocal.createVendor(vendor_clothes);
+
+                    Vendor vendor_venue = new Vendor();
+                    vendor_venue.setUsername("VenueVendor");
+                    vendor_venue.setEmail("VenueVendor@email.com");
+                    vendor_venue.setPassword("password");
+                    vendor_venue.setDescription("Sample vendor description. I do these stuff");
+                    vendor_venue.setWebsiteUrl("vendorURL.com");
+                    vendor_venue.setInstagramUrl("This is the URL of instagram");
+                    vendor_venue.setFacebookUrl("Facebook url");
+                    vendor_venue.setWhatsappUrl("Whatsapp url");
+                    vendor_venue.setCategory(CategoryEnum.VENUE);
+                    vendorSessionBeanLocal.createVendor(vendor_venue);
+
                     Guest guest = new Guest();
                     guest.setAttendingSide(BRIDE);
                     guest.setEmail("RANDOM@EMAIL.COM");
@@ -295,57 +318,80 @@ public class TestingDataInitBean {
                     guestTable.setTableNumber(1);
                     guestTable.setTableSize(200);
                     guestTableSessionBean.createGuestTable(guestTable, 1L);
-                    
-                    WeddingItinerary weddingItinerary = new WeddingItinerary();
-                weddingItinerary.setEventName("Sample Event");
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                weddingItinerary.setEventDate(formatter.parse("2023-04-04"));
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(weddingItinerary.getEventDate());
-                int year = cal.get(Calendar.YEAR);
-                int month = cal.get(Calendar.MONTH);
-                int day = cal.get(Calendar.DAY_OF_MONTH);
 
-                formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                Date eventStartTime = formatter.parse(String.format("%04d-%02d-%02d 20:00", year, month + 1, day));
-                Date eventEndTime = formatter.parse(String.format("%04d-%02d-%02d 22:00", year, month + 1, day));
-                weddingItinerary.setEventStartTime(eventStartTime);
-                weddingItinerary.setEventEndTime(eventEndTime);
+                    WeddingItinerary weddingItinerary = new WeddingItinerary();
+                    weddingItinerary.setEventName("Sample Event");
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                    weddingItinerary.setEventDate(formatter.parse("2023-04-04"));
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(weddingItinerary.getEventDate());
+                    int year = cal.get(Calendar.YEAR);
+                    int month = cal.get(Calendar.MONTH);
+                    int day = cal.get(Calendar.DAY_OF_MONTH);
+
+                    formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                    Date eventStartTime = formatter.parse(String.format("%04d-%02d-%02d 20:00", year, month + 1, day));
+                    Date eventEndTime = formatter.parse(String.format("%04d-%02d-%02d 22:00", year, month + 1, day));
+                    weddingItinerary.setEventStartTime(eventStartTime);
+                    weddingItinerary.setEventEndTime(eventEndTime);
 //                formatter = new SimpleDateFormat("HH:mm");
 //                weddingItinerary.setEventStartTime(formatter.parse("20:00"));
 //                weddingItinerary.setEventEndTime(formatter.parse("22:00"));
-                weddingItinerarySessionBean.createNewItinerary(weddingItinerary, weddingProject1.getWeddingProjectId());
+                    weddingItinerarySessionBean.createNewItinerary(weddingItinerary, weddingProject1.getWeddingProjectId());
 
-                WeddingBudgetList budget = new WeddingBudgetList();
-                budget.setBudget(BigDecimal.valueOf(10000));
-                weddingBudgetSessionBean.createBudget(budget, weddingProject1.getWeddingProjectId());
-                em.persist(budget);
-                em.flush();
-                // Sample 1
-                WeddingBudgetItem item = new WeddingBudgetItem();
-                item.setName("Sample 1");
-                item.setCost(BigDecimal.valueOf(2000));
-                item.setIsPaid(true);
-                item.setCategory(CategoryEnum.FOOD);
-                weddingBudgetSessionBean.createItem(item, budget.getWeddingBudgetListId());
-                // Sample 2
-                item = new WeddingBudgetItem();
-                item.setName("Sample 2");
-                item.setCost(BigDecimal.valueOf(2500));
-                item.setIsPaid(false);
-                item.setCategory(CategoryEnum.DECORATION);
-                weddingBudgetSessionBean.createItem(item, budget.getWeddingBudgetListId());
-                // Sample 3
-                item = new WeddingBudgetItem();
-                item.setName("Sample 3");
-                item.setCost(BigDecimal.valueOf(1500));
-                item.setIsPaid(false);
-                item.setCategory(CategoryEnum.DECORATION);
-                weddingBudgetSessionBean.createItem(item, budget.getWeddingBudgetListId());
+                    WeddingBudgetList budget = new WeddingBudgetList();
+                    budget.setBudget(BigDecimal.valueOf(10000));
+                    weddingBudgetSessionBean.createBudget(budget, weddingProject1.getWeddingProjectId());
+                    em.persist(budget);
+                    em.flush();
+                    // Sample 1
+                    WeddingBudgetItem item = new WeddingBudgetItem();
+                    item.setName("Sample 1");
+                    item.setCost(BigDecimal.valueOf(2000));
+                    item.setIsPaid(true);
+                    item.setCategory(CategoryEnum.FOOD);
+                    weddingBudgetSessionBean.createItem(item, budget.getWeddingBudgetListId());
+                    // Sample 2
+                    item = new WeddingBudgetItem();
+                    item.setName("Sample 2");
+                    item.setCost(BigDecimal.valueOf(2500));
+                    item.setIsPaid(false);
+                    item.setCategory(CategoryEnum.DECORATION);
+                    weddingBudgetSessionBean.createItem(item, budget.getWeddingBudgetListId());
+                    // Sample 3
+                    item = new WeddingBudgetItem();
+                    item.setName("Sample 3");
+                    item.setCost(BigDecimal.valueOf(1500));
+                    item.setIsPaid(false);
+                    item.setCategory(CategoryEnum.DECORATION);
+                    weddingBudgetSessionBean.createItem(item, budget.getWeddingBudgetListId());
+
+                    WeddingChecklist weddingChecklist = new WeddingChecklist();
+                    weddingChecklist.setWeddingProject(weddingProject1);
+                    weddingProject1.setWeddingChecklist(weddingChecklist);
+                    em.persist(weddingChecklist);
+                    em.flush();
+
+                    WeddingParentTask parentTask = new WeddingParentTask();
+                    parentTask.setTaskDescription("Sample Parent Task");
+                    parentTask.setIsDone(false);
+                    weddingChecklistSessionBean.createParentTask(parentTask, weddingChecklist.getWeddingCheckListId());
+                    em.persist(parentTask);
+                    em.flush();
+//                
+                    WeddingSubtask subtask = new WeddingSubtask();
+                    subtask.setSubtaskDescription("SubTask 1");
+                    subtask.setIsDone(false);
+                    weddingChecklistSessionBean.createSubtask(subtask, parentTask.getWeddingParentTaskId());
+//                
+                    subtask = new WeddingSubtask();
+                    subtask.setSubtaskDescription("SubTask 2");
+                    subtask.setIsDone(true);
+                    weddingChecklistSessionBean.createSubtask(subtask, parentTask.getWeddingParentTaskId());
                 } catch (InvalidAssociationException ex) {
                     //Logger.getLogger(TestingDataInitBean.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ParseException ex) {
-                    
+
                 }
 
             }

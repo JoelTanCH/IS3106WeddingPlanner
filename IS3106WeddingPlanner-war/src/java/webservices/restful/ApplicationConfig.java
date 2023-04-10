@@ -35,6 +35,7 @@ public class ApplicationConfig extends javax.ws.rs.core.Application {
         resources.add(webservices.restful.RequestsResource.class);
         resources.add(webservices.restful.StageResource.class);
         resources.add(webservices.restful.TableManagementResource.class);
+        resources.add(webservices.restful.TransactionsResource.class);
         resources.add(webservices.restful.VendorsResource.class);
         resources.add(webservices.restful.WeddingBudgetResource.class);
         resources.add(webservices.restful.WeddingChecklistsResource.class);

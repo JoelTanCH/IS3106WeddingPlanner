@@ -7,6 +7,8 @@ package session;
 
 import entity.Request;
 import entity.Transaction;
+import entity.Vendor;
+import entity.WeddingProject;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -24,8 +26,14 @@ import javax.persistence.Query;
 public class RequestSessionBean implements RequestSessionBeanLocal {
 
     @EJB
-    private TransactionSessionBeanLocal transactionSessionBeanLocal;
+    private VendorSessionBeanLocal vendorSessionBeanLocal;
 
+    @EJB
+    private WeddingProjectSessionBeanLocal weddingProjectSessionBeanLocal;
+
+    @EJB
+    private TransactionSessionBeanLocal transactionSessionBeanLocal;
+    
     @PersistenceContext(unitName = "IS3106WeddingPlanner-ejbPU")
     private EntityManager em;
 
@@ -38,8 +46,59 @@ public class RequestSessionBean implements RequestSessionBeanLocal {
     }
 
     @Override
-    public void createRequest(Request request) {
+    public Request createRequest(Request request) {
         em.persist(request);
+        return request;
+    }
+    
+    @Override
+    public boolean checkIfRequestExists(Long projId, Long vendorId){
+        List<Request> vendorRequests = getAllRequests();
+        if(vendorRequests.isEmpty()){
+            System.out.println("vendor requests empty");
+            return false;
+        }else{
+            System.out.println("PROJ ID = " + projId);
+            System.out.println("VENDOR ID = " + vendorId);
+            System.out.println("Looping through");
+            for (Request request : vendorRequests){
+                System.out.println("vendor id = " + request.getVendor().getUserId());
+                System.out.println("proj id = " + request.getWeddingProject().getWeddingProjectId());
+                if(request.getVendor().getUserId() == vendorId &&
+                   request.getWeddingProject().getWeddingProjectId() == projId){
+                    System.out.println("there is a match");
+                    return true;
+                }
+            }
+            System.out.println("there is no match");
+            return false;
+        }
+    }
+    
+    @Override
+    public List<Request> getAllRequests(){
+        String query = "SELECT r FROM Request r";
+        Query result = em.createQuery(query);
+        List<Request> req = (List<Request>) result.getResultList();
+        return req;
+    }
+    
+    @Override 
+    public void createRequestFromFrontend(Request request, Long weddingProjectId, Long vendorId){
+        try{
+        Request createdRequest = createRequest(request);
+        WeddingProject weddingProj = weddingProjectSessionBeanLocal.getWeddingProject(weddingProjectId);
+        Vendor vendor = vendorSessionBeanLocal.getVendor(vendorId);
+        //set things for request 
+        createdRequest.setVendor(vendor);
+        createdRequest.setWeddingProject(weddingProj);
+        //set things for vendor
+        vendor.getRequests().add(createdRequest);
+        //set things for wedding proj 
+        weddingProj.getRequests().add(createdRequest);
+        }catch(Exception e){
+            System.out.println("error in request creation: " + e.getMessage());
+        }
     }
 
     @Override
@@ -97,6 +156,14 @@ public class RequestSessionBean implements RequestSessionBeanLocal {
 
         return numberOfClashes;
 
+    }
+
+    @Override
+    public List<Request> retrieveAcceptedVendorRequests(Long vendorId) {
+        String query = "SELECT req FROM Request req WHERE req.vendor.userId = ?1 AND req.isAccepted = TRUE";
+        Query result = em.createQuery(query).setParameter(1, vendorId);
+        List<Request> req = (List<Request>) result.getResultList();
+        return req;
     }
 
 }
