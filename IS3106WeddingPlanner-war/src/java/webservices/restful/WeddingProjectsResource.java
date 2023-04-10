@@ -92,7 +92,7 @@ public class WeddingProjectsResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     }
-    
+
     @GET
     @Path("query")
     @Produces(MediaType.APPLICATION_JSON)
@@ -104,27 +104,7 @@ public class WeddingProjectsResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
 
-        // if wedding organiser id is provided but isCompleted is not provided, just get all projects by that particular organiser
-        if (isCompleted == null) {
-
-            try {
-                List<WeddingProject> projects = weddingProjectSessionBeanLocal.getAllWeddingProjectbyOrganiser(wOrganiserId);
-
-                for (WeddingProject w : projects) {
-                    nullifyBidirectionalWeddingProject(w);
-                }
-
-                GenericEntity<List<WeddingProject>> entityToReturn = new GenericEntity<List<WeddingProject>>(projects) {
-                };
-
-                return Response.status(200).entity(entityToReturn).type(MediaType.APPLICATION_JSON).build();
-
-            } catch (WeddingOrganiserNotFoundException e) {
-                JsonObject exception = Json.createObjectBuilder().add("error", "Wedding Projects from Wedding Organiser with id " + wOrganiserId + " not found")
-                        .build();
-                return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
-            }
-        } else if (isCompleted) {
+        if (isCompleted) {
             try {
                 List<WeddingProject> projects = weddingProjectSessionBeanLocal.getAllCompletedWeddingProject(wOrganiserId);
                 for (WeddingProject w : projects) {

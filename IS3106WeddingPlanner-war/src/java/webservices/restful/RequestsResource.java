@@ -106,7 +106,7 @@ public class RequestsResource {
                 if (req.getTransaction() != null) {
                     req.getTransaction().setRequest(null);
                 }
-                req.getWeddingProject().setCompleted(null);
+                req.getWeddingProject().setCompleted(false);
                 req.getWeddingProject().setDescription(null);
                 req.getWeddingProject().setGuests(null);
                 req.getWeddingProject().setRequests(null);
@@ -142,7 +142,7 @@ public class RequestsResource {
                 if (req.getTransaction() != null) {
                     req.getTransaction().setRequest(null);
                 }
-                req.getWeddingProject().setCompleted(null);
+                req.getWeddingProject().setCompleted(false);
                 req.getWeddingProject().setDescription(null);
                 req.getWeddingProject().setGuests(null);
                 req.getWeddingProject().setRequests(null);

@@ -5,6 +5,7 @@
  */
 package jwt;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import java.util.Date;
@@ -36,4 +37,5 @@ public class JWTSessionBean implements JWTSessionBeanLocal {
     }
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
+
 }

@@ -26,8 +26,6 @@ public class Vendor extends UserEntity implements Serializable {
     @Column(nullable = false)
     private String description;
     @Column(nullable = false)
-    private String banner;
-    @Column(nullable = false)
     private String websiteUrl;
     @Column(nullable = false)
     private String instagramUrl;
@@ -98,20 +96,6 @@ public class Vendor extends UserEntity implements Serializable {
      */
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    /**
-     * @return the banner
-     */
-    public String getBanner() {
-        return banner;
-    }
-
-    /**
-     * @param banner the banner to set
-     */
-    public void setBanner(String banner) {
-        this.banner = banner;
     }
 
     /**
