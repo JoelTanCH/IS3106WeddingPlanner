@@ -193,7 +193,6 @@ public class TestingDataInitBean {
                     vendor_entertainment.setEmail("sampleVendorEmail@email.com");
                     vendor_entertainment.setPassword("password");
                     vendor_entertainment.setDescription("Sample vendor description. I do these stuff");
-                    vendor_entertainment.setBanner("This is a banner");
                     vendor_entertainment.setWebsiteUrl("vendorURL.com");
                     vendor_entertainment.setInstagramUrl("This is the URL of instagram");
                     vendor_entertainment.setFacebookUrl("Facebook url");
@@ -210,8 +209,7 @@ public class TestingDataInitBean {
                     sampleRequest.setWeddingProject(weddingProject1);
                     vendor_entertainment.getRequests().add(sampleRequest);
                     requestSessionBeanLocal.createRequest(sampleRequest);
-                    
-                    
+
                     sampleRequest = new Request();
                     sampleRequest.setIsAccepted(true);
                     sampleRequest.setQuotationURL("www.anotherfakeUrl.com");
@@ -220,14 +218,14 @@ public class TestingDataInitBean {
                     sampleRequest.setRequestDetails("Small gig");
                     sampleRequest.setVendor(vendor_entertainment);
                     sampleRequest.setWeddingProject(weddingProject2);
-                    
+
                     Transaction sampleTransaction = new Transaction();
                     sampleTransaction.setIsPaid(false);
                     sampleTransaction.setRequest(sampleRequest);
                     sampleTransaction.setTotalPrice(BigDecimal.ONE);
                     sampleTransaction.setTransactionTime(new Date());
                     sampleRequest.setTransaction(sampleTransaction);
-                    
+
                     vendor_entertainment.getRequests().add(sampleRequest);
                     requestSessionBeanLocal.createRequest(sampleRequest);
                     transactionSessionBeanLocal.createTransaction(sampleTransaction);
@@ -238,7 +236,6 @@ public class TestingDataInitBean {
                     vendor_entertainment2.setEmail("EntertainmentVendor2@email.com");
                     vendor_entertainment2.setPassword("password");
                     vendor_entertainment2.setDescription("Sample vendor description. I do these stuff");
-                    vendor_entertainment2.setBanner("This is a banner");
                     vendor_entertainment2.setWebsiteUrl("vendorURL.com");
                     vendor_entertainment2.setInstagramUrl("This is the URL of instagram");
                     vendor_entertainment2.setFacebookUrl("Facebook url");
@@ -251,7 +248,6 @@ public class TestingDataInitBean {
                     vendor_food.setEmail("FoodVendor@email.com");
                     vendor_food.setPassword("password");
                     vendor_food.setDescription("Sample vendor description. I do these stuff");
-                    vendor_food.setBanner("This is a banner");
                     vendor_food.setWebsiteUrl("vendorURL.com");
                     vendor_food.setInstagramUrl("This is the URL of instagram");
                     vendor_food.setFacebookUrl("Facebook url");
@@ -264,7 +260,6 @@ public class TestingDataInitBean {
                     vendor_lighting.setEmail("LightingVendor@email.com");
                     vendor_lighting.setPassword("password");
                     vendor_lighting.setDescription("Sample vendor description. I do these stuff");
-                    vendor_lighting.setBanner("This is a banner");
                     vendor_lighting.setWebsiteUrl("vendorURL.com");
                     vendor_lighting.setInstagramUrl("This is the URL of instagram");
                     vendor_lighting.setFacebookUrl("Facebook url");
@@ -277,7 +272,6 @@ public class TestingDataInitBean {
                     vendor_decoration.setEmail("DecorationVendor@email.com");
                     vendor_decoration.setPassword("password");
                     vendor_decoration.setDescription("Sample vendor description. I do these stuff");
-                    vendor_decoration.setBanner("This is a banner");
                     vendor_decoration.setWebsiteUrl("vendorURL.com");
                     vendor_decoration.setInstagramUrl("This is the URL of instagram");
                     vendor_decoration.setFacebookUrl("Facebook url");
@@ -290,7 +284,6 @@ public class TestingDataInitBean {
                     vendor_clothes.setEmail("ClothesVendor@email.com");
                     vendor_clothes.setPassword("password");
                     vendor_clothes.setDescription("Sample vendor description. I do these stuff");
-                    vendor_clothes.setBanner("This is a banner");
                     vendor_clothes.setWebsiteUrl("vendorURL.com");
                     vendor_clothes.setInstagramUrl("This is the URL of instagram");
                     vendor_clothes.setFacebookUrl("Facebook url");
@@ -303,7 +296,6 @@ public class TestingDataInitBean {
                     vendor_venue.setEmail("VenueVendor@email.com");
                     vendor_venue.setPassword("password");
                     vendor_venue.setDescription("Sample vendor description. I do these stuff");
-                    vendor_venue.setBanner("This is a banner");
                     vendor_venue.setWebsiteUrl("vendorURL.com");
                     vendor_venue.setInstagramUrl("This is the URL of instagram");
                     vendor_venue.setFacebookUrl("Facebook url");
@@ -347,54 +339,55 @@ public class TestingDataInitBean {
 //                weddingItinerary.setEventEndTime(formatter.parse("22:00"));
                     weddingItinerarySessionBean.createNewItinerary(weddingItinerary, weddingProject1.getWeddingProjectId());
 
-                WeddingBudgetList budget = new WeddingBudgetList();
-                budget.setBudget(BigDecimal.valueOf(10000));
-                weddingBudgetSessionBean.createBudget(budget, weddingProject1.getWeddingProjectId());
-                em.persist(budget);
-                em.flush();
-                // Sample 1
-                WeddingBudgetItem item = new WeddingBudgetItem();
-                item.setName("Sample 1");
-                item.setCost(BigDecimal.valueOf(2000));
-                item.setIsPaid(true);
-                item.setCategory(CategoryEnum.FOOD);
-                weddingBudgetSessionBean.createItem(item, budget.getWeddingBudgetListId());
-                // Sample 2
-                item = new WeddingBudgetItem();
-                item.setName("Sample 2");
-                item.setCost(BigDecimal.valueOf(2500));
-                item.setIsPaid(false);
-                item.setCategory(CategoryEnum.DECORATION);
-                weddingBudgetSessionBean.createItem(item, budget.getWeddingBudgetListId());
-                // Sample 3
-                item = new WeddingBudgetItem();
-                item.setName("Sample 3");
-                item.setCost(BigDecimal.valueOf(1500));
-                item.setIsPaid(false);
-                item.setCategory(CategoryEnum.DECORATION);
-                weddingBudgetSessionBean.createItem(item, budget.getWeddingBudgetListId());
-                
-                WeddingChecklist weddingChecklist = new WeddingChecklist();
-                weddingChecklist.setWeddingProject(weddingProject1);
-                em.persist(weddingChecklist);
-                em.flush();
-                
-                WeddingParentTask parentTask = new WeddingParentTask();
-                parentTask.setTaskDescription("Sample Parent Task");
-                parentTask.setIsDone(false);
-                weddingChecklistSessionBean.createParentTask(parentTask, weddingChecklist.getWeddingCheckListId());
-                em.persist(parentTask);
-                em.flush();
+                    WeddingBudgetList budget = new WeddingBudgetList();
+                    budget.setBudget(BigDecimal.valueOf(10000));
+                    weddingBudgetSessionBean.createBudget(budget, weddingProject1.getWeddingProjectId());
+                    em.persist(budget);
+                    em.flush();
+                    // Sample 1
+                    WeddingBudgetItem item = new WeddingBudgetItem();
+                    item.setName("Sample 1");
+                    item.setCost(BigDecimal.valueOf(2000));
+                    item.setIsPaid(true);
+                    item.setCategory(CategoryEnum.FOOD);
+                    weddingBudgetSessionBean.createItem(item, budget.getWeddingBudgetListId());
+                    // Sample 2
+                    item = new WeddingBudgetItem();
+                    item.setName("Sample 2");
+                    item.setCost(BigDecimal.valueOf(2500));
+                    item.setIsPaid(false);
+                    item.setCategory(CategoryEnum.DECORATION);
+                    weddingBudgetSessionBean.createItem(item, budget.getWeddingBudgetListId());
+                    // Sample 3
+                    item = new WeddingBudgetItem();
+                    item.setName("Sample 3");
+                    item.setCost(BigDecimal.valueOf(1500));
+                    item.setIsPaid(false);
+                    item.setCategory(CategoryEnum.DECORATION);
+                    weddingBudgetSessionBean.createItem(item, budget.getWeddingBudgetListId());
+
+                    WeddingChecklist weddingChecklist = new WeddingChecklist();
+                    weddingChecklist.setWeddingProject(weddingProject1);
+                    weddingProject1.setWeddingChecklist(weddingChecklist);
+                    em.persist(weddingChecklist);
+                    em.flush();
+
+                    WeddingParentTask parentTask = new WeddingParentTask();
+                    parentTask.setTaskDescription("Sample Parent Task");
+                    parentTask.setIsDone(false);
+                    weddingChecklistSessionBean.createParentTask(parentTask, weddingChecklist.getWeddingCheckListId());
+                    em.persist(parentTask);
+                    em.flush();
 //                
-                WeddingSubtask subtask = new WeddingSubtask();
-                subtask.setSubtaskDescription("SubTask 1");
-                subtask.setIsDone(false);
-                weddingChecklistSessionBean.createSubtask(subtask, parentTask.getWeddingParentTaskId());
+                    WeddingSubtask subtask = new WeddingSubtask();
+                    subtask.setSubtaskDescription("SubTask 1");
+                    subtask.setIsDone(false);
+                    weddingChecklistSessionBean.createSubtask(subtask, parentTask.getWeddingParentTaskId());
 //                
-                subtask = new WeddingSubtask();
-                subtask.setSubtaskDescription("SubTask 2");
-                subtask.setIsDone(true);
-                weddingChecklistSessionBean.createSubtask(subtask, parentTask.getWeddingParentTaskId());
+                    subtask = new WeddingSubtask();
+                    subtask.setSubtaskDescription("SubTask 2");
+                    subtask.setIsDone(true);
+                    weddingChecklistSessionBean.createSubtask(subtask, parentTask.getWeddingParentTaskId());
                 } catch (InvalidAssociationException ex) {
                     //Logger.getLogger(TestingDataInitBean.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ParseException ex) {

@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,6 +26,20 @@ import javax.persistence.TemporalType;
  */
 @Entity
 public class WeddingProject implements Serializable {
+
+    /**
+     * @return the completed
+     */
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    /**
+     * @param completed the completed to set
+     */
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
 
     /**
      * @return the weddingBudgetList
@@ -58,10 +73,12 @@ public class WeddingProject implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long weddingProjectId;
-
+    
+    @Column(nullable = false)
     private String name;
     private String description;
-    private Boolean completed;
+    @Column(nullable = false)
+    private boolean completed;
 
     @ManyToOne
     private WeddingOrganiser weddingOrganiser;
@@ -263,20 +280,6 @@ public class WeddingProject implements Serializable {
      */
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    /**
-     * @return the completed
-     */
-    public Boolean getCompleted() {
-        return completed;
-    }
-
-    /**
-     * @param completed the completed to set
-     */
-    public void setCompleted(Boolean completed) {
-        this.completed = completed;
     }
 
 }

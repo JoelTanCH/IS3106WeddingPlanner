@@ -57,6 +57,7 @@ public class WeddingProjectSessionBean implements WeddingProjectSessionBeanLocal
     public void createWeddingProject(Long organiserId, WeddingProject w) {
         WeddingOrganiser organiser = em.find(WeddingOrganiser.class, organiserId);
         organiser.getWeddingProjects().add(w);
+        w.setWeddingOrganiser(organiser);
 
         em.persist(w);
     }
@@ -76,7 +77,7 @@ public class WeddingProjectSessionBean implements WeddingProjectSessionBeanLocal
         WeddingProject wOld = getWeddingProject(w.getWeddingProjectId());
         wOld.setName(w.getName());
         wOld.setDescription(w.getDescription());
-        wOld.setCompleted(w.getCompleted());
+        wOld.setCompleted(w.isCompleted());
         wOld.setVenue(w.getVenue());
         wOld.setWeddingDate(w.getWeddingDate());
         wOld.setWeddingStartTime(w.getWeddingStartTime());

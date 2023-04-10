@@ -22,6 +22,8 @@ public interface RequestSessionBeanLocal {
     public Request createRequest(Request request);
     
     public List<Request> retrieveVendorRequests(Long vendorId);
+    
+     public List<Request> retrieveAcceptedVendorRequests(Long vendorId);
 
     public void acceptRequest(Long requestId);
     
@@ -35,4 +37,6 @@ public interface RequestSessionBeanLocal {
     
     public void createRequestFromFrontend(Request request, Long weddingProjectId, Long vendorId);
 
+    public boolean checkIfRequestExists(Long projId, Long vendorId);
+    public List<Request> getAllRequests();
 }

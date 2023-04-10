@@ -65,7 +65,14 @@ public class RequestsResource {
         System.out.println("vendor id = "+ vendorId);
         requestSessionBeanLocal.createRequestFromFrontend(request,projId,vendorId);
     }
-
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public boolean checkIfRequestExists(@QueryParam("weddingProjId") Long projId, @QueryParam("vendorId")Long vendorId){
+        boolean doesRequestExist = requestSessionBeanLocal.checkIfRequestExists(projId, vendorId);
+        return doesRequestExist;
+    }
+            
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -91,6 +98,7 @@ public class RequestsResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getVendorRequests(@PathParam("id") Long vendorId) {
         try {
+            //add start end info
             List<Request> requests = requestSessionBeanLocal.retrieveVendorRequests(vendorId);
             for (Request req : requests) {
                 //Disassociation
@@ -98,7 +106,52 @@ public class RequestsResource {
                 if (req.getTransaction() != null) {
                     req.getTransaction().setRequest(null);
                 }
-                req.setWeddingProject(null);
+                req.getWeddingProject().setCompleted(false);
+                req.getWeddingProject().setDescription(null);
+                req.getWeddingProject().setGuests(null);
+                req.getWeddingProject().setRequests(null);
+                req.getWeddingProject().setTables(null);
+                req.getWeddingProject().setWeddingBudgetList(null);
+                req.getWeddingProject().setWeddingChecklist(null);
+                req.getWeddingProject().setWeddingItineraries(null);
+                req.getWeddingProject().setWeddingOrganiser(null);
+                //dis ev except timings
+            }
+            return Response.status(200).entity(requests).type(MediaType.APPLICATION_JSON).build();
+        } catch (NoResultException e) {
+
+            //Template to throw error. Can change
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found")
+                    .build();
+            return Response.status(404).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    }
+
+    @GET
+    @Path("vendorRequests/accepted/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAcceptedVendorRequests(@PathParam("id") Long vendorId) {
+        try {
+            //add start end info
+            List<Request> requests = requestSessionBeanLocal.retrieveAcceptedVendorRequests(vendorId);
+            for (Request req : requests) {
+                //Disassociation
+                req.setVendor(null);
+                if (req.getTransaction() != null) {
+                    req.getTransaction().setRequest(null);
+                }
+                req.getWeddingProject().setCompleted(false);
+                req.getWeddingProject().setDescription(null);
+                req.getWeddingProject().setGuests(null);
+                req.getWeddingProject().setRequests(null);
+                req.getWeddingProject().setTables(null);
+                req.getWeddingProject().setWeddingBudgetList(null);
+                req.getWeddingProject().setWeddingChecklist(null);
+                req.getWeddingProject().setWeddingItineraries(null);
+                req.getWeddingProject().setWeddingOrganiser(null);
+                //dis ev except timings
             }
             return Response.status(200).entity(requests).type(MediaType.APPLICATION_JSON).build();
         } catch (NoResultException e) {
@@ -144,11 +197,12 @@ public class RequestsResource {
     @Path("/checkSchedule")
     @Produces(MediaType.APPLICATION_JSON)
     public Response checkSchedule(@QueryParam("requestId") Long requestId, @QueryParam("vendorId") Long vendorId) {
-
+        Request req = requestSessionBeanLocal.retrieveRequest(requestId);
         Long clashes = requestSessionBeanLocal.checkSchedule(vendorId, requestId);
         System.out.println(clashes);
         JsonObjectBuilder builder = Json.createObjectBuilder();
         builder.add("clashes", clashes);
+        builder.add("clashDate", req.getWeddingProject().getWeddingDate().toLocaleString());
         return Response.status(200).entity(builder.build()).type(MediaType.APPLICATION_JSON).build();
     }
 
@@ -161,9 +215,13 @@ public class RequestsResource {
             JsonObjectBuilder builder = Json.createObjectBuilder();
             //Request start and end need to be determined? + Add venue.
             builder.add("requestDetails", request.getRequestDetails())
-                    .add("requestStart", request.getRequestDate().toLocaleString())
+                    .add("requestDate", request.getWeddingProject().getWeddingDate().toLocaleString())
+                    .add("requestStart", request.getWeddingProject().getWeddingStartTime().toLocaleString())
                     .add("quotationURL", request.getQuotationURL());
-
+            if (request.getWeddingProject().getWeddingEndTime() != null) {
+                builder.add("requestEnd", request.getWeddingProject().getWeddingEndTime().toLocaleString());
+            }
+            
             if (request.getTransaction() != null) {
                 builder.add("isPaid", request.getTransaction().isIsPaid());
             }
@@ -175,8 +233,9 @@ public class RequestsResource {
                 builder.add("isAccepted", request.getIsAccepted());
             }
 
-            //.add("weddingName", request.getWeddingProject().getName())
-            //.add("weddingOrganiserName", request.getWeddingProject().getWeddingOrganiser().getUsername())
+            builder.add("weddingName", request.getWeddingProject().getName());
+            builder.add("weddingOrganiserName", request.getWeddingProject().getWeddingOrganiser().getUsername());
+            builder.add("venue", request.getWeddingProject().getVenue());
             return Response.status(200).entity(builder.build()).type(MediaType.APPLICATION_JSON).build();
         } catch (NoResultException e) {
 
@@ -200,10 +259,30 @@ public class RequestsResource {
 
             List<Request> wProjectRequests = wProject.getRequests();
             
-            for (Request r : wProjectRequests) {
-                r.setWeddingProject(null);
-                r.setVendor(null);
-                r.setTransaction(null);
+            for (Request req : wProjectRequests) {
+                req.getVendor().setBanner(null);
+                req.getVendor().setDescription(null);
+                req.getVendor().setEmail(null);
+                req.getVendor().setFacebookUrl(null);
+                req.getVendor().setInstagramUrl(null);
+                req.getVendor().setRequests(null);
+                req.getVendor().setPassword(null);
+                req.getVendor().setUserId(null);
+                req.getVendor().setWebsiteUrl(null);
+                req.getVendor().setWhatsappUrl(null);
+                
+                if (req.getTransaction() != null) {
+                    req.getTransaction().setRequest(null);
+                }
+                req.getWeddingProject().setCompleted(null);
+                req.getWeddingProject().setDescription(null);
+                req.getWeddingProject().setGuests(null);
+                req.getWeddingProject().setRequests(null);
+                req.getWeddingProject().setTables(null);
+                req.getWeddingProject().setWeddingBudgetList(null);
+                req.getWeddingProject().setWeddingChecklist(null);
+                req.getWeddingProject().setWeddingItineraries(null);
+                req.getWeddingProject().setWeddingOrganiser(null);
             }
             GenericEntity<List<Request>> entityToReturn = new GenericEntity<List<Request>>(wProjectRequests) {
             };

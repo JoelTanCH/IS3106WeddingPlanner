@@ -51,6 +51,38 @@ public class RequestSessionBean implements RequestSessionBeanLocal {
         return request;
     }
     
+    @Override
+    public boolean checkIfRequestExists(Long projId, Long vendorId){
+        List<Request> vendorRequests = getAllRequests();
+        if(vendorRequests.isEmpty()){
+            System.out.println("vendor requests empty");
+            return false;
+        }else{
+            System.out.println("PROJ ID = " + projId);
+            System.out.println("VENDOR ID = " + vendorId);
+            System.out.println("Looping through");
+            for (Request request : vendorRequests){
+                System.out.println("vendor id = " + request.getVendor().getUserId());
+                System.out.println("proj id = " + request.getWeddingProject().getWeddingProjectId());
+                if(request.getVendor().getUserId() == vendorId &&
+                   request.getWeddingProject().getWeddingProjectId() == projId){
+                    System.out.println("there is a match");
+                    return true;
+                }
+            }
+            System.out.println("there is no match");
+            return false;
+        }
+    }
+    
+    @Override
+    public List<Request> getAllRequests(){
+        String query = "SELECT r FROM Request r";
+        Query result = em.createQuery(query);
+        List<Request> req = (List<Request>) result.getResultList();
+        return req;
+    }
+    
     @Override 
     public void createRequestFromFrontend(Request request, Long weddingProjectId, Long vendorId){
         try{
@@ -126,8 +158,12 @@ public class RequestSessionBean implements RequestSessionBeanLocal {
 
     }
 
-    public void persist(Object object) {
-        em.persist(object);
+    @Override
+    public List<Request> retrieveAcceptedVendorRequests(Long vendorId) {
+        String query = "SELECT req FROM Request req WHERE req.vendor.userId = ?1 AND req.isAccepted = TRUE";
+        Query result = em.createQuery(query).setParameter(1, vendorId);
+        List<Request> req = (List<Request>) result.getResultList();
+        return req;
     }
 
 }
