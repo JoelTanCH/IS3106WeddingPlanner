@@ -104,6 +104,13 @@ public class VendorSessionBean implements VendorSessionBeanLocal {
                     vendorsInCategory.add(vendor);
                 }
             }
+        }else if (vendorCategorySelection.equals("venue")) {
+
+            for (Vendor vendor : allVendors) {
+                if (vendor.getCategory() == CategoryEnum.VENUE) {
+                    vendorsInCategory.add(vendor);
+                }
+            }
         } else {
             throw new InvalidVendorCategory("Invalid Vendor Category: " + vendorCategorySelection);
         }
