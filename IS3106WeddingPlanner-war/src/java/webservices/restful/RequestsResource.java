@@ -260,7 +260,7 @@ public class RequestsResource {
             List<Request> wProjectRequests = wProject.getRequests();
             
             for (Request req : wProjectRequests) {
-                req.getVendor().setBanner(null);
+//                req.getVendor().setBanner(null);
                 req.getVendor().setDescription(null);
                 req.getVendor().setEmail(null);
                 req.getVendor().setFacebookUrl(null);
@@ -274,7 +274,7 @@ public class RequestsResource {
                 if (req.getTransaction() != null) {
                     req.getTransaction().setRequest(null);
                 }
-                req.getWeddingProject().setCompleted(null);
+                req.getWeddingProject().setCompleted(false); // previously null
                 req.getWeddingProject().setDescription(null);
                 req.getWeddingProject().setGuests(null);
                 req.getWeddingProject().setRequests(null);
