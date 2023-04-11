@@ -192,7 +192,7 @@ public class TestingDataInitBean {
                     vendor_entertainment.setUsername("EntertainmentVendor");
                     vendor_entertainment.setEmail("sampleVendorEmail@email.com");
                     vendor_entertainment.setPassword("password");
-                    vendor_entertainment.setDescription("Sample vendor description. I do these stuff");
+                    vendor_entertainment.setDescription("Are you looking for the perfect way to make your wedding day even more memorable? Look no further than hiring a professional wedding entertainer!");
                     vendor_entertainment.setWebsiteUrl("vendorURL.com");
                     vendor_entertainment.setInstagramUrl("This is the URL of instagram");
                     vendor_entertainment.setFacebookUrl("Facebook url");
@@ -242,6 +242,66 @@ public class TestingDataInitBean {
                     vendor_entertainment2.setWhatsappUrl("Whatsapp url");
                     vendor_entertainment2.setCategory(CategoryEnum.ENTERTAINMENT);
                     vendorSessionBeanLocal.createVendor(vendor_entertainment2);
+                    
+                    Vendor BestWeddingEntertainer = new Vendor();
+                    BestWeddingEntertainer.setUsername("BestWeddingEntertainer");
+                    BestWeddingEntertainer.setEmail("BestWeddingEntertainer@email.com");
+                    BestWeddingEntertainer.setPassword("password");
+                    BestWeddingEntertainer.setDescription("Make your wedding day unforgettable with a professional wedding entertainer. From DJs to live bands to magicians, they bring the fun and excitement, leaving you and your guests with memories that will last a lifetime.");
+                    BestWeddingEntertainer.setWebsiteUrl("vendorURL.com");
+                    BestWeddingEntertainer.setInstagramUrl("This is the URL of instagram");
+                    BestWeddingEntertainer.setFacebookUrl("Facebook url");
+                    BestWeddingEntertainer.setWhatsappUrl("Whatsapp url");
+                    BestWeddingEntertainer.setCategory(CategoryEnum.ENTERTAINMENT);
+                    vendorSessionBeanLocal.createVendor(BestWeddingEntertainer);
+                    
+                    Vendor KindaEntertaining = new Vendor();
+                    KindaEntertaining.setUsername("KindaEntertaining");
+                    KindaEntertaining.setEmail("KindaEntertaining@email.com");
+                    KindaEntertaining.setPassword("password");
+                    KindaEntertaining.setDescription("Make your wedding day unforgettable with a professional wedding entertainer. From DJs to live bands to magicians, they bring the fun and excitement, leaving you and your guests with memories that will last a lifetime.");
+                    KindaEntertaining.setWebsiteUrl("vendorURL.com");
+                    KindaEntertaining.setInstagramUrl("This is the URL of instagram");
+                    KindaEntertaining.setFacebookUrl("Facebook url");
+                    KindaEntertaining.setWhatsappUrl("Whatsapp url");
+                    KindaEntertaining.setCategory(CategoryEnum.ENTERTAINMENT);
+                    vendorSessionBeanLocal.createVendor(KindaEntertaining);
+                    
+                    Vendor UnforgettableEntertainment = new Vendor();
+                    UnforgettableEntertainment.setUsername("UnforgettableEntertainment");
+                    UnforgettableEntertainment.setEmail("UnforgettableEntertainment@email.com");
+                    UnforgettableEntertainment.setPassword("password");
+                    UnforgettableEntertainment.setDescription("Make your wedding day unforgettable with a professional wedding entertainer. From DJs to live bands to magicians, they bring the fun and excitement, leaving you and your guests with memories that will last a lifetime.");
+                    UnforgettableEntertainment.setWebsiteUrl("vendorURL.com");
+                    UnforgettableEntertainment.setInstagramUrl("This is the URL of instagram");
+                    UnforgettableEntertainment.setFacebookUrl("Facebook url");
+                    UnforgettableEntertainment.setWhatsappUrl("Whatsapp url");
+                    UnforgettableEntertainment.setCategory(CategoryEnum.ENTERTAINMENT);
+                    vendorSessionBeanLocal.createVendor(UnforgettableEntertainment);
+                    
+                    Vendor EverlastingMemories  = new Vendor();
+                    EverlastingMemories.setUsername("EverlastingMemories");
+                    EverlastingMemories.setEmail("EverlastingMemories@email.com");
+                    EverlastingMemories.setPassword("password");
+                    EverlastingMemories.setDescription("Unforgettable wedding entertainment with DJs, live bands, magicians, and more. Create memories that last a lifetime");
+                    EverlastingMemories.setWebsiteUrl("vendorURL.com");
+                    EverlastingMemories.setInstagramUrl("This is the URL of instagram");
+                    EverlastingMemories.setFacebookUrl("Facebook url");
+                    EverlastingMemories.setWhatsappUrl("Whatsapp url");
+                    EverlastingMemories.setCategory(CategoryEnum.ENTERTAINMENT);
+                    vendorSessionBeanLocal.createVendor(EverlastingMemories);
+                    
+                    Vendor WeddingPartyPros  = new Vendor();
+                    WeddingPartyPros.setUsername("WeddingPartyPros");
+                    WeddingPartyPros.setEmail("WeddingPartyPros@email.com");
+                    WeddingPartyPros.setPassword("password");
+                    WeddingPartyPros.setDescription("Unforgettable wedding entertainment with DJs, live bands, magicians, and more. Create memories that last a lifetime");
+                    WeddingPartyPros.setWebsiteUrl("vendorURL.com");
+                    WeddingPartyPros.setInstagramUrl("This is the URL of instagram");
+                    WeddingPartyPros.setFacebookUrl("Facebook url");
+                    WeddingPartyPros.setWhatsappUrl("Whatsapp url");
+                    WeddingPartyPros.setCategory(CategoryEnum.ENTERTAINMENT);
+                    vendorSessionBeanLocal.createVendor(WeddingPartyPros);
 
                     Vendor vendor_food = new Vendor();
                     vendor_food.setUsername("FoodVendor");

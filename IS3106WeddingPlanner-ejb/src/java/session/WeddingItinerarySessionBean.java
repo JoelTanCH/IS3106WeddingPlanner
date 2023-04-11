@@ -81,7 +81,34 @@ public class WeddingItinerarySessionBean implements WeddingItinerarySessionBeanL
         itinerary.setWeddingProject(null);
         em.remove(itinerary);
     }
-
+    
+    //code for Guest View (part of guest management)
+    @Override
+    public List<WeddingItinerary> getWeddingItinerary(Long weddingId) {
+        if (weddingId != null) {
+           List<WeddingItinerary> itinerary = em.createQuery("SELECT w FROM WeddingItinerary w WHERE w.weddingProject.weddingProjectId = :wId").setParameter("wId", weddingId).getResultList();
+           itinerary.forEach(i -> {
+               em.detach(i);
+               i.setWeddingProject(null);
+           });
+           itinerary.sort((x,y) -> {
+               if (x.getEventDate().after(y.getEventDate())) {
+                   return 1;
+               } else if (x.getEventDate().before(y.getEventDate())) {
+                   return -1;
+               } else if (x.getEventStartTime().after(y.getEventStartTime())) {
+                   return 1;
+               } else if (x.getEventStartTime().before(y.getEventStartTime())) {
+                   return -1;
+               } else {
+                   return 0;
+               }
+           });
+           itinerary.forEach(System.out::println);
+           return itinerary;
+        }
+        return new ArrayList<>();
+    } 
     // idk what this is but without this there is an error
     @Override
     public List<WeddingItinerary> getWeddingItinerariesByWeddingProject(Long weddingId) {
