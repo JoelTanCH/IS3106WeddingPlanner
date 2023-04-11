@@ -253,6 +253,26 @@ public class TestingDataInitBean {
                     vendor_food.setFacebookUrl("Facebook url");
                     vendor_food.setWhatsappUrl("Whatsapp url");
                     vendor_food.setCategory(CategoryEnum.FOOD);
+
+                    Request sampleRequest2 = new Request();
+                    sampleRequest2.setIsAccepted(true);
+                    sampleRequest2.setQuotationURL("www.fakeUrl.com for sample2");
+                    sampleRequest2.setQuotedPrice(null);
+                    sampleRequest2.setRequestDate(new Date());
+                    sampleRequest2.setRequestDetails("Do some food stuff");
+                    sampleRequest2.setVendor(vendor_food);
+                    sampleRequest2.setWeddingProject(weddingProject1);
+                    vendor_food.getRequests().add(sampleRequest2);
+
+                    Transaction sampleTransaction2 = new Transaction();
+                    sampleTransaction2.setIsPaid(true);
+                    sampleTransaction2.setRequest(sampleRequest2);
+                    sampleTransaction2.setTotalPrice(BigDecimal.TEN);
+                    sampleTransaction2.setTransactionTime(new Date());
+                    sampleRequest2.setTransaction(sampleTransaction2);
+
+                    requestSessionBeanLocal.createRequest(sampleRequest2);
+                    transactionSessionBeanLocal.createTransaction(sampleTransaction2);
                     vendorSessionBeanLocal.createVendor(vendor_food);
 
                     Vendor vendor_lighting = new Vendor();
@@ -289,6 +309,26 @@ public class TestingDataInitBean {
                     vendor_clothes.setFacebookUrl("Facebook url");
                     vendor_clothes.setWhatsappUrl("Whatsapp url");
                     vendor_clothes.setCategory(CategoryEnum.CLOTHES);
+
+                    Request sampleRequest3 = new Request();
+                    sampleRequest3.setIsAccepted(true);
+                    sampleRequest3.setQuotationURL("www.fakeUrl.com for sample2");
+                    sampleRequest3.setQuotedPrice(BigDecimal.TEN);
+                    sampleRequest3.setRequestDate(new Date());
+                    sampleRequest3.setRequestDetails("Do some clothes stuff");
+                    sampleRequest3.setVendor(vendor_clothes);
+                    sampleRequest3.setWeddingProject(weddingProject1);
+                    vendor_clothes.getRequests().add(sampleRequest3);
+
+                    Transaction sampleTransaction3 = new Transaction();
+                    sampleTransaction3.setIsPaid(true);
+                    sampleTransaction3.setRequest(sampleRequest3);
+                    sampleTransaction3.setTotalPrice(BigDecimal.TEN);
+                    sampleTransaction3.setTransactionTime(new Date());
+                    sampleRequest3.setTransaction(sampleTransaction3);
+                    
+                    requestSessionBeanLocal.createRequest(sampleRequest3);
+                    transactionSessionBeanLocal.createTransaction(sampleTransaction3);
                     vendorSessionBeanLocal.createVendor(vendor_clothes);
 
                     Vendor vendor_venue = new Vendor();

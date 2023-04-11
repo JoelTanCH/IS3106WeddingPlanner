@@ -6,6 +6,7 @@
 package session;
 
 import entity.Transaction;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -19,4 +20,6 @@ public interface TransactionSessionBeanLocal {
     public Transaction getTransactionById(Long transactionId);
 
     public Transaction getTransactionByRequestId(Long requestId);
+
+    public List<Object[]> getTotalValueGroupedByCategory();
 }
