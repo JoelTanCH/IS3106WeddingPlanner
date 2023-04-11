@@ -103,7 +103,7 @@ public class WeddingItineraryResource {
     
     
     
-    //code for Guest View (part of guest management)
+    //code for Guest View (part of guest management) 
     @GET
     @Path("/wedding/{weddingId}")
     @Produces(MediaType.APPLICATION_JSON)

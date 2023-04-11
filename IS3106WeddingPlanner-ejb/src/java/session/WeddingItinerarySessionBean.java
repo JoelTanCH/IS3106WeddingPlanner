@@ -91,7 +91,20 @@ public class WeddingItinerarySessionBean implements WeddingItinerarySessionBeanL
                em.detach(i);
                i.setWeddingProject(null);
            });
-           itinerary.sort((x,y) -> x.getEventStartTime().after(y.getEventStartTime()) ? 1 : x.getEventStartTime().before(y.getEventStartTime()) ? -1 : 0);
+           itinerary.sort((x,y) -> {
+               if (x.getEventDate().after(y.getEventDate())) {
+                   return 1;
+               } else if (x.getEventDate().before(y.getEventDate())) {
+                   return -1;
+               } else if (x.getEventStartTime().after(y.getEventStartTime())) {
+                   return 1;
+               } else if (x.getEventStartTime().before(y.getEventStartTime())) {
+                   return -1;
+               } else {
+                   return 0;
+               }
+           });
+           itinerary.forEach(System.out::println);
            return itinerary;
         }
         return new ArrayList<>();
