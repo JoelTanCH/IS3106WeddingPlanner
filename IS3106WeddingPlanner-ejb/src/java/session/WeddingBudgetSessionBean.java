@@ -127,12 +127,47 @@ public class WeddingBudgetSessionBean implements WeddingBudgetSessionBeanLocal {
     public WeddingBudgetList getBudget(Long weddingBudgetListId) {
         WeddingBudgetList budget = em.find(WeddingBudgetList.class, weddingBudgetListId);
         if (budget.getWeddingBudgetItems() != null) {
-            budget.setWeddingBudgetItems(null);
+            for (WeddingBudgetItem item : budget.getWeddingBudgetItems()) {
+                em.detach(item);
+                item.setWeddingBudgetList(null);
+            }
         }
         if (budget.getWeddingProject() != null) {
+            em.detach(budget);
             budget.setWeddingProject(null);
         }
         return budget;
+    }
+    
+    @Override
+    public WeddingBudgetList getBudgetByWeddingProject(Long weddingProjectId) {
+        WeddingProject weddingProject = em.find(WeddingProject.class, weddingProjectId);
+        Query query = em.createQuery("SELECT b FROM WeddingBudgetList b");
+        List<WeddingBudgetList> budgets = query.getResultList();
+        
+        WeddingBudgetList getBudget = new WeddingBudgetList();
+        if (weddingProject != null) {
+            for (WeddingBudgetList budget : budgets) {
+                if (budget.getWeddingProject().equals(weddingProject)) {
+                    getBudget = budget;
+                }
+            }
+        }
+        
+        if (getBudget.getWeddingProject() != null) {
+            em.detach(getBudget);
+            getBudget.setWeddingProject(null);
+        }
+        
+        if (getBudget.getWeddingBudgetItems() != null) {
+            List<WeddingBudgetItem> items = getBudget.getWeddingBudgetItems();
+            
+            for (WeddingBudgetItem item : items) {
+                em.detach(item);
+                item.setWeddingBudgetList(null);
+            }
+        }
+        return getBudget;
     }
 
     @Override

@@ -259,10 +259,30 @@ public class RequestsResource {
 
             List<Request> wProjectRequests = wProject.getRequests();
             
-            for (Request r : wProjectRequests) {
-                r.setWeddingProject(null);
-                r.setVendor(null);
-                r.setTransaction(null);
+            for (Request req : wProjectRequests) {
+//                req.getVendor().setBanner(null);
+                req.getVendor().setDescription(null);
+                req.getVendor().setEmail(null);
+                req.getVendor().setFacebookUrl(null);
+                req.getVendor().setInstagramUrl(null);
+                req.getVendor().setRequests(null);
+                req.getVendor().setPassword(null);
+                req.getVendor().setUserId(null);
+                req.getVendor().setWebsiteUrl(null);
+                req.getVendor().setWhatsappUrl(null);
+                
+                if (req.getTransaction() != null) {
+                    req.getTransaction().setRequest(null);
+                }
+                req.getWeddingProject().setCompleted(false); // previously null
+                req.getWeddingProject().setDescription(null);
+                req.getWeddingProject().setGuests(null);
+                req.getWeddingProject().setRequests(null);
+                req.getWeddingProject().setTables(null);
+                req.getWeddingProject().setWeddingBudgetList(null);
+                req.getWeddingProject().setWeddingChecklist(null);
+                req.getWeddingProject().setWeddingItineraries(null);
+                req.getWeddingProject().setWeddingOrganiser(null);
             }
             GenericEntity<List<Request>> entityToReturn = new GenericEntity<List<Request>>(wProjectRequests) {
             };

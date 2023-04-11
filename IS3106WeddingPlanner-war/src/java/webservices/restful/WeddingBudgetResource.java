@@ -93,6 +93,13 @@ public class WeddingBudgetResource {
         return weddingBudgetSessionBean.getBudget(weddingBudgetListId);
     }
     
+    @GET
+    @Path("/getBudgetByWeddingProject/{wedding-project-id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public WeddingBudgetList getBudgetByWeddingProject(@PathParam("wedding-project-id") Long weddingProjectId) {
+        return weddingBudgetSessionBean.getBudgetByWeddingProject(weddingProjectId);
+    }
+    
     @PUT
     @Path("/update/budget")
     @Consumes(MediaType.APPLICATION_JSON)

@@ -93,23 +93,32 @@ public class WeddingItineraryResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     }
+    
     @GET
-    @Path("/wedding/{weddingId}")
+    @Path("/getItinerariesByWeddingProject/{wedding-project-id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getWeddingItinerary(@PathParam("weddingId") Long wId) {
-        try {
-            List<WeddingItinerary> list = weddingItinerarySessionBean.getWeddingItinerary(wId);
-            GenericEntity<List<WeddingItinerary>> entity = new GenericEntity<List<WeddingItinerary>>(list) { };
-
-            return Response.status(200).entity(entity).type(MediaType.APPLICATION_JSON).build();
-        } catch (Exception e) {
-            JsonObject exception = Json.createObjectBuilder()
-                    .add("error", "Not Found")
-                    .build();
-          
-            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
-        }
+    public List<WeddingItinerary> getItinerariesByWeddingProject(@PathParam("wedding-project-id") Long weddingProjectId) {
+        return weddingItinerarySessionBean.getWeddingItinerariesByWeddingProject(weddingProjectId);
     }
+    
+//    @GET
+//    @Path("/wedding/{weddingId}")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Response getWeddingItinerary(@PathParam("weddingId") Long wId) {
+//        try {
+//            List<WeddingItinerary> list = weddingItinerarySessionBean.getWeddingItinerary(wId);
+//            GenericEntity<List<WeddingItinerary>> entity = new GenericEntity<List<WeddingItinerary>>(list) { };
+//
+//            return Response.status(200).entity(entity).type(MediaType.APPLICATION_JSON).build();
+//        } catch (Exception e) {
+//            JsonObject exception = Json.createObjectBuilder()
+//                    .add("error", "Not Found")
+//                    .build();
+//          
+//            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+//        }
+//    }
+    
     @PUT
     @Path("/update/itinerary")
     @Consumes(MediaType.APPLICATION_JSON)

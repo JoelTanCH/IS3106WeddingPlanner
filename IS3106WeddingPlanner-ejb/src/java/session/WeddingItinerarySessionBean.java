@@ -7,6 +7,7 @@ package session;
 
 import entity.WeddingItinerary;
 import entity.WeddingProject;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -83,7 +84,26 @@ public class WeddingItinerarySessionBean implements WeddingItinerarySessionBeanL
 
     // idk what this is but without this there is an error
     @Override
-    public List<WeddingItinerary> getWeddingItinerary(Long weddingId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<WeddingItinerary> getWeddingItinerariesByWeddingProject(Long weddingId) {
+        WeddingProject weddingProject = em.find(WeddingProject.class, weddingId);
+        Query query = em.createQuery("SELECT i FROM WeddingItinerary i");
+        List<WeddingItinerary> itineraries = query.getResultList();
+        
+        List<WeddingItinerary> newItineraries = new ArrayList<>();
+        if (weddingProject != null) {
+            for (WeddingItinerary itinerary : itineraries) {
+                if (itinerary.getWeddingProject().equals(weddingProject)) {
+                    newItineraries.add(itinerary);
+                }
+            }
+        }
+        
+        for (WeddingItinerary itinerary : itineraries) {
+            if (itinerary.getWeddingProject() != null) {
+                em.detach(itinerary);
+                itinerary.setWeddingProject(null);
+            }
+        }
+        return newItineraries;
     }
 }
