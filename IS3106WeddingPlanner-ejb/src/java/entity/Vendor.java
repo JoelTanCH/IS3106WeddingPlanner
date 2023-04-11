@@ -14,6 +14,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -23,6 +24,7 @@ import javax.persistence.OneToMany;
 public class Vendor extends UserEntity implements Serializable {
 
     private static long serialVersionUID = 1L;
+    @Size(max = 10000)
     @Column(nullable = false)
     private String description;
     @Column(nullable = false)
