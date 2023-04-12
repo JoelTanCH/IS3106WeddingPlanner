@@ -242,7 +242,7 @@ public class TestingDataInitBean {
                     vendor_entertainment2.setWhatsappUrl("Whatsapp url");
                     vendor_entertainment2.setCategory(CategoryEnum.ENTERTAINMENT);
                     vendorSessionBeanLocal.createVendor(vendor_entertainment2);
-                    
+
                     Vendor BestWeddingEntertainer = new Vendor();
                     BestWeddingEntertainer.setUsername("BestWeddingEntertainer");
                     BestWeddingEntertainer.setEmail("BestWeddingEntertainer@email.com");
@@ -254,7 +254,7 @@ public class TestingDataInitBean {
                     BestWeddingEntertainer.setWhatsappUrl("Whatsapp url");
                     BestWeddingEntertainer.setCategory(CategoryEnum.ENTERTAINMENT);
                     vendorSessionBeanLocal.createVendor(BestWeddingEntertainer);
-                    
+
                     Vendor KindaEntertaining = new Vendor();
                     KindaEntertaining.setUsername("KindaEntertaining");
                     KindaEntertaining.setEmail("KindaEntertaining@email.com");
@@ -266,7 +266,7 @@ public class TestingDataInitBean {
                     KindaEntertaining.setWhatsappUrl("Whatsapp url");
                     KindaEntertaining.setCategory(CategoryEnum.ENTERTAINMENT);
                     vendorSessionBeanLocal.createVendor(KindaEntertaining);
-                    
+
                     Vendor UnforgettableEntertainment = new Vendor();
                     UnforgettableEntertainment.setUsername("UnforgettableEntertainment");
                     UnforgettableEntertainment.setEmail("UnforgettableEntertainment@email.com");
@@ -278,8 +278,8 @@ public class TestingDataInitBean {
                     UnforgettableEntertainment.setWhatsappUrl("Whatsapp url");
                     UnforgettableEntertainment.setCategory(CategoryEnum.ENTERTAINMENT);
                     vendorSessionBeanLocal.createVendor(UnforgettableEntertainment);
-                    
-                    Vendor EverlastingMemories  = new Vendor();
+
+                    Vendor EverlastingMemories = new Vendor();
                     EverlastingMemories.setUsername("EverlastingMemories");
                     EverlastingMemories.setEmail("EverlastingMemories@email.com");
                     EverlastingMemories.setPassword("password");
@@ -290,8 +290,8 @@ public class TestingDataInitBean {
                     EverlastingMemories.setWhatsappUrl("Whatsapp url");
                     EverlastingMemories.setCategory(CategoryEnum.ENTERTAINMENT);
                     vendorSessionBeanLocal.createVendor(EverlastingMemories);
-                    
-                    Vendor WeddingPartyPros  = new Vendor();
+
+                    Vendor WeddingPartyPros = new Vendor();
                     WeddingPartyPros.setUsername("WeddingPartyPros");
                     WeddingPartyPros.setEmail("WeddingPartyPros@email.com");
                     WeddingPartyPros.setPassword("password");
@@ -386,7 +386,7 @@ public class TestingDataInitBean {
                     sampleTransaction3.setTotalPrice(BigDecimal.TEN);
                     sampleTransaction3.setTransactionTime(new Date());
                     sampleRequest3.setTransaction(sampleTransaction3);
-                    
+
                     requestSessionBeanLocal.createRequest(sampleRequest3);
                     transactionSessionBeanLocal.createTransaction(sampleTransaction3);
                     vendorSessionBeanLocal.createVendor(vendor_clothes);
@@ -488,6 +488,12 @@ public class TestingDataInitBean {
                     subtask.setSubtaskDescription("SubTask 2");
                     subtask.setIsDone(true);
                     weddingChecklistSessionBean.createSubtask(subtask, parentTask.getWeddingParentTaskId());
+
+                    WeddingChecklist weddingChecklist2 = new WeddingChecklist();
+                    weddingChecklist2.setWeddingProject(weddingProject2);
+                    weddingProject2.setWeddingChecklist(weddingChecklist2);
+                    em.persist(weddingChecklist2);
+                    em.flush();
                 } catch (InvalidAssociationException ex) {
                     //Logger.getLogger(TestingDataInitBean.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ParseException ex) {

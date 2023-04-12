@@ -12,6 +12,7 @@ import entity.WeddingBudgetList;
 import entity.WeddingChecklist;
 import entity.WeddingItinerary;
 import entity.WeddingOrganiser;
+import entity.WeddingParentTask;
 import entity.WeddingProject;
 import error.WeddingOrganiserNotFoundException;
 import error.WeddingProjectNotFoundException;
@@ -66,6 +67,7 @@ public class WeddingProjectSessionBean implements WeddingProjectSessionBeanLocal
         
         WeddingChecklist emptyChecklist = new WeddingChecklist();
         emptyChecklist.setWeddingProject(w);
+        emptyChecklist.setWeddingParentTasks(new ArrayList<WeddingParentTask>());
         w.setWeddingChecklist(emptyChecklist);
         
         // no need to persist this one i think, because no actual WeddingItinerary objects are created
