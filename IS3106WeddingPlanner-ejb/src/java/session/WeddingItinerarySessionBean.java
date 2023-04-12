@@ -104,7 +104,6 @@ public class WeddingItinerarySessionBean implements WeddingItinerarySessionBeanL
                    return 0;
                }
            });
-           itinerary.forEach(System.out::println);
            return itinerary;
         }
         return new ArrayList<>();
