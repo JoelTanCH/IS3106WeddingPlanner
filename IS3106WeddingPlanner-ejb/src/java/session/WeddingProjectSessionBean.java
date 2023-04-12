@@ -8,13 +8,16 @@ package session;
 import entity.Guest;
 import entity.GuestTable;
 import entity.Request;
+import entity.WeddingBudgetList;
+import entity.WeddingChecklist;
 import entity.WeddingItinerary;
 import entity.WeddingOrganiser;
 import entity.WeddingProject;
 import error.WeddingOrganiserNotFoundException;
 import error.WeddingProjectNotFoundException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -59,6 +62,24 @@ public class WeddingProjectSessionBean implements WeddingProjectSessionBeanLocal
         organiser.getWeddingProjects().add(w);
         w.setWeddingOrganiser(organiser);
 
+        // now we have to create and attach empty wedding checklists n stuff to a project
+        
+        WeddingChecklist emptyChecklist = new WeddingChecklist();
+        emptyChecklist.setWeddingProject(w);
+        w.setWeddingChecklist(emptyChecklist);
+        
+        // no need to persist this one i think, because no actual WeddingItinerary objects are created
+        List<WeddingItinerary> emptyItineraryList = new ArrayList<>();
+        w.setWeddingItineraries(emptyItineraryList);
+        
+        
+        WeddingBudgetList emptyBudgetList = new WeddingBudgetList();
+        emptyBudgetList.setWeddingProject(w);
+        emptyBudgetList.setBudget(BigDecimal.ZERO);
+        w.setWeddingBudgetList(emptyBudgetList);
+        
+        em.persist(emptyChecklist);
+        em.persist(emptyBudgetList);
         em.persist(w);
     }
 
