@@ -467,16 +467,17 @@ public class TestingDataInitBean {
                     item.setCategory(CategoryEnum.DECORATION);
                     weddingBudgetSessionBean.createItem(item, budget.getWeddingBudgetListId());
 
-                    WeddingChecklist weddingChecklist = new WeddingChecklist();
-                    weddingChecklist.setWeddingProject(weddingProject1);
-                    weddingProject1.setWeddingChecklist(weddingChecklist);
-                    em.persist(weddingChecklist);
-                    em.flush();
+//                    WeddingChecklist weddingChecklist = new WeddingChecklist();
+//                    weddingChecklist.setWeddingProject(weddingProject1);
+//                    weddingProject1.setWeddingChecklist(weddingChecklist);
+//                    em.persist(weddingChecklist);
+//                    em.flush();
 
+                    WeddingChecklist weddingProject1Checklist = weddingProject1.getWeddingChecklist();
                     WeddingParentTask parentTask = new WeddingParentTask();
                     parentTask.setTaskDescription("Sample Parent Task");
                     parentTask.setIsDone(false);
-                    weddingChecklistSessionBean.createParentTask(parentTask, weddingChecklist.getWeddingCheckListId());
+                    weddingChecklistSessionBean.createParentTask(parentTask, weddingProject1Checklist.getWeddingCheckListId());
                     em.persist(parentTask);
                     em.flush();
 //                
