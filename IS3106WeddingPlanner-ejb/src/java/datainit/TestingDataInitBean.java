@@ -489,10 +489,6 @@ public class TestingDataInitBean {
                     subtask.setIsDone(true);
                     weddingChecklistSessionBean.createSubtask(subtask, parentTask.getWeddingParentTaskId());
 
-                    WeddingChecklist weddingChecklist2 = new WeddingChecklist();
-                    weddingChecklist2.setWeddingProject(weddingProject2);
-                    weddingProject2.setWeddingChecklist(weddingChecklist2);
-                    em.persist(weddingChecklist2);
                     em.flush();
                 } catch (InvalidAssociationException ex) {
                     //Logger.getLogger(TestingDataInitBean.class.getName()).log(Level.SEVERE, null, ex);
