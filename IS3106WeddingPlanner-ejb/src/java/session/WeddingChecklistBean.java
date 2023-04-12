@@ -106,6 +106,12 @@ public class WeddingChecklistBean implements WeddingChecklistBeanLocal {
         WeddingParentTask parentTask = em.find(WeddingParentTask.class, parentTaskId);
         if (parentTask != null) {
             WeddingChecklist weddingChecklist = parentTask.getWeddingChecklist();
+            if (parentTask.getWeddingSubtasks() != null) {
+                List<WeddingSubtask> subtasks = parentTask.getWeddingSubtasks();
+                for (WeddingSubtask subtask : subtasks) {
+                    em.remove(subtask);
+                }
+            } 
             weddingChecklist.getWeddingParentTasks().remove(parentTask);
             em.remove(parentTask);
         }

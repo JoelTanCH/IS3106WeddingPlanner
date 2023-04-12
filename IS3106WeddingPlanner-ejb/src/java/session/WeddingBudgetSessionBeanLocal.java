@@ -46,5 +46,7 @@ public interface WeddingBudgetSessionBeanLocal {
     public WeddingBudgetList getBudget(Long weddingBudgetListId);
     
     public WeddingBudgetList getBudgetByWeddingProject(Long weddingProjectId);
+
+    public List<WeddingBudgetItem> retrieveItemByBudget(Long weddingBudgetListId) throws InvalidAssociationException;
     
 }
