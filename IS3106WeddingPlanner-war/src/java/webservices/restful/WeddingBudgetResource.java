@@ -7,6 +7,11 @@ package webservices.restful;
 
 import entity.WeddingBudgetItem;
 import entity.WeddingBudgetList;
+import entity.WeddingChecklist;
+import entity.WeddingParentTask;
+import entity.WeddingProject;
+import entity.WeddingSubtask;
+import error.WeddingProjectNotFoundException;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.ejb.EJB;
@@ -23,9 +28,11 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import session.WeddingBudgetSessionBeanLocal;
+import session.WeddingProjectSessionBeanLocal;
 import util.exception.InvalidAssociationException;
 
 /**
@@ -43,6 +50,9 @@ public class WeddingBudgetResource {
     @EJB
     private WeddingBudgetSessionBeanLocal weddingBudgetSessionBean;
     
+        @EJB
+    WeddingProjectSessionBeanLocal weddingProjectSessionBeanLocal;
+        
     /**
      * Creates a new instance of WeddingBudgetResource
      */
@@ -96,8 +106,36 @@ public class WeddingBudgetResource {
     @GET
     @Path("/getBudgetByWeddingProject/{wedding-project-id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public WeddingBudgetList getBudgetByWeddingProject(@PathParam("wedding-project-id") Long weddingProjectId) {
-        return weddingBudgetSessionBean.getBudgetByWeddingProject(weddingProjectId);
+    public Response getBudgetByWeddingProject(@PathParam("wedding-project-id") Long weddingProjectId) {
+        try {
+            WeddingProject weddingProject = weddingProjectSessionBeanLocal.getWeddingProject(weddingProjectId);
+
+            WeddingBudgetList budgetObject = weddingProject.getWeddingBudgetList();
+
+            budgetObject.setWeddingProject(null);
+
+            List<WeddingBudgetItem> items = budgetObject.getWeddingBudgetItems();
+            for (WeddingBudgetItem item : items) {
+
+                item.setWeddingBudgetList(null);
+                
+            }
+
+            GenericEntity<WeddingBudgetList> entityToReturn = new GenericEntity<WeddingBudgetList>(budgetObject) {
+            };
+            return Response.status(200).entity(entityToReturn).build();
+        } catch (WeddingProjectNotFoundException e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "WeddingProjectNotFoundException")
+                    .build();
+
+            return Response.status(404).entity(exception).build();
+
+        } catch (Exception e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Wedding project probably doesn't have a budget list (which shldnt be the case)")
+                    .build();
+
+            return Response.status(404).entity(exception).build();
+        }
     }
     
     @PUT
@@ -152,6 +190,22 @@ public class WeddingBudgetResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     }
+    
+//    @GET
+//    @Path("/{budget-id}")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Response retrieveItemByBudget(@PathParam("budget-id") Long budgetId) {
+//        try {
+//            WeddingBudgetItem i = weddingBudgetSessionBean.retrieveItem(itemId);
+//            return Response.status(200).entity(i).type(MediaType.APPLICATION_JSON).build();
+//        } catch (Exception e) {
+//            JsonObject exception = Json.createObjectBuilder()
+//                    .add("error", "Not Found")
+//                    .build();
+//            
+//            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+//        }
+//    }
     
     @DELETE
     @Path("/{item-id}")

@@ -341,6 +341,7 @@ public class TestingDataInitBean {
 
                     WeddingBudgetList budget = new WeddingBudgetList();
                     budget.setBudget(BigDecimal.valueOf(10000));
+//                    weddingProject1.setWeddingBudgetList(budget);
                     weddingBudgetSessionBean.createBudget(budget, weddingProject1.getWeddingProjectId());
                     em.persist(budget);
                     em.flush();

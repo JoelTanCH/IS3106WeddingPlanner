@@ -80,13 +80,28 @@ public class WeddingBudgetSessionBean implements WeddingBudgetSessionBeanLocal {
 //    }
 
     @Override
+    public List<WeddingBudgetItem> retrieveItemByBudget(Long weddingBudgetListId) throws InvalidAssociationException {
+        WeddingBudgetList budget = em.find(WeddingBudgetList.class, weddingBudgetListId);
+        if (budget != null) {
+            return budget.getWeddingBudgetItems();
+        } else {
+            throw new InvalidAssociationException();
+        }
+    }
+
+    @Override
     public void deleteItem(Long itemId) {
         WeddingBudgetItem item = em.find(WeddingBudgetItem.class, itemId);
 
-        item.setWeddingBudgetList(null);
-        item.setRequest(null);
-
-        em.remove(item);
+        if (item != null) {
+            WeddingBudgetList budget = item.getWeddingBudgetList();
+            budget.getWeddingBudgetItems().remove(item);
+            if (item.getRequest() != null) {
+                em.detach(item);
+                item.setRequest(null);
+            }
+            em.remove(item);
+        }
     }
 
 //    @Override
@@ -99,6 +114,7 @@ public class WeddingBudgetSessionBean implements WeddingBudgetSessionBeanLocal {
         if (budget != null && weddingProject != null) {
             em.persist(budget);
             budget.setWeddingProject(weddingProject);
+            weddingProject.setWeddingBudgetList(budget);
             em.flush();
             return budget.getWeddingBudgetListId();
         } else {
@@ -115,9 +131,14 @@ public class WeddingBudgetSessionBean implements WeddingBudgetSessionBeanLocal {
                 em.detach(budget);
                 budget.setWeddingProject(null);
             }
-            
+
             if (budget.getWeddingBudgetItems() != null) {
-               budget.setWeddingBudgetItems(null);
+                List<WeddingBudgetItem> items = budget.getWeddingBudgetItems();
+
+                for (WeddingBudgetItem item : items) {
+                    em.detach(item);
+                    item.setWeddingBudgetList(null);
+                }
             }
         }
         return budgets;
@@ -138,38 +159,59 @@ public class WeddingBudgetSessionBean implements WeddingBudgetSessionBeanLocal {
         }
         return budget;
     }
-    
+
     @Override
     public WeddingBudgetList getBudgetByWeddingProject(Long weddingProjectId) {
         WeddingProject weddingProject = em.find(WeddingProject.class, weddingProjectId);
-        Query query = em.createQuery("SELECT b FROM WeddingBudgetList b");
-        List<WeddingBudgetList> budgets = query.getResultList();
-        
-        WeddingBudgetList getBudget = new WeddingBudgetList();
-        if (weddingProject != null) {
-            for (WeddingBudgetList budget : budgets) {
-                if (budget.getWeddingProject().equals(weddingProject)) {
-                    getBudget = budget;
+        WeddingBudgetList budget = weddingProject.getWeddingBudgetList();
+
+        if (budget != null) {
+            em.detach(budget);
+            budget.setWeddingProject(null);
+
+            if (budget.getWeddingBudgetItems() != null) {
+                List<WeddingBudgetItem> items = budget.getWeddingBudgetItems();
+
+                for (WeddingBudgetItem item : items) {
+                    em.detach(item);
+                    item.setWeddingBudgetList(null);
                 }
             }
         }
-        
-        if (getBudget.getWeddingProject() != null) {
-            em.detach(getBudget);
-            getBudget.setWeddingProject(null);
-        }
-        
-        if (getBudget.getWeddingBudgetItems() != null) {
-            List<WeddingBudgetItem> items = getBudget.getWeddingBudgetItems();
-            
-            for (WeddingBudgetItem item : items) {
-                em.detach(item);
-                item.setWeddingBudgetList(null);
-            }
-        }
-        return getBudget;
+
+        return budget;
     }
 
+//    @Override
+//    public WeddingBudgetList getBudgetByWeddingProject(Long weddingProjectId) {
+//        WeddingProject weddingProject = em.find(WeddingProject.class, weddingProjectId);
+//        Query query = em.createQuery("SELECT b FROM WeddingBudgetList b");
+//        List<WeddingBudgetList> budgets = query.getResultList();
+//        
+//        WeddingBudgetList getBudget = new WeddingBudgetList();
+//        if (weddingProject != null) {
+//            for (WeddingBudgetList budget : budgets) {
+//                if (budget.getWeddingProject().equals(weddingProject)) {
+//                    getBudget = budget;
+//                }
+//            }
+//        }
+//        
+//        if (getBudget.getWeddingProject() != null) {
+//            em.detach(getBudget);
+//            getBudget.setWeddingProject(null);
+//        }
+//        
+//        if (getBudget.getWeddingBudgetItems() != null) {
+//            List<WeddingBudgetItem> items = getBudget.getWeddingBudgetItems();
+//            
+//            for (WeddingBudgetItem item : items) {
+//                em.detach(item);
+//                item.setWeddingBudgetList(null);
+//            }
+//        }
+//        return getBudget;
+//    }
     @Override
     public void updateBudget(WeddingBudgetList budget) {
 //        em.merge(budget);
