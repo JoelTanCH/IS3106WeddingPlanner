@@ -101,23 +101,26 @@ public class WeddingItineraryResource {
         return weddingItinerarySessionBean.getWeddingItinerariesByWeddingProject(weddingProjectId);
     }
     
-//    @GET
-//    @Path("/wedding/{weddingId}")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response getWeddingItinerary(@PathParam("weddingId") Long wId) {
-//        try {
-//            List<WeddingItinerary> list = weddingItinerarySessionBean.getWeddingItinerary(wId);
-//            GenericEntity<List<WeddingItinerary>> entity = new GenericEntity<List<WeddingItinerary>>(list) { };
-//
-//            return Response.status(200).entity(entity).type(MediaType.APPLICATION_JSON).build();
-//        } catch (Exception e) {
-//            JsonObject exception = Json.createObjectBuilder()
-//                    .add("error", "Not Found")
-//                    .build();
-//          
-//            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
-//        }
-//    }
+    
+    
+    //code for Guest View (part of guest management) 
+    @GET
+    @Path("/wedding/{weddingId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getWeddingItinerary(@PathParam("weddingId") Long wId) {
+        try {
+            List<WeddingItinerary> list = weddingItinerarySessionBean.getWeddingItinerary(wId);
+            GenericEntity<List<WeddingItinerary>> entity = new GenericEntity<List<WeddingItinerary>>(list) { };
+
+            return Response.status(200).entity(entity).type(MediaType.APPLICATION_JSON).build();
+        } catch (Exception e) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not Found")
+                    .build();
+          
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    }
     
     @PUT
     @Path("/update/itinerary")

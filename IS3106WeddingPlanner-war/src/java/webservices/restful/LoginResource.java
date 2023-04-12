@@ -89,12 +89,20 @@ public class LoginResource {
             JsonObject exception = Json.createObjectBuilder().add("error", "Admin with username & password doesn't exist")
                     .build();
 
-            // 401 is invalid credentials
-            return Response.status(401).entity(exception).build();
+            // 404 is not found
+            return Response.status(404).entity(exception).build();
         } else {
             // if list isnt empty, build the token
             Admin adminFound = gotAdminsByUsernamePassword.get(0);
 
+            // if admin is banned return error as well
+            if (adminFound.isIsBanned()) {
+                JsonObject exception = Json.createObjectBuilder().add("error", "Admin found is banned")
+                        .build();
+
+                // 403 is forbidden (i think)
+                return Response.status(403).entity(exception).build();
+            }
             JsonObject tokenInfo = Json.createObjectBuilder()
                     .add("userType", "ADMIN")
                     .add("userId", "" + adminFound.getUserId())
@@ -140,6 +148,13 @@ public class LoginResource {
             // if list isnt empty, build the token
             WeddingOrganiser woFound = gotWeddingOrganisers.get(0);
 
+            if (woFound.isIsBanned()) {
+                JsonObject exception = Json.createObjectBuilder().add("error", "Wedding Organiser found is banned.")
+                        .build();
+
+                // 403 is forbidden (i think)
+                return Response.status(403).entity(exception).build();
+            }
             JsonObject tokenInfo = Json.createObjectBuilder()
                     .add("userType", "WEDDING-ORGANISER")
                     .add("userId", "" + woFound.getUserId())
@@ -178,6 +193,13 @@ public class LoginResource {
             // if list isnt empty, build the token
             Vendor vendorFound = gotVendors.get(0);
 
+            if (vendorFound.isIsBanned()) {
+                JsonObject exception = Json.createObjectBuilder().add("error", "Vendor found is banned.")
+                        .build();
+
+                // 403 is forbidden (i think)
+                return Response.status(403).entity(exception).build();
+            }
             JsonObject tokenInfo = Json.createObjectBuilder()
                     .add("userType", "VENDOR")
                     .add("userId", "" + vendorFound.getUserId())

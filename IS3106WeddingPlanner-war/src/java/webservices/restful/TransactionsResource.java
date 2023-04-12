@@ -7,6 +7,9 @@ package webservices.restful;
 
 import entity.Request;
 import entity.Transaction;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -15,7 +18,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.enterprise.context.RequestScoped;
 import javax.json.Json;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
@@ -65,6 +70,32 @@ public class TransactionsResource {
             return Response.status(400).entity(exception).build();
 
         }
+    }
+
+    @GET
+    @Path("/getTotalValueGroupedByCategory")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTotalValueGroupedByCategory() {
+        try {
+            List<Object[]> valueCategoryPairs = transactionSessionBeanLocal.getTotalValueGroupedByCategory();
+            List<JsonObject> listOfPairs = new ArrayList<>();
+
+            for (Object[] pair : valueCategoryPairs) {
+                // need to use toString() on first value because CategoryEnum needs to be converted to String
+                JsonObject pairToPush = Json.createObjectBuilder().add("category", (String) pair[0].toString()).add("totalValue", (BigDecimal) pair[1]).build();
+                listOfPairs.add(pairToPush);
+            }
+
+            return Response.status(200).entity(listOfPairs).build();
+
+        } catch (Exception e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "sth went wrong with fetching total values" + e.getCause().getLocalizedMessage())
+                    .build();
+
+            // 400 is error; invalid request
+            return Response.status(400).entity(exception).build();
+        }
+
     }
 
 //    @POST
