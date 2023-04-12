@@ -7,9 +7,11 @@ package session;
 
 import entity.Request;
 import entity.Transaction;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -39,6 +41,17 @@ public class TransactionSessionBean implements TransactionSessionBeanLocal {
         Request request = em.find(Request.class, requestId);
         Transaction trans = request.getTransaction();
         return trans;
+    }
+
+    @Override
+    public List<Object[]> getTotalValueGroupedByCategory() {
+//        Query query = em.createQuery("SELECT v.category, SUM(t.totalPrice) FROM Transaction t JOIN Request r JOIN Vendor v WHERE t.isPaid = true "
+//                + "GROUP BY v.category");
+        Query query = em.createQuery("SELECT v.category, SUM(t.totalPrice) FROM Transaction t JOIN t.request r JOIN r.vendor v "
+                + "WHERE t.isPaid = TRUE GROUP BY v.category");
+
+        return query.getResultList();
+        // so Object[] here consists of a String and then a BigDecimal...?
     }
 
     // Add business logic below. (Right-click in editor and choose
