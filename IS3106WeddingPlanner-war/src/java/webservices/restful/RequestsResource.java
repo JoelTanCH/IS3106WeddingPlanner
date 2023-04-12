@@ -258,7 +258,6 @@ public class RequestsResource {
             WeddingProject wProject = weddingProjectSessionBeanLocal.getWeddingProject(wProjectId);
 
             List<Request> wProjectRequests = wProject.getRequests();
-            
             for (Request req : wProjectRequests) {
 //                req.getVendor().setBanner(null);
                 req.getVendor().setDescription(null);
@@ -270,7 +269,6 @@ public class RequestsResource {
                 req.getVendor().setUserId(null);
                 req.getVendor().setWebsiteUrl(null);
                 req.getVendor().setWhatsappUrl(null);
-                
                 if (req.getTransaction() != null) {
                     req.getTransaction().setRequest(null);
                 }
