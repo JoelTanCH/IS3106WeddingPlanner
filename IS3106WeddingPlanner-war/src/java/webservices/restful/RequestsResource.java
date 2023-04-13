@@ -47,7 +47,7 @@ public class RequestsResource {
 
     @EJB
     WeddingProjectSessionBeanLocal weddingProjectSessionBeanLocal;
-    
+
     @Context
     private UriInfo context;
 
@@ -58,21 +58,21 @@ public class RequestsResource {
     @Path("/createRequest")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void createRequest(Request request, @QueryParam("projId") Long projId, @QueryParam("vendorId")Long vendorId) {
+    public void createRequest(Request request, @QueryParam("projId") Long projId, @QueryParam("vendorId") Long vendorId) {
         System.out.println("enters create request");
         System.out.println("request date = " + request.getRequestDate());
         System.out.println("projid = " + projId);
-        System.out.println("vendor id = "+ vendorId);
-        requestSessionBeanLocal.createRequestFromFrontend(request,projId,vendorId);
+        System.out.println("vendor id = " + vendorId);
+        requestSessionBeanLocal.createRequestFromFrontend(request, projId, vendorId);
     }
-    
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public boolean checkIfRequestExists(@QueryParam("weddingProjId") Long projId, @QueryParam("vendorId")Long vendorId){
+    public boolean checkIfRequestExists(@QueryParam("weddingProjId") Long projId, @QueryParam("vendorId") Long vendorId) {
         boolean doesRequestExist = requestSessionBeanLocal.checkIfRequestExists(projId, vendorId);
         return doesRequestExist;
     }
-            
+
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -216,12 +216,16 @@ public class RequestsResource {
             //Request start and end need to be determined? + Add venue.
             builder.add("requestDetails", request.getRequestDetails())
                     .add("requestDate", request.getWeddingProject().getWeddingDate().toLocaleString())
-                    .add("requestStart", request.getWeddingProject().getWeddingStartTime().toLocaleString())
                     .add("quotationURL", request.getQuotationURL());
+
+            if (request.getWeddingProject().getWeddingStartTime() != null) {
+                builder.add("requestStart", request.getWeddingProject().getWeddingStartTime().toLocaleString());
+            }
+
             if (request.getWeddingProject().getWeddingEndTime() != null) {
                 builder.add("requestEnd", request.getWeddingProject().getWeddingEndTime().toLocaleString());
             }
-            
+
             if (request.getTransaction() != null) {
                 builder.add("isPaid", request.getTransaction().isIsPaid());
             }
@@ -235,7 +239,11 @@ public class RequestsResource {
 
             builder.add("weddingName", request.getWeddingProject().getName());
             builder.add("weddingOrganiserName", request.getWeddingProject().getWeddingOrganiser().getUsername());
-            builder.add("venue", request.getWeddingProject().getVenue());
+
+            if (request.getWeddingProject().getVenue() != null) {
+                builder.add("venue", request.getWeddingProject().getVenue());
+            }
+
             return Response.status(200).entity(builder.build()).type(MediaType.APPLICATION_JSON).build();
         } catch (NoResultException e) {
 
