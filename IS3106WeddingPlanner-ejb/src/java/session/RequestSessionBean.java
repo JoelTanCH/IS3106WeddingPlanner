@@ -149,8 +149,8 @@ public class RequestSessionBean implements RequestSessionBeanLocal {
     @Override
     public Long checkSchedule(Long vendorId, Long requestId) {
         Request request = em.find(Request.class, requestId);
-        Date newRequestDate = request.getRequestDate();
-        String query = "SELECT COUNT(req) FROM Request req WHERE req.vendor.userId = ?1 AND req.isAccepted = TRUE AND FUNCTION('DATE', req.requestDate) = FUNCTION('DATE', ?2)";
+        Date newRequestDate = request.getWeddingProject().getWeddingDate();
+        String query = "SELECT COUNT(req) FROM Request req WHERE req.vendor.userId = ?1 AND req.isAccepted = TRUE AND FUNCTION('DATE', req.weddingProject.weddingDate) = FUNCTION('DATE', ?2)";
         Query result = em.createQuery(query).setParameter(1, vendorId).setParameter(2, newRequestDate);
         Long numberOfClashes = (Long) result.getSingleResult();
 
