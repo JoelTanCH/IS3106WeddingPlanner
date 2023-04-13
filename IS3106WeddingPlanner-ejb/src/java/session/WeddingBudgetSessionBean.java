@@ -66,6 +66,8 @@ public class WeddingBudgetSessionBean implements WeddingBudgetSessionBeanLocal {
 
     @Override
     public void updateItem(WeddingBudgetItem weddingBudgetItem) {
+        WeddingBudgetItem oldBudgetItem = em.find(WeddingBudgetItem.class, weddingBudgetItem.getWeddingBudgetItemId());
+        weddingBudgetItem.setWeddingBudgetList(oldBudgetItem.getWeddingBudgetList()); // because frontend returns nothing for the reference to budget list
         em.merge(weddingBudgetItem);
     }
 //    @Override
