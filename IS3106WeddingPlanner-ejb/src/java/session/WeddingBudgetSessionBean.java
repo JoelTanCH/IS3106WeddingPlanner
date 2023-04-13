@@ -95,16 +95,15 @@ public class WeddingBudgetSessionBean implements WeddingBudgetSessionBeanLocal {
 
         if (item != null) {
             WeddingBudgetList budget = item.getWeddingBudgetList();
-            em.detach(item);
-            item.setWeddingBudgetList(null);
             budget.getWeddingBudgetItems().remove(item);
             if (item.getRequest() != null) {
-                em.detach(item);
                 item.setRequest(null);
             }
             em.remove(item);
         }
     }
+    
+
 
 //    @Override
 //    public void createBudget(WeddingBudgetList budget) {

@@ -153,6 +153,38 @@ public class WeddingChecklistBean implements WeddingChecklistBeanLocal {
     }
 
     @Override
+    public List<WeddingParentTask> getWeddingParentTasksByChecklist(Long checklistId) {
+        WeddingChecklist checklist = em.find(WeddingChecklist.class, checklistId);
+        
+        Query query = em.createQuery("SELECT p FROM WeddingParentTask p");
+        List<WeddingParentTask> tasks = query.getResultList();
+        
+        List<WeddingParentTask> approvedTasks = new ArrayList<>();
+        for (WeddingParentTask task : tasks) {
+            if (task.getWeddingChecklist().equals(checklist)) {
+                approvedTasks.add(task);
+            }
+        }
+        
+        for (WeddingParentTask task : approvedTasks) {
+            if (task.getWeddingChecklist() != null) {
+                em.detach(task);
+                task.setWeddingChecklist(null);
+            }
+            
+            if (task.getWeddingSubtasks() != null) {
+                List<WeddingSubtask> subtasks = task.getWeddingSubtasks();
+                
+                for (WeddingSubtask subtask : subtasks) {
+                    em.detach(subtask);
+                    subtask.setWeddingParentTask(null);
+                }
+            }
+        }
+        return approvedTasks;
+    }
+    
+    @Override
     public List<WeddingSubtask> getAllWeddingSubtasks() {
         Query query = em.createQuery("SELECT s FROM WeddingSubtask s");
         List<WeddingSubtask> subtasks = query.getResultList();

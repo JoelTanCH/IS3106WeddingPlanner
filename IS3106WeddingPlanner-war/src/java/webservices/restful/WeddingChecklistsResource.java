@@ -185,6 +185,13 @@ public class WeddingChecklistsResource {
     public List<WeddingSubtask> getAllSubTasks() {
         return weddingChecklistBeanLocal.getAllWeddingSubtasks();
     }
+    
+    @GET
+    @Path("tasks/{checklist-id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<WeddingParentTask> getParentTasksByWeddingChecklist(@PathParam("checklist-id") Long checklistId) {
+        return weddingChecklistBeanLocal.getWeddingParentTasksByChecklist(checklistId);
+    }
 
     @PUT
     @Path("/update/parentTask")
