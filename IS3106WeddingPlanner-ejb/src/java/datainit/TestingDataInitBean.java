@@ -135,21 +135,33 @@ public class TestingDataInitBean {
             if (em.find(WeddingProject.class, 1L) == null) {
                 try {
 
-                    String startDateString = "2023-03-04 1330";
-                    String endDateString = "2023-03-04 1830";
+                    String startDateString = "2023-06-06 1330";
+                    String endDateString = "2023-06-06 1830";
                     String startDateString2 = "2023-05-04 1230";
                     String endDateString2 = "2023-05-04 1530";
+                    String startDateString3 = "2023-07-06 1330";
+                    String endDateString3 = "2023-07-06 1830";
+                    String startDateString4 = "2023-08-04 1230";
+                    String endDateString4 = "2023-08-04 1530";
 
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HHmm");
                     Date startDate = null;
                     Date endDate = null;
                     Date startDate2 = null;
                     Date endDate2 = null;
+                    Date startDate3 = null;
+                    Date endDate3 = null;
+                    Date startDate4 = null;
+                    Date endDate4 = null;
                     try {
                         startDate = dateFormat.parse(startDateString);
                         endDate = dateFormat.parse(endDateString);
                         startDate2 = dateFormat.parse(startDateString2);
                         endDate2 = dateFormat.parse(endDateString2);
+                        startDate3 = dateFormat.parse(startDateString3);
+                        endDate3 = dateFormat.parse(endDateString3);
+                        startDate4 = dateFormat.parse(startDateString4);
+                        endDate4 = dateFormat.parse(endDateString4);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -186,6 +198,29 @@ public class TestingDataInitBean {
                     weddingProject3.setWeddingEndTime(endDate);
                     weddingProject3.setVenue("Venue threeeeee");
                     weddingProjectSessionBeanLocal.createWeddingProject(w2.getUserId(), weddingProject3);
+                    
+                    WeddingProject weddingProject4 = new WeddingProject();
+                    weddingProject4.setName("Thomas and Susan's Wedding");
+                    weddingProject4.setDescription("Thomas and Susan's Wedding!");
+                    weddingProject4.setCompleted(Boolean.FALSE);
+                    weddingProject4.setWeddingOrganiser(w1);
+                    weddingProject4.setWeddingDate(startDate3); // since the database only stores date anyway, we can just use the same date for both event & startTime
+                    weddingProject4.setWeddingStartTime(startDate3);
+                    weddingProject4.setWeddingEndTime(endDate3);
+                    weddingProject4.setVenue("Hotel Luxury Marina");
+                    weddingProjectSessionBeanLocal.createWeddingProject(w1.getUserId(), weddingProject4);
+                    
+                    WeddingProject weddingProject5 = new WeddingProject();
+                    weddingProject5.setName("Alex and Haley's Wedding");
+                    weddingProject5.setDescription("Alex and Haley's Wedding!");
+                    weddingProject5.setCompleted(Boolean.FALSE);
+                    weddingProject5.setWeddingOrganiser(w1);
+                    weddingProject5.setWeddingDate(startDate4); // since the database only stores date anyway, we can just use the same date for both event & startTime
+                    weddingProject5.setWeddingStartTime(startDate4);
+                    weddingProject5.setWeddingEndTime(endDate4);
+                    weddingProject5.setVenue("Hotel Luxury Marina");
+                    weddingProjectSessionBeanLocal.createWeddingProject(w1.getUserId(), weddingProject5);
+                    
                     em.flush();
 
                     Vendor vendor_entertainment = new Vendor();
@@ -203,13 +238,18 @@ public class TestingDataInitBean {
                     sampleRequest.setIsAccepted(null);
                     sampleRequest.setQuotationURL("www.fakeUrl.com");
                     sampleRequest.setQuotedPrice(null);
-                    sampleRequest.setRequestDate(new Date());
+                    Date date = new Date();
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(date);
+                    calendar.add(Calendar.DATE, 2);
+                    Date newDate = calendar.getTime();
+                    sampleRequest.setRequestDate(newDate);
                     sampleRequest.setRequestDetails("Do something for me");
                     sampleRequest.setVendor(vendor_entertainment);
                     sampleRequest.setWeddingProject(weddingProject1);
                     vendor_entertainment.getRequests().add(sampleRequest);
                     requestSessionBeanLocal.createRequest(sampleRequest);
-
+                    
                     sampleRequest = new Request();
                     sampleRequest.setIsAccepted(true);
                     sampleRequest.setQuotationURL("www.anotherfakeUrl.com");
@@ -229,6 +269,61 @@ public class TestingDataInitBean {
                     vendor_entertainment.getRequests().add(sampleRequest);
                     requestSessionBeanLocal.createRequest(sampleRequest);
                     transactionSessionBeanLocal.createTransaction(sampleTransaction);
+                    //vendorSessionBeanLocal.createVendor(vendor_entertainment);
+                    
+                    Request sampleRequest4 = new Request();
+                    sampleRequest4.setIsAccepted(null);
+                    sampleRequest4.setQuotationURL("www.fakeUrl.com");
+                    sampleRequest4.setQuotedPrice(null);
+                    //Date date = new Date();
+                    //Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(date);
+                    calendar.add(Calendar.DATE, 3);
+                    Date newDate4 = calendar.getTime();
+                    sampleRequest4.setRequestDate(newDate4);
+                    sampleRequest4.setRequestDetails("Do something for me");
+                    sampleRequest4.setVendor(vendor_entertainment);
+                    sampleRequest4.setWeddingProject(weddingProject4);
+                    vendor_entertainment.getRequests().add(sampleRequest4);
+                    requestSessionBeanLocal.createRequest(sampleRequest4);
+                    
+                    Transaction sampleTransaction4 = new Transaction();
+                    sampleTransaction4.setIsPaid(false);
+                    sampleTransaction4.setRequest(sampleRequest4);
+                    sampleTransaction4.setTotalPrice(BigDecimal.ONE);
+                    sampleTransaction4.setTransactionTime(new Date());
+                    sampleRequest4.setTransaction(sampleTransaction4);
+
+                    vendor_entertainment.getRequests().add(sampleRequest4);
+                    requestSessionBeanLocal.createRequest(sampleRequest4);
+                    transactionSessionBeanLocal.createTransaction(sampleTransaction4);
+                    
+                    Request sampleRequest5 = new Request();
+                    sampleRequest5.setIsAccepted(null);
+                    sampleRequest5.setQuotationURL("www.fakeUrl.com");
+                    sampleRequest5.setQuotedPrice(null);
+                    //Date date = new Date();
+                    //Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(date);
+                    calendar.add(Calendar.DATE, 5);
+                    Date newDate5 = calendar.getTime();
+                    sampleRequest5.setRequestDate(newDate5);
+                    sampleRequest5.setRequestDetails("Do something for me");
+                    sampleRequest5.setVendor(vendor_entertainment);
+                    sampleRequest5.setWeddingProject(weddingProject5);
+                    vendor_entertainment.getRequests().add(sampleRequest5);
+                    requestSessionBeanLocal.createRequest(sampleRequest5);
+                    
+                    Transaction sampleTransaction5 = new Transaction();
+                    sampleTransaction5.setIsPaid(false);
+                    sampleTransaction5.setRequest(sampleRequest5);
+                    sampleTransaction5.setTotalPrice(BigDecimal.ONE);
+                    sampleTransaction5.setTransactionTime(new Date());
+                    sampleRequest5.setTransaction(sampleTransaction5);
+
+                    vendor_entertainment.getRequests().add(sampleRequest5);
+                    requestSessionBeanLocal.createRequest(sampleRequest5);
+                    transactionSessionBeanLocal.createTransaction(sampleTransaction5);
                     vendorSessionBeanLocal.createVendor(vendor_entertainment);
 
                     Vendor vendor_entertainment2 = new Vendor();
