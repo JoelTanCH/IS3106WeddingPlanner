@@ -155,14 +155,14 @@ public class TestingDataInitBean {
                     }
 
                     WeddingProject weddingProject1 = new WeddingProject();
-                    weddingProject1.setName("weddingProject1");
+                    weddingProject1.setName("Bob and Alice's Wedding");
                     weddingProject1.setDescription("description for project1");
                     weddingProject1.setCompleted(Boolean.FALSE);
                     weddingProject1.setWeddingOrganiser(w1);
                     weddingProject1.setWeddingDate(startDate); // since the database only stores date anyway, we can just use the same date for both event & startTime
                     weddingProject1.setWeddingStartTime(startDate);
                     weddingProject1.setWeddingEndTime(endDate);
-                    weddingProject1.setVenue("Venue oneeeee");
+                    weddingProject1.setVenue("Hotel Luxury Marina");
                     weddingProjectSessionBeanLocal.createWeddingProject(w1.getUserId(), weddingProject1);
 
                     WeddingProject weddingProject2 = new WeddingProject();
